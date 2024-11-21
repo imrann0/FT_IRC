@@ -1,12 +1,20 @@
 #include <sys/socket.h>	// socket, bind
 #include <iostream>
+#include <string>
 #include <cstring>		// memset
 #include <netinet/in.h>	// sockaddr_in
 #include <unistd.h>	 // close
 #include <poll.h>  //poll
 #include <fcntl.h> // fcntl, F_SETFL, O_NONBLOCK
-#include <vector> //v
+#include <vector> // vector
+#include <map>
+#include <utility>
+#include <fstream>
+#include <cstdlib>
+// https://datatracker.ietf.org/doc/html/rfc1459#section-4.2.1
+
 #define PORT 6667
+#define RPL_JOIN(nick, user, host, channel) (":" + (nick) + "!" + (user) + "@" + (host) + " JOIN " + (channel) + "\r\n")
 
 int main()
 {
@@ -22,10 +30,11 @@ int main()
 		perror("setsockopt error");
 	}
 
-    if (fcntl(server_socket, F_SETFL, O_NONBLOCK) == -1) {
-        std::cerr << "fcntl F_SETFL hatası" << std::endl;
-        return 1;
-    }
+	if (fcntl(server_socket, F_SETFL, O_NONBLOCK) == -1)
+	{
+		std::cerr << "fcntl F_SETFL hatası" << std::endl;
+		return 1;
+	}
 	struct sockaddr_in server_addr;
 
 	std::memset(&server_addr, 0, sizeof(server_addr));
@@ -52,6 +61,7 @@ int main()
 	struct pollfd fds[10];  // Maksimum 10 istemci dinleyeceğiz
 	int client_count = 0;
 	std::vector<pollfd> userfd;
+	std::map<std::string, std::vector<int> > channels; // Kanal adı ve istemci fd'leri
 	fds[0].fd = server_socket;
 	fds[0].events = POLLIN;
 	userfd.push_back(fds[0]);
@@ -90,8 +100,31 @@ int main()
 			{
 				char buffer[1024];
 				int bytes_received = recv(userfd[i].fd, buffer, sizeof(buffer), 0);
-				if (bytes_received > 0) {
+				std::string message = buffer;
+
+				if (bytes_received > 0)
+				{
 					buffer[bytes_received] = '\0';
+					if (message.find("JOIN") == 0)
+					{
+						std::string channel_name = message.substr(4); // "JOIN" sonrası
+						channel_name.erase(0, channel_name.find_first_not_of(" \t\r\n"));
+						channel_name.erase(channel_name.find_last_not_of(" \t\r\n") + 1);
+						if (channels.find(channel_name) == channels.end())
+						{
+							// Kanal yoksa oluştur
+							channels[channel_name] = std::vector<int>();
+							std::cout << "Yeni kanal oluşturuldu: " << channel_name << std::endl;
+						}
+						// İstemciyi kanala ekle
+						channels[channel_name].push_back(userfd[i].fd);
+						std::string nick = "client" + std::to_string(i);  // Geçici kullanıcı adı
+                        std::string user = "user" + std::to_string(i);    // Geçici kullanıcı adı
+                        std::string host = "localhost";                    // Sunucu adı
+                        std::string join_message = ":" + nick + "!" + user + "@" + host + " JOIN " + channel_name + "\r\n";
+                        send(userfd[i].fd, join_message.c_str(), join_message.size(), 0);
+						std::cout << "İstemci " << userfd[i].fd << " kanala katıldı: " << channel_name << std::endl;
+					}
 					std::cout << "İstemci " << userfd[i].fd << " mesaj aldı: " << buffer << std::endl;
 				}
 				else if (bytes_received == 0)

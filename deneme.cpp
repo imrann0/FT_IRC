@@ -65,6 +65,7 @@ int main()
 	fds[0].fd = server_socket;
 	fds[0].events = POLLIN;
 	userfd.push_back(fds[0]);
+
 	while (true)
 	{
 		int ret = poll(&userfd[0], userfd.size(), -1);
@@ -105,26 +106,41 @@ int main()
 				if (bytes_received > 0)
 				{
 					buffer[bytes_received] = '\0';
-					if (message.find("JOIN") == 0)
+				if (message.find("JOIN") == 0)
+				{
+					std::string channel_name = message.substr(4); // "JOIN" sonrası
+					channel_name.erase(0, channel_name.find_first_not_of(" \t\r\n"));
+					channel_name.erase(channel_name.find_last_not_of(" \t\r\n") + 1);
+
+					if (channels.find(channel_name) == channels.end())
 					{
-						std::string channel_name = message.substr(4); // "JOIN" sonrası
-						channel_name.erase(0, channel_name.find_first_not_of(" \t\r\n"));
-						channel_name.erase(channel_name.find_last_not_of(" \t\r\n") + 1);
-						if (channels.find(channel_name) == channels.end())
-						{
-							// Kanal yoksa oluştur
-							channels[channel_name] = std::vector<int>();
-							std::cout << "Yeni kanal oluşturuldu: " << channel_name << std::endl;
-						}
-						// İstemciyi kanala ekle
-						channels[channel_name].push_back(userfd[i].fd);
-						std::string nick = "client" + std::to_string(i);  // Geçici kullanıcı adı
-                        std::string user = "user" + std::to_string(i);    // Geçici kullanıcı adı
-                        std::string host = "localhost";                    // Sunucu adı
-                        std::string join_message = ":" + nick + "!" + user + "@" + host + " JOIN " + channel_name + "\r\n";
-                        send(userfd[i].fd, join_message.c_str(), join_message.size(), 0);
-						std::cout << "İstemci " << userfd[i].fd << " kanala katıldı: " << channel_name << std::endl;
+						// Kanal yoksa oluştur
+						channels[channel_name] = std::vector<int>();
+						std::cout << "Yeni kanal oluşturuldu: " << channel_name << std::endl;
 					}
+
+					// İstemciyi kanala ekle
+					channels[channel_name].push_back(userfd[i].fd);
+
+					// Kullanıcı bilgileri
+					std::string nick = "client" + std::to_string(i);  // Geçici kullanıcı adı
+					std::string user = "user" + std::to_string(i);    // Geçici kullanıcı adı
+					std::string host = "localhost";                  // Sunucu adı
+
+					// JOIN mesajı gönder
+					std::string join_message = ":" + nick + "!" + user + "@" + host + " JOIN " + channel_name + "\r\n";
+					send(userfd[i].fd, join_message.c_str(), join_message.size(), 0);
+
+					// Kanal kullanıcılarını listele (RPL_NAMREPLY)
+					std::string namreply = ":localhost 353 " + nick + " = " + channel_name + " :@" + nick + "\r\n";
+					send(userfd[i].fd, namreply.c_str(), namreply.size(), 0);
+
+					// Kanal kullanıcı listesinin sonunu bildir (RPL_ENDOFNAMES)
+					std::string endofnames = ":localhost 366 " + nick + " " + channel_name + " :End of /NAMES list.\r\n";
+					send(userfd[i].fd, endofnames.c_str(), endofnames.size(), 0);
+
+					std::cout << "İstemci " << userfd[i].fd << " kanala katıldı: " << channel_name << std::endl;
+				}
 					std::cout << "İstemci " << userfd[i].fd << " mesaj aldı: " << buffer << std::endl;
 				}
 				else if (bytes_received == 0)

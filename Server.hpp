@@ -7,6 +7,9 @@
 #include <vector>		//vector
 #include <map>			//map
 #include "Client.hpp"
+#include "Channel.hpp"
+
+#define RPL_JOIN(source, channel)					":" + source + " JOIN :" + channel
 
 class Server
 {
@@ -16,12 +19,14 @@ class Server
 		void acceptClient();
 		void handleClientEvents();
 	private:
+		std::string serverName;
 		const int _port;
 		const std::string _password;
 		int _socket;
 		struct sockaddr_in server_addr;
 		std::vector<pollfd> _pollFds;
 		std::map<int, Client> _clients;
+		std::map<std::string, Channel> channels;
 };
 
 

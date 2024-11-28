@@ -9,7 +9,7 @@
 Server::Server(int port, std::string password) : _port(port), _password(password)
 {
 	std::cout << "Server Constructor Called" << std::endl;
-
+	serverName  = "irc.myserver.com";
 	_socket = socket(AF_INET, SOCK_STREAM, 0);
 	if (_socket == -1)
 		throw std::runtime_error("Socket Error");
@@ -83,17 +83,18 @@ void Server::acceptClient()
 	if (clientSocket == -1)
 	{
 		std::cerr << "Accept Error" << std::endl;
-		return;
+		return ;
 	}
 
 	pollfd clientPollFd;
 	clientPollFd.fd = clientSocket;
 	clientPollFd.events = POLLIN;
 	_pollFds.push_back(clientPollFd);
-	_clients[clientSocket] = Client();
+	_clients.insert(std::make_pair(clientSocket, Client(clientSocket)));
 
 	std::cout << "New client connected: " << clientSocket << std::endl;
 }
+
 
 void Server::handleClientEvents()
 {
@@ -132,7 +133,7 @@ void Server::handleClientEvents()
 					_pollFds.push_back(fds);
 
 					// Add new client to the _clients map
-					Client newClient;
+					Client newClient(client_socket);
 					_clients[client_socket] = newClient;
 
 					// Send welcome message or other initial messages
@@ -170,7 +171,8 @@ void Server::handleClientEvents()
 						// Send the response based on the client's request
 						std::string response = "Message received!";
 						send(_pollFds[i].fd, response.c_str(), response.size(), 0);
-					} else
+					}
+					else
 					{
 						// Handle initial registration (e.g., NICK, USER)
 						if (strncmp(buffer, "NICK", 4) == 0)
@@ -179,12 +181,23 @@ void Server::handleClientEvents()
 							std::string nickname = std::string(buffer + 5);
 							_clients[_pollFds[i].fd].setNickname(nickname);
 							std::cout << "Client " << _pollFds[i].fd << " set nickname: " << nickname << std::endl;
-						} else if (strncmp(buffer, "USER", 4) == 0)
+						}
+						else if (strncmp(buffer, "USER", 4) == 0)
 						{
 							// Parse and set username for the client
 							std::string username = std::string(buffer + 5);
 							_clients[_pollFds[i].fd].setUsername(username);
 							std::cout << "Client " << _pollFds[i].fd << " set username: " << username << std::endl;
+						}
+						else if (strncmp(buffer, "GETNICK", 7) == 0)
+						{
+
+							std::string message = _clients[_pollFds[i].fd].getNickname();
+							// Mesajı istemciye gönder
+							if (send(_pollFds[i].fd, message.c_str(), message.length(), 0) == -1)
+							{
+								std::cerr << "Mesaj gönderilirken hata oluştu!" << std::endl;
+							}
 						}
 					}
 				}
@@ -192,4 +205,3 @@ void Server::handleClientEvents()
 		}
 	}
 }
-

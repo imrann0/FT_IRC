@@ -1,4 +1,6 @@
 #include "Server.hpp"
+#include "Channel.hpp"
+
 #include <sys/socket.h> // socket, bind
 #include <fcntl.h>		// fcntl, F_SETFL, O_NONBLOCK
 #include <cstring>	 	// memset
@@ -6,7 +8,8 @@
 #include <stdexcept>	// runtime_error
 #include <poll.h>		//poll
 #include <string>
-
+#include <cstring>  // strerror
+#include <cerrno>   // errno
 
 Server::Server(int port, std::string password) : _port(port), _password(password)
 {
@@ -164,14 +167,18 @@ void	Server::processUserEvents()
 
 void Server::processMessage(int clientFd, const char* buffer, std::map<int, Client>& clients)
 {
+
 	if (clients[clientFd].isRegistered() == false)
 	{
-		std::string str = buffer + 8;
-		if (str.find("NICK") != std::string::npos && str.find("USER") != std::string::npos )
+		std::string str = buffer;
+		int p = str.find("NICK");
+		if (p == -1)
+			return ;
+		str = str.substr(p, str.length() - p);
+		if (str.find("NICK") != std::string::npos && str.find("USER") != std::string::npos)
 		{
 			str.erase(std::remove(str.begin(), str.end(), '\r'), str.end());
 			size_t pos = str.find('\n');
-			std::cout << pos << "\n" << str<< "\n" << std::endl;
 			std::string nickname = str.substr(5, pos - 5);
 			str = str.substr(pos + 1);
 
@@ -197,41 +204,75 @@ void Server::processMessage(int clientFd, const char* buffer, std::map<int, Clie
 			clients[clientFd].setRealName(realname);
 			clients[clientFd].setHostName(hostname);
 			clients[clientFd].registerClient();
-
+			std::cout << clientFd << " Başarılı Bir Şekilde Kayıt Gerçekleşti" << std::endl;
 			/*std::cout << "nickname: " << nickname << std::endl;
 			std::cout << "username: " << username << std::endl;
 			std::cout << "hostname: " << hostname << std::endl;
 			std::cout << "servername: " << servername << std::endl;
 			std::cout << "realname: " << realname << std::endl;*/
-
 		}
 	}
-	//hatalı kullanıum düzeltilcek kayıt olmayan kullanıcı nick komutunu kullanamıyor
-	if (clients[clientFd].isRegistered() == false)
+	else if (clients[clientFd].isRegistered() == false) //hatalı kullanıum düzeltilcek kayıt olmayan kullanıcı nick komutunu kullanamıyor
 	{
-		std::string response = "Message received!";
+		std::string response = "Please Register First!";
 		send(clientFd, response.c_str(), response.size(), 0);
 	}
 	else
 	{
 		if (strncmp(buffer, "NICK", 4) == 0)
 		{
+			std::cout << "Ben burdaım cünkü Malım" << std::endl;
 			std::string nickname(buffer + 5);
+			nickname.erase(nickname.find_last_not_of("\r\n") + 1);
+			if (nickname.length() == 0)
+			{
+				std::cout << ":localhost 431 * " << clientFd << " nickname " << clients[clientFd].getNickname();
+			}
+			//std::string nickname = str.substr(0, str.length());
 			std::string a =  ":" + clients[clientFd].getNickname() + "!" + clients[clientFd].getUsername() + "@localhost NICK " + nickname + "\r\n";
-			std::cout << "send: " << send(clientFd, a.c_str(), a.length(), 0) << std::endl;
+			std::cerr  << std::strerror(send(clientFd, a.c_str(), a.length(), 0)) << std::endl;
+
+			std::cout << clientFd <<std::endl;
+			std::cout << clients[clientFd].getNickname()  <<std::endl;
+			std::cout << clients[clientFd].getUsername() <<std::endl;
+			std::cout << nickname <<std::endl;
+
 			clients[clientFd].setNickname(nickname);
 			std::cout << "Client " << clientFd << " set nickname: " << nickname << std::endl;
+			std::cout << "Ben burdan gidiyorum ama agzına sıçtım" << std::endl;
 		}
 		else if (strncmp(buffer, "USER", 4) == 0)
 		{
+			//eklencek
 			std::string a = buffer;
-
 		}
 		else if (strncmp(buffer, "GETNICK", 7) == 0)
 		{
-			std::string message = clients[clientFd].getNickname();
+			//Test Komutu
+			std::string message = clients[clientFd].getNickname() + "\r\n";
 			if (send(clientFd, message.c_str(), message.length(), 0) == -1)
 				std::cerr << "Error sending message to client!" << std::endl;
+		}
+		else if (strncmp(buffer, "JOIN", 4) == 0)
+		{
+			// :user!~user@host JOIN :#mychannel  -- rpl'dir
+
+			std::string channelName(buffer + 5);
+			channelName.erase(channelName.find_last_not_of("\r\n") + 1);
+			// if (channelName[0] != '#') {} // Eklenebilir
+			if  (_channels.find(channelName) != _channels.end())
+			{
+				std::cout << "Channel " << channelName << " already exists." << std::endl;
+			}
+			else
+			{
+				std::string message = ":" + clients[clientFd].getUsername() + "!~" + clients[clientFd].getUsername() + "@" + clients[clientFd].getHostName() + " JOIN :" + channelName  + "\r\n";
+				Channel  channel(channelName);
+				channel.ClientAdd(clients[clientFd]);
+				channel.OperatorAdd(clients[clientFd]);
+				_channels.insert(std::make_pair(channelName, channel));
+				send(clientFd, message.c_str(), message.length(), 0);
+			}
 		}
 	}
 }

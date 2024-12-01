@@ -28,7 +28,7 @@ class Server
 		struct sockaddr_in server_addr;
 		std::vector<pollfd> _pollFds;
 		std::map<int, Client> _clients;
-		std::map<std::string, Channel> channels;
+		std::map<std::string, Channel> _channels;
 };
 
 

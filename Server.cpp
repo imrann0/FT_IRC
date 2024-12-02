@@ -1,5 +1,6 @@
 #include "Server.hpp"
 #include "Channel.hpp"
+#include "Tools.hpp"
 
 #include <sys/socket.h> // socket, bind
 #include <fcntl.h>		// fcntl, F_SETFL, O_NONBLOCK
@@ -98,8 +99,7 @@ void Server::acceptClient()
 	_clients.insert(std::make_pair(clientSocket, Client(clientSocket)));
 
 	std::string welcomeMessage = "Welcome to the server!\n";
-	//std::string ServerInfo =  " Giriş Yapti";
-	//send(_pollFds.begin()->fd, ServerInfo.c_str(), ServerInfo.size(), 0);
+	std::cout << clientSocket << " Login" << std::endl;
 	send(clientSocket, welcomeMessage.c_str(), welcomeMessage.size(), 0);
 }
 
@@ -190,39 +190,7 @@ void Server::processMessage(int clientFd, const char* buffer, std::map<int, Clie
 		str = str.substr(p, str.length() - p);
 		if (str.find("NICK") != std::string::npos && str.find("USER") != std::string::npos)
 		{
-			str.erase(std::remove(str.begin(), str.end(), '\r'), str.end());
-			size_t pos = str.find('\n');
-			std::string nickname = str.substr(5, pos - 5);
-			str = str.substr(pos + 1);
-
-
-			str.erase(std::remove(str.begin(), str.end(), '\n'), str.end());
-			std::string userInfo = str.substr(5); // "USER" komutundan sonraki kısmı alıyoruz
-			size_t firstSpace = userInfo.find(" "); // ilk boşluğu bul
-			size_t secondSpace = userInfo.find(" ", firstSpace + 1); // ikinci boşluğu bul
-			size_t thirdSpace = userInfo.find(" ", secondSpace + 1); // üçüncü boşluğu bul
-
-			// Parçaları ayıralım
-			std::string username = userInfo.substr(0, firstSpace); // username
-			std::string hostname = userInfo.substr(firstSpace + 1, secondSpace - firstSpace - 1); // hostname
-			std::string servername = userInfo.substr(secondSpace + 1, thirdSpace - secondSpace - 1); // servername
-			std::string realname = userInfo.substr(thirdSpace + 2); // realname kısmını almak için ':'
-
-			// Gerçek adı temizlemek için trim işlemi yapılabilir
-			if (realname[0] == ':') {
-				realname = realname.substr(1); // ':' karakterini çıkar
-			}
-			clients[clientFd].setNickname(nickname);
-			clients[clientFd].setUsername(username);
-			clients[clientFd].setRealName(realname);
-			clients[clientFd].setHostName(hostname);
-			clients[clientFd].registerClient();
-			std::cout << clientFd << " Başarılı Bir Şekilde Kayıt Gerçekleşti" << std::endl;
-			/*std::cout << "nickname: " << nickname << std::endl;
-			std::cout << "username: " << username << std::endl;
-			std::cout << "hostname: " << hostname << std::endl;
-			std::cout << "servername: " << servername << std::endl;
-			std::cout << "realname: " << realname << std::endl;*/
+			chatRegisterClient(str, clients[clientFd]);
 		}
 	}
 	else if (clients[clientFd].isRegistered() == false) //hatalı kullanıum düzeltilcek kayıt olmayan kullanıcı nick komutunu kullanamıyor

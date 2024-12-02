@@ -21,14 +21,14 @@ class Server
 		void	processUserEvents();
 		void	processMessage(int clientFd, const char* buffer, std::map<int, Client>& clients);
 	private:
-		std::string serverName;
-		const int _port;
-		const std::string _password;
-		int _socket;
-		struct sockaddr_in server_addr;
-		std::vector<pollfd> _pollFds;
-		std::map<int, Client> _clients;
-		std::map<std::string, Channel> _channels;
+		std::string						serverName;
+		const int						_port;
+		const std::string				_password;
+		int								_socket;
+		struct sockaddr_in				server_addr;
+		std::vector<pollfd>				_pollFds;
+		std::map<int, Client>			_clients;
+		std::map<std::string, Channel>	_channels;
 };
 
 

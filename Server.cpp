@@ -3,13 +3,14 @@
 
 #include <sys/socket.h> // socket, bind
 #include <fcntl.h>		// fcntl, F_SETFL, O_NONBLOCK
-#include <cstring>	 	// memset
+#include <cstring>	 	// memset strerror
 #include <unistd.h>		// close
 #include <stdexcept>	// runtime_error
 #include <poll.h>		//poll
 #include <string>
-#include <cstring>  // strerror
 #include <cerrno>   // errno
+#include <algorithm> // std::error
+
 
 Server::Server(int port, std::string password) : _port(port), _password(password)
 {
@@ -60,7 +61,7 @@ void	Server::Debug()
 {
 	while (true)
 	{
-		int ret = poll(_pollFds.data(), _pollFds.size(), -1);
+		int ret = poll(_pollFds.data(), _pollFds.size(), -1); // poll nedir?
 		if (ret == -1)
 		{
 			close(_socket);
@@ -97,6 +98,8 @@ void Server::acceptClient()
 	_clients.insert(std::make_pair(clientSocket, Client(clientSocket)));
 
 	std::string welcomeMessage = "Welcome to the server!\n";
+	//std::string ServerInfo =  " Giriş Yapti";
+	//send(_pollFds.begin()->fd, ServerInfo.c_str(), ServerInfo.size(), 0);
 	send(clientSocket, welcomeMessage.c_str(), welcomeMessage.size(), 0);
 }
 
@@ -167,7 +170,7 @@ void	Server::processUserEvents()
 
 void Server::processMessage(int clientFd, const char* buffer, std::map<int, Client>& clients)
 {
-
+	std::cout << buffer << std::endl;
 	if (clients[clientFd].isRegistered() == false)
 	{
 		std::string str = buffer;
@@ -221,7 +224,6 @@ void Server::processMessage(int clientFd, const char* buffer, std::map<int, Clie
 	{
 		if (strncmp(buffer, "NICK", 4) == 0)
 		{
-			std::cout << "Ben burdaım cünkü Malım" << std::endl;
 			std::string nickname(buffer + 5);
 			nickname.erase(nickname.find_last_not_of("\r\n") + 1);
 			if (nickname.length() == 0)
@@ -230,16 +232,19 @@ void Server::processMessage(int clientFd, const char* buffer, std::map<int, Clie
 			}
 			//std::string nickname = str.substr(0, str.length());
 			std::string a =  ":" + clients[clientFd].getNickname() + "!" + clients[clientFd].getUsername() + "@localhost NICK " + nickname + "\r\n";
-			std::cerr  << std::strerror(send(clientFd, a.c_str(), a.length(), 0)) << std::endl;
-
+			int err = send(clientFd, a.c_str(), a.length(), 0);
+			if (err < 0)
+				std::cerr  << std::strerror(err) << std::endl;
+			else
+				std::cout << "NICK UPDATE SUCCSES" << std::endl;
+/*
 			std::cout << clientFd <<std::endl;
 			std::cout << clients[clientFd].getNickname()  <<std::endl;
 			std::cout << clients[clientFd].getUsername() <<std::endl;
-			std::cout << nickname <<std::endl;
+			std::cout << nickname <<std::endl; */
 
 			clients[clientFd].setNickname(nickname);
 			std::cout << "Client " << clientFd << " set nickname: " << nickname << std::endl;
-			std::cout << "Ben burdan gidiyorum ama agzına sıçtım" << std::endl;
 		}
 		else if (strncmp(buffer, "USER", 4) == 0)
 		{
@@ -256,13 +261,16 @@ void Server::processMessage(int clientFd, const char* buffer, std::map<int, Clie
 		else if (strncmp(buffer, "JOIN", 4) == 0)
 		{
 			// :user!~user@host JOIN :#mychannel  -- rpl'dir
-
+			std::cout << "3" << std::endl;
 			std::string channelName(buffer + 5);
 			channelName.erase(channelName.find_last_not_of("\r\n") + 1);
 			// if (channelName[0] != '#') {} // Eklenebilir
 			if  (_channels.find(channelName) != _channels.end())
 			{
 				std::cout << "Channel " << channelName << " already exists." << std::endl;
+				std::string message = ":" + clients[clientFd].getUsername() + "!~" + clients[clientFd].getUsername() + "@" + clients[clientFd].getHostName() + " JOIN :" + channelName  + "\r\n";
+				_channels[channelName].ClientAdd(clients[clientFd]);
+				send(clientFd, message.c_str(), message.length(), 0);
 			}
 			else
 			{
@@ -273,6 +281,40 @@ void Server::processMessage(int clientFd, const char* buffer, std::map<int, Clie
 				_channels.insert(std::make_pair(channelName, channel));
 				send(clientFd, message.c_str(), message.length(), 0);
 			}
+			std::cout << "1" << std::endl;
+		}
+		else if (strncmp(buffer, "PRIVMSG", 7 ) == 0)
+		{
+			// :Alice!alice@irc.example.com PRIVMSG #general :Herkese merhaba!
+			// :<sender>!<user>@<host> PRIVMSG <channel> :<message>
+			std::string rawMessage(buffer);
+			rawMessage.erase(rawMessage.find_last_not_of("\r\n") + 1);
+
+			// Mesajı parçalara ayır (alıcı ve içerik)
+			size_t firstSpace = rawMessage.find(" ");
+			size_t secondSpace = rawMessage.find(" ", firstSpace + 1);
+
+			if (firstSpace == std::string::npos || secondSpace == std::string::npos) {
+				// Geçersiz format
+				std::string error = "ERROR :Invalid PRIVMSG format\r\n";
+				send(clientFd, error.c_str(), error.length(), 0);
+				return;
+			}
+
+			std::string target = rawMessage.substr(firstSpace + 1, secondSpace - firstSpace - 1); // Alıcı (#channel veya kullanıcı)
+			std::string content = rawMessage.substr(secondSpace + 2); // Mesaj içeriği
+			//std::cout << target << " " << content << std::endl;
+			//std::string m = ":" + clients[clientFd].getNickname() + "!" + clients[clientFd].getUsername() + "@" + clients[clientFd].getHostName() + " "+ message;
+			std::vector<Client> users = _channels[target].getClients();
+			it user = users.begin() + 1;
+			for (; user != users.end(); user++)
+			{
+				int fda = user->getClientFd();
+				std::string m = ":" + clients[fda].getNickname() + "!" + clients[fda].getUsername() + "@" + clients[fda].getHostName() + " "+ rawMessage + "\r\n";
+				send(fda, m.c_str(), m.length(), 0);
+			}
+			//send(clientFd, m.c_str(), m.length(), 0);
+
 		}
 	}
 }

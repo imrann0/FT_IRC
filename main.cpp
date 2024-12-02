@@ -1,10 +1,11 @@
 #include "Server.hpp"
+#include <cstdlib> // std::atoi
 
 int main(int ar, char **av)
 {
 	if (ar != 3)
 	{
-		std::cerr << "Kullanım: ./program <port> <password>" << std::endl;
+		std::cerr << "used: ./program <port> <password>" << std::endl;
 		return 1;
 	}
 

@@ -20,6 +20,7 @@ class Server
 		void	handleClientEvents();
 		void	processUserEvents();
 		void	processMessage(int clientFd, const char* buffer, std::map<int, Client>& clients);
+		const Client getClientNameFd(std::string& target);
 	private:
 		std::string						serverName;
 		const int						_port;

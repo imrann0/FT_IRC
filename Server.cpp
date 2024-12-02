@@ -166,6 +166,16 @@ void	Server::processUserEvents()
 	}
 }
 
+const Client Server::getClientNameFd(std::string& target)
+{
+	std::map<int, Client>::iterator user = _clients.begin();
+	for (; user != _clients.end(); user++)
+	{
+		if (user->second.getNickname() == target)
+			return (user->second);
+	}
+	return (user->second); // bu olmayan bir şeyde ne döner diye testinin yapılması lazım // kesin hata
+}
 
 
 void Server::processMessage(int clientFd, const char* buffer, std::map<int, Client>& clients)
@@ -287,6 +297,7 @@ void Server::processMessage(int clientFd, const char* buffer, std::map<int, Clie
 		{
 			// :Alice!alice@irc.example.com PRIVMSG #general :Herkese merhaba!
 			// :<sender>!<user>@<host> PRIVMSG <channel> :<message>
+			// :<sender_nickname>!<sender_username>@<sender_host> PRIVMSG <recipient_nickname> :<message> ->özel mesaj
 			std::string rawMessage(buffer);
 			rawMessage.erase(rawMessage.find_last_not_of("\r\n") + 1);
 
@@ -302,18 +313,29 @@ void Server::processMessage(int clientFd, const char* buffer, std::map<int, Clie
 			}
 
 			std::string target = rawMessage.substr(firstSpace + 1, secondSpace - firstSpace - 1); // Alıcı (#channel veya kullanıcı)
-			std::string content = rawMessage.substr(secondSpace + 2); // Mesaj içeriği
-			//std::cout << target << " " << content << std::endl;
-			//std::string m = ":" + clients[clientFd].getNickname() + "!" + clients[clientFd].getUsername() + "@" + clients[clientFd].getHostName() + " "+ message;
-			std::vector<Client> users = _channels[target].getClients();
-			it user = users.begin() + 1;
-			for (; user != users.end(); user++)
+			std::string content = rawMessage.substr(secondSpace + 1); // Mesaj içeriği
+			if (target[0] == '#')
 			{
-				int fda = user->getClientFd();
-				std::string m = ":" + clients[fda].getNickname() + "!" + clients[fda].getUsername() + "@" + clients[fda].getHostName() + " "+ rawMessage + "\r\n";
-				send(fda, m.c_str(), m.length(), 0);
+				std::vector<Client> users = _channels[target].getClients();
+				it user = users.begin();
+				for (; user != users.end(); user++)
+				{
+					if (user->getClientFd() == clientFd)
+						continue ;
+					int fda = user->getClientFd();
+					std::string m = ":" + clients[clientFd].getNickname() + "!" + clients[fda].getUsername() + "@" + clients[fda].getHostName() + " "+ rawMessage + "\r\n";
+					send(fda, m.c_str(), m.length(), 0);
+				}
 			}
-			//send(clientFd, m.c_str(), m.length(), 0);
+			else
+			{
+				Client targetCLient = this->getClientNameFd(target);
+				std::cout << "Target NickName: " <<  targetCLient.getNickname() << std::endl;
+				std::cout << "content: " << content << std::endl;
+				std::string mes = ":" + clients[clientFd].getNickname() + "!~" +  clients[clientFd].getUsername() + "@" + clients[clientFd].getHostName() + " PRIVMSG " + targetCLient.getNickname() + " :" + content + "\r\n";
+				send(targetCLient.getClientFd(), mes.c_str(), mes.length(), 0);
+				//send(clientFd, mes.c_str(), mes.length(), 0);
+			}
 
 		}
 	}

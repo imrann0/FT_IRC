@@ -1,1 +1,10 @@
 • Several IRC clients exist. You have to choose one of them as a reference.  biz hexchat'i seçtik.
+
+
+
+
+LOGIN
+QUIT
+INVITE
+TOPIC
+MODE

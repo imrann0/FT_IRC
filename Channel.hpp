@@ -27,7 +27,6 @@ class Channel
 		void ClientAdd(Client newClient);
 		void OperatorAdd(Client newOperator);
 
-
 };
 
 #endif

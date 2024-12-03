@@ -32,9 +32,8 @@ void chatRegisterClient(const std::string& message, Client *client)
 	client->setUsername(username);
 	client->setRealName(realname);
 	client->setHostName(hostname);
-	client->registerClient();
 
-	std::cout << client->getClientFd() << " Başarılı Bir Şekilde Kayıt Gerçekleşti" << std::endl;
+	std::cout << client->getClientFd() << " Başaril Bir Şekilde Kayıt Gerçekleşti" << std::endl;
 }
 
 const Client getClientNameFd(std::map<int, Client>& clients, const std::string& target)

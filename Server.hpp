@@ -17,7 +17,7 @@ class Server
 		void	Debug();
 		void	acceptClient();
 		void	processUserEvents();
-		void	processMessage(int clientFd,  std::string str);
+		void	processMessage(Client &client);
 		void	routeCommand(int clientFd, const  std::string& str);
 	private:
 		std::string						serverName;

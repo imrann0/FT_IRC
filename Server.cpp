@@ -105,17 +105,17 @@ void Server::acceptClient()
 }
 
 
-int receiveData(int clientFd, char* buffer, size_t bufferSize)
+int receiveData(Client &client, char* buffer, size_t bufferSize)
 {
 	std::memset(buffer, 0, bufferSize);
-	int bytesReceived = recv(clientFd, buffer, bufferSize - 1, 0);
-
+	int bytesReceived = recv(client.getClientFd(), buffer, bufferSize - 1, 0);
 	if (bytesReceived <= 0) {
 		if (bytesReceived == 0)
-			std::cout << "Client " << clientFd << " disconnected." << std::endl;
+			std::cout << "Client " << client.getClientFd() << " disconnected." << std::endl;
 		else
-			std::cerr << "Error receiving data from client " << clientFd << std::endl;
+			std::cerr << "Error receiving data from client " << client.getClientFd() << std::endl;
 	}
+	client.appendBuffer(buffer);
 	return bytesReceived;
 }
 
@@ -138,14 +138,14 @@ void	Server::processUserEvents()
 			else
 			{
 				char buffer[1024];
-				int bytesReceived = receiveData(_pollFds[i].fd, buffer, sizeof(buffer));
+				int bytesReceived = receiveData(_clients[_pollFds[i].fd], buffer, sizeof(buffer));
 				if (bytesReceived <= 0)
 				{
 					closeConnection(_pollFds[i].fd, _clients, _pollFds, i);
 					continue ;
 				}
 				buffer[bytesReceived] = '\0';
-				processMessage(_pollFds[i].fd, buffer);
+				processMessage(_clients[_pollFds[i].fd]);
 			}
 
 		}
@@ -153,41 +153,58 @@ void	Server::processUserEvents()
 }
 
 
-
-void Server::processMessage(int clientFd, std::string str)
+void	login(Client &client, std::string &str)
 {
-	if (_clients[clientFd].isRegistered() == false)
+	std::cout << "|" << str << "|" << std::endl;
+	if (str.compare(0, 11, "CAP LS 302") == 0)
+		;
+	else if (str.compare(0, 4, "NICK") == 0)
+        Nick(client, str.substr(5));
+/*
+	if (str.find("NICK") != std::string::npos &&
+		str.find("USER") != std::string::npos)
 	{
 		int p = str.find("NICK");
-		if (p == -1)
-		{
-			std::string response = "Please Register First!";
-			send(clientFd, response.c_str(), response.size(), 0);
-			return ;
-		}
 		str = str.substr(p, str.length() - p);
-		if (str.find("NICK") != std::string::npos && str.find("USER") != std::string::npos)
-		{
-			chatRegisterClient(str, &_clients[clientFd]);
-		}
+		chatRegisterClient(str, &client);
 	}
+	else if (str.find("NICK") != std::string::npos ||
+		str.find("USER") != std::string::npos)
+	{
+
+	} */
 	else
-		this->routeCommand(clientFd, str);
+	{
+		std::string response = "Please Register First!\r\n";
+		send(client.getClientFd(), response.c_str(), response.size(), 0);
+	}
+	if (/* !client.getUsername().empty() &&
+		!client.getHostName().empty() && */
+		!client.getNickname().empty() /* && */
+		/* !client.getRealName().empty() */)
+		client.registerClient();
+}
+
+void Server::processMessage(Client	&client)
+{
+	std::string	str;
+
+	while (client.getBufferLine(str))
+	{
+		if (client.isRegistered() == false)
+			login(client, str);
+		else
+			this->routeCommand(client.getClientFd(), str);
+	}
 }
 
 void Server::routeCommand(int clientFd, const std::string& str)
 {
     if (str.compare(0, 4, "NICK") == 0)
-    {
-        Nick(&this->_clients[clientFd], str.substr(5)); 
-    }
-    else if (str.compare(0, 4, "JOIN") == 0) 
-    {
-        Join(&_channels, &_clients[clientFd], str.substr(5)); 
-    }
-    else if (str.compare(0, 7, "PRIVMSG") == 0) 
-    {
+        Nick(this->_clients[clientFd], str.substr(5));
+    else if (str.compare(0, 4, "JOIN") == 0)
+        Join(&_channels, &_clients[clientFd], str.substr(5));
+    else if (str.compare(0, 7, "PRIVMSG") == 0)
         Privmsg(_clients[clientFd], str, _channels, _clients);
-    }
 }
 

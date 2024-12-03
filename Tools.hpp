@@ -3,6 +3,6 @@
 
 #include "Client.hpp"
 
-void chatRegisterClient(const std::string& message, Client client);
+void chatRegisterClient(const std::string& message, Client *client);
 
 # endif

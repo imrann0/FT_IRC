@@ -1,7 +1,9 @@
 #include "Tools.hpp"
 #include <iostream>
+#include <algorithm>
 
-void chatRegisterClient(const std::string& message, Client client)
+
+void chatRegisterClient(const std::string& message, Client *client)
 {
 	std::string str = message;
 	str.erase(std::remove(str.begin(), str.end(), '\r'), str.end());
@@ -26,11 +28,11 @@ void chatRegisterClient(const std::string& message, Client client)
 	}
 
 	// Client bilgilerini güncelle
-	client.setNickname(nickname);
-	client.setUsername(username);
-	client.setRealName(realname);
-	client.setHostName(hostname);
-	client.registerClient();
+	client->setNickname(nickname);
+	client->setUsername(username);
+	client->setRealName(realname);
+	client->setHostName(hostname);
+	client->registerClient();
 
-	std::cout << client.getClientFd() << " Başarılı Bir Şekilde Kayıt Gerçekleşti" << std::endl;
+	std::cout << client->getClientFd() << " Başarılı Bir Şekilde Kayıt Gerçekleşti" << std::endl;
 }

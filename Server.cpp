@@ -1,6 +1,7 @@
 #include "Server.hpp"
 #include "Channel.hpp"
 #include "Tools.hpp"
+#include "Include/Command.hpp"
 
 #include <sys/socket.h> // socket, bind
 #include <fcntl.h>		// fcntl, F_SETFL, O_NONBLOCK
@@ -156,10 +157,10 @@ void	Server::processUserEvents()
 				if (bytesReceived <= 0)
 				{
 					closeConnection(_pollFds[i].fd, _clients, _pollFds, i);
-					continue;
+					continue ;
 				}
 				buffer[bytesReceived] = '\0';
-				processMessage(_pollFds[i].fd, buffer, _clients);
+				processMessage(_pollFds[i].fd, buffer);
 			}
 
 		}
@@ -178,10 +179,10 @@ const Client Server::getClientNameFd(std::string& target)
 }
 
 
-void Server::processMessage(int clientFd, const char* buffer, std::map<int, Client>& clients)
+void Server::processMessage(int clientFd, const char* buffer)
 {
 	std::cout << buffer << std::endl;
-	if (clients[clientFd].isRegistered() == false)
+	if (_clients[clientFd].isRegistered() == false)
 	{
 		std::string str = buffer;
 		int p = str.find("NICK");
@@ -190,10 +191,10 @@ void Server::processMessage(int clientFd, const char* buffer, std::map<int, Clie
 		str = str.substr(p, str.length() - p);
 		if (str.find("NICK") != std::string::npos && str.find("USER") != std::string::npos)
 		{
-			chatRegisterClient(str, clients[clientFd]);
+			chatRegisterClient(str, &_clients[clientFd]);
 		}
 	}
-	else if (clients[clientFd].isRegistered() == false) //hatalı kullanıum düzeltilcek kayıt olmayan kullanıcı nick komutunu kullanamıyor
+	else if (_clients[clientFd].isRegistered() == false) //hatalı kullanıum düzeltilcek kayıt olmayan kullanıcı nick komutunu kullanamıyor
 	{
 		std::string response = "Please Register First!";
 		send(clientFd, response.c_str(), response.size(), 0);
@@ -202,27 +203,7 @@ void Server::processMessage(int clientFd, const char* buffer, std::map<int, Clie
 	{
 		if (strncmp(buffer, "NICK", 4) == 0)
 		{
-			std::string nickname(buffer + 5);
-			nickname.erase(nickname.find_last_not_of("\r\n") + 1);
-			if (nickname.length() == 0)
-			{
-				std::cout << ":localhost 431 * " << clientFd << " nickname " << clients[clientFd].getNickname();
-			}
-			//std::string nickname = str.substr(0, str.length());
-			std::string a =  ":" + clients[clientFd].getNickname() + "!" + clients[clientFd].getUsername() + "@localhost NICK " + nickname + "\r\n";
-			int err = send(clientFd, a.c_str(), a.length(), 0);
-			if (err < 0)
-				std::cerr  << std::strerror(err) << std::endl;
-			else
-				std::cout << "NICK UPDATE SUCCSES" << std::endl;
-/*
-			std::cout << clientFd <<std::endl;
-			std::cout << clients[clientFd].getNickname()  <<std::endl;
-			std::cout << clients[clientFd].getUsername() <<std::endl;
-			std::cout << nickname <<std::endl; */
-
-			clients[clientFd].setNickname(nickname);
-			std::cout << "Client " << clientFd << " set nickname: " << nickname << std::endl;
+			Nick(&_clients[clientFd], buffer + 5);
 		}
 		else if (strncmp(buffer, "USER", 4) == 0)
 		{
@@ -232,7 +213,7 @@ void Server::processMessage(int clientFd, const char* buffer, std::map<int, Clie
 		else if (strncmp(buffer, "GETNICK", 7) == 0)
 		{
 			//Test Komutu
-			std::string message = clients[clientFd].getNickname() + "\r\n";
+			std::string message = _clients[clientFd].getNickname() + "\r\n";
 			if (send(clientFd, message.c_str(), message.length(), 0) == -1)
 				std::cerr << "Error sending message to client!" << std::endl;
 		}
@@ -246,18 +227,23 @@ void Server::processMessage(int clientFd, const char* buffer, std::map<int, Clie
 			if  (_channels.find(channelName) != _channels.end())
 			{
 				std::cout << "Channel " << channelName << " already exists." << std::endl;
-				std::string message = ":" + clients[clientFd].getUsername() + "!~" + clients[clientFd].getUsername() + "@" + clients[clientFd].getHostName() + " JOIN :" + channelName  + "\r\n";
-				_channels[channelName].ClientAdd(clients[clientFd]);
+				std::string message = ":" + _clients[clientFd].getNickname() + "!~" + _clients[clientFd].getUsername() + "@" + _clients[clientFd].getHostName() + " JOIN :" + channelName  + "\r\n";
+				_channels[channelName].ClientAdd(_clients[clientFd]);
 				send(clientFd, message.c_str(), message.length(), 0);
 			}
 			else
 			{
-				std::string message = ":" + clients[clientFd].getUsername() + "!~" + clients[clientFd].getUsername() + "@" + clients[clientFd].getHostName() + " JOIN :" + channelName  + "\r\n";
+				std::string message = ":" + _clients[clientFd].getNickname() + "!~" + _clients[clientFd].getUsername() + "@" + _clients[clientFd].getHostName() + " JOIN :" + channelName  + "\r\n";
 				Channel  channel(channelName);
-				channel.ClientAdd(clients[clientFd]);
-				channel.OperatorAdd(clients[clientFd]);
+				std::cout << "Channel Nick Name" << _clients[clientFd].getNickname() << std::endl;
+				channel.ClientAdd(_clients[clientFd]);
+				channel.OperatorAdd(_clients[clientFd]);
 				_channels.insert(std::make_pair(channelName, channel));
-				send(clientFd, message.c_str(), message.length(), 0);
+				int err = send(clientFd, message.c_str(), message.length(), 0);
+				if (err < 0)
+					std::cerr  << std::strerror(err) << std::endl;
+				else
+					std::cout << "NICK UPDATE SUCCSES" << std::endl;
 			}
 			std::cout << "1" << std::endl;
 		}
@@ -291,7 +277,7 @@ void Server::processMessage(int clientFd, const char* buffer, std::map<int, Clie
 					if (user->getClientFd() == clientFd)
 						continue ;
 					int fda = user->getClientFd();
-					std::string m = ":" + clients[clientFd].getNickname() + "!" + clients[fda].getUsername() + "@" + clients[fda].getHostName() + " "+ rawMessage + "\r\n";
+					std::string m = ":" + _clients[clientFd].getNickname() + "!" + _clients[fda].getUsername() + "@" + _clients[fda].getHostName() + " "+ rawMessage + "\r\n";
 					send(fda, m.c_str(), m.length(), 0);
 				}
 			}
@@ -300,7 +286,7 @@ void Server::processMessage(int clientFd, const char* buffer, std::map<int, Clie
 				Client targetCLient = this->getClientNameFd(target);
 				std::cout << "Target NickName: " <<  targetCLient.getNickname() << std::endl;
 				std::cout << "content: " << content << std::endl;
-				std::string mes = ":" + clients[clientFd].getNickname() + "!~" +  clients[clientFd].getUsername() + "@" + clients[clientFd].getHostName() + " PRIVMSG " + targetCLient.getNickname() + " :" + content + "\r\n";
+				std::string mes = ":" + _clients[clientFd].getNickname() + "!~" +  _clients[clientFd].getUsername() + "@" + _clients[clientFd].getHostName() + " PRIVMSG " + targetCLient.getNickname() + " :" + content + "\r\n";
 				send(targetCLient.getClientFd(), mes.c_str(), mes.length(), 0);
 				//send(clientFd, mes.c_str(), mes.length(), 0);
 			}

@@ -19,7 +19,7 @@ class Server
 		void	acceptClient();
 		void	handleClientEvents();
 		void	processUserEvents();
-		void	processMessage(int clientFd, const char* buffer, std::map<int, Client>& clients);
+		void	processMessage(int clientFd, const char* buffer);
 		const Client getClientNameFd(std::string& target);
 	private:
 		std::string						serverName;

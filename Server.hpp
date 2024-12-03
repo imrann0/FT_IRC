@@ -9,7 +9,6 @@
 #include "Client.hpp"
 #include "Channel.hpp"
 
-#define RPL_JOIN(source, channel) ":" + source + " JOIN :" + channel
 
 class Server
 {
@@ -17,10 +16,9 @@ class Server
 		Server(int port, std::string password);
 		void	Debug();
 		void	acceptClient();
-		void	handleClientEvents();
 		void	processUserEvents();
-		void	processMessage(int clientFd, const char* buffer);
-		const Client getClientNameFd(std::string& target);
+		void	processMessage(int clientFd,  std::string str);
+		void	routeCommand(int clientFd, const  std::string& str);
 	private:
 		std::string						serverName;
 		const int						_port;

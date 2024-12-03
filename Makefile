@@ -2,8 +2,10 @@ NAME = Server
 
 CXX = c++
 CXXFLAGS = -Wall -Wextra -Werror -std=c++98
-SRCS =  Server.cpp Client.cpp Tools.cpp Channel.cpp main.cpp \
-		Commands/Nick.cpp
+SRCS =  Server.cpp Client.cpp Channel.cpp Tools.cpp main.cpp \
+		Commands/Nick.cpp \
+		Commands/Join.cpp \
+		Commands/Privmsg.cpp 
 
 OBJS = $(SRCS:.cpp=.o)
 

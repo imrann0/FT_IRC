@@ -36,3 +36,13 @@ void chatRegisterClient(const std::string& message, Client *client)
 
 	std::cout << client->getClientFd() << " Başarılı Bir Şekilde Kayıt Gerçekleşti" << std::endl;
 }
+
+const Client getClientNameFd(std::map<int, Client>& clients, const std::string& target)
+{
+    for (std::map<int, Client>::iterator user = clients.begin(); user != clients.end(); ++user)
+	{
+        if (user->second.getNickname() == target)
+            return user->second;
+    }
+    throw std::runtime_error("Client not found");
+}

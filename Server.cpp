@@ -76,7 +76,7 @@ void	Server::Debug()
 				if (_pollFds[i].fd == _socket)
 					acceptClient();
 				else
-					handleClientEvents();
+					processUserEvents();
 			}
 		}
 	}
@@ -105,21 +105,6 @@ void Server::acceptClient()
 }
 
 
-void Server::handleClientEvents()
-{
-	while (true)
-	{
-		int ret = poll(&_pollFds[0], _pollFds.size(), -1);
-		if (ret == -1)
-		{
-			std::cerr << "Poll error!" << std::endl;
-			close(_socket);
-			throw std::runtime_error("poll Error");
-		}
-		// Loop through all users to check for events
-		processUserEvents();
-	}
-}
 int receiveData(int clientFd, char* buffer, size_t bufferSize)
 {
 	std::memset(buffer, 0, bufferSize);
@@ -167,130 +152,42 @@ void	Server::processUserEvents()
 	}
 }
 
-const Client Server::getClientNameFd(std::string& target)
-{
-	std::map<int, Client>::iterator user = _clients.begin();
-	for (; user != _clients.end(); user++)
-	{
-		if (user->second.getNickname() == target)
-			return (user->second);
-	}
-	return (user->second); // bu olmayan bir şeyde ne döner diye testinin yapılması lazım // kesin hata
-}
 
 
-void Server::processMessage(int clientFd, const char* buffer)
+void Server::processMessage(int clientFd, std::string str)
 {
-	std::cout << buffer << std::endl;
 	if (_clients[clientFd].isRegistered() == false)
 	{
-		std::string str = buffer;
 		int p = str.find("NICK");
 		if (p == -1)
+		{
+			std::string response = "Please Register First!";
+			send(clientFd, response.c_str(), response.size(), 0);
 			return ;
+		}
 		str = str.substr(p, str.length() - p);
 		if (str.find("NICK") != std::string::npos && str.find("USER") != std::string::npos)
 		{
 			chatRegisterClient(str, &_clients[clientFd]);
 		}
 	}
-	else if (_clients[clientFd].isRegistered() == false) //hatalı kullanıum düzeltilcek kayıt olmayan kullanıcı nick komutunu kullanamıyor
-	{
-		std::string response = "Please Register First!";
-		send(clientFd, response.c_str(), response.size(), 0);
-	}
 	else
-	{
-		if (strncmp(buffer, "NICK", 4) == 0)
-		{
-			Nick(&_clients[clientFd], buffer + 5);
-		}
-		else if (strncmp(buffer, "USER", 4) == 0)
-		{
-			//eklencek
-			std::string a = buffer;
-		}
-		else if (strncmp(buffer, "GETNICK", 7) == 0)
-		{
-			//Test Komutu
-			std::string message = _clients[clientFd].getNickname() + "\r\n";
-			if (send(clientFd, message.c_str(), message.length(), 0) == -1)
-				std::cerr << "Error sending message to client!" << std::endl;
-		}
-		else if (strncmp(buffer, "JOIN", 4) == 0)
-		{
-			// :user!~user@host JOIN :#mychannel  -- rpl'dir
-			std::cout << "3" << std::endl;
-			std::string channelName(buffer + 5);
-			channelName.erase(channelName.find_last_not_of("\r\n") + 1);
-			// if (channelName[0] != '#') {} // Eklenebilir
-			if  (_channels.find(channelName) != _channels.end())
-			{
-				std::cout << "Channel " << channelName << " already exists." << std::endl;
-				std::string message = ":" + _clients[clientFd].getNickname() + "!~" + _clients[clientFd].getUsername() + "@" + _clients[clientFd].getHostName() + " JOIN :" + channelName  + "\r\n";
-				_channels[channelName].ClientAdd(_clients[clientFd]);
-				send(clientFd, message.c_str(), message.length(), 0);
-			}
-			else
-			{
-				std::string message = ":" + _clients[clientFd].getNickname() + "!~" + _clients[clientFd].getUsername() + "@" + _clients[clientFd].getHostName() + " JOIN :" + channelName  + "\r\n";
-				Channel  channel(channelName);
-				std::cout << "Channel Nick Name" << _clients[clientFd].getNickname() << std::endl;
-				channel.ClientAdd(_clients[clientFd]);
-				channel.OperatorAdd(_clients[clientFd]);
-				_channels.insert(std::make_pair(channelName, channel));
-				int err = send(clientFd, message.c_str(), message.length(), 0);
-				if (err < 0)
-					std::cerr  << std::strerror(err) << std::endl;
-				else
-					std::cout << "NICK UPDATE SUCCSES" << std::endl;
-			}
-			std::cout << "1" << std::endl;
-		}
-		else if (strncmp(buffer, "PRIVMSG", 7 ) == 0)
-		{
-			// :Alice!alice@irc.example.com PRIVMSG #general :Herkese merhaba!
-			// :<sender>!<user>@<host> PRIVMSG <channel> :<message>
-			// :<sender_nickname>!<sender_username>@<sender_host> PRIVMSG <recipient_nickname> :<message> ->özel mesaj
-			std::string rawMessage(buffer);
-			rawMessage.erase(rawMessage.find_last_not_of("\r\n") + 1);
-
-			// Mesajı parçalara ayır (alıcı ve içerik)
-			size_t firstSpace = rawMessage.find(" ");
-			size_t secondSpace = rawMessage.find(" ", firstSpace + 1);
-
-			if (firstSpace == std::string::npos || secondSpace == std::string::npos) {
-				// Geçersiz format
-				std::string error = "ERROR :Invalid PRIVMSG format\r\n";
-				send(clientFd, error.c_str(), error.length(), 0);
-				return;
-			}
-
-			std::string target = rawMessage.substr(firstSpace + 1, secondSpace - firstSpace - 1); // Alıcı (#channel veya kullanıcı)
-			std::string content = rawMessage.substr(secondSpace + 1); // Mesaj içeriği
-			if (target[0] == '#')
-			{
-				std::vector<Client> users = _channels[target].getClients();
-				it user = users.begin();
-				for (; user != users.end(); user++)
-				{
-					if (user->getClientFd() == clientFd)
-						continue ;
-					int fda = user->getClientFd();
-					std::string m = ":" + _clients[clientFd].getNickname() + "!" + _clients[fda].getUsername() + "@" + _clients[fda].getHostName() + " "+ rawMessage + "\r\n";
-					send(fda, m.c_str(), m.length(), 0);
-				}
-			}
-			else
-			{
-				Client targetCLient = this->getClientNameFd(target);
-				std::cout << "Target NickName: " <<  targetCLient.getNickname() << std::endl;
-				std::cout << "content: " << content << std::endl;
-				std::string mes = ":" + _clients[clientFd].getNickname() + "!~" +  _clients[clientFd].getUsername() + "@" + _clients[clientFd].getHostName() + " PRIVMSG " + targetCLient.getNickname() + " :" + content + "\r\n";
-				send(targetCLient.getClientFd(), mes.c_str(), mes.length(), 0);
-				//send(clientFd, mes.c_str(), mes.length(), 0);
-			}
-
-		}
-	}
+		this->routeCommand(clientFd, str);
 }
+
+void Server::routeCommand(int clientFd, const std::string& str)
+{
+    if (str.compare(0, 4, "NICK") == 0)
+    {
+        Nick(&this->_clients[clientFd], str.substr(5)); 
+    }
+    else if (str.compare(0, 4, "JOIN") == 0) 
+    {
+        Join(&_channels, &_clients[clientFd], str.substr(5)); 
+    }
+    else if (str.compare(0, 7, "PRIVMSG") == 0) 
+    {
+        Privmsg(_clients[clientFd], str, _channels, _clients);
+    }
+}
+

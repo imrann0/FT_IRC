@@ -147,11 +147,12 @@ void	Server::processUserEvents()
 
 void	login(Client &client, std::string &str)
 {
-	std::cout << "|" << str << "|" << std::endl;
 	if (str.compare(0, 11, "CAP LS 302") == 0)
 		;
 	else if (str.compare(0, 4, "NICK") == 0)
         Nick(client, str.substr(5));
+	else if (str.compare(0, 4, "USER") == 0)
+        user(client, str.substr(5));
 /*
 	if (str.find("NICK") != std::string::npos &&
 		str.find("USER") != std::string::npos)

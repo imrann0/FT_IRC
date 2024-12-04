@@ -19,6 +19,7 @@ public:
 	const std::string&	getHostName() const;
 	bool				getBufferLine(std::string &str);
 	bool				isRegistered() const;
+	bool				getPass() const;
 
 	// Setters
 	void	setClientFd(int fd);
@@ -27,6 +28,7 @@ public:
 	void	setUsername(const std::string& username);
 	void	setRealName(const std::string& realname);
 	void	setHostName(const std::string& hostname);
+	void	setPass(bool pass);
 	void	registerClient();
 
 	std::string getPrefixName();

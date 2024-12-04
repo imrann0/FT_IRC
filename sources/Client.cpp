@@ -25,6 +25,8 @@ bool Client::isRegistered() const { return _registered; }
 
 int Client::getClientFd() const { return _clientFd; }
 
+bool    Client::getPass() const { return this->_pass; }
+
 // Setters
 
 void Client::setBuffer(const std::string& buffer) { _buffer = buffer; }
@@ -41,6 +43,7 @@ void Client::registerClient() { _registered = true; }
 
 void Client::setClientFd(int fd){ _clientFd = fd; }
 
+void Client::setPass(bool pass) { this->_pass = pass; }
 
 std::string	Client::getPrefixName() {
     std::string prefixName = _nickname;

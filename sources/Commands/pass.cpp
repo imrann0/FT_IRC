@@ -6,7 +6,7 @@
 /*   By: bdemirbu <bdemirbu@student.42kocaeli.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 16:54:06 by bdemirbu          #+#    #+#             */
-/*   Updated: 2024/12/04 17:16:25 by bdemirbu         ###   ########.fr       */
+/*   Updated: 2024/12/04 17:25:35 by bdemirbu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,5 +16,5 @@
 
 void pass(Server &server, Client &client, std::string str)
 {
-
+	if ()
 }

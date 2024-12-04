@@ -147,7 +147,7 @@ void	Server::processUserEvents()
 
 void	login(Client &client, std::string &str)
 {
-	if (str.compare(0, 11, "CAP LS 302") == 0)
+	if (str.compare(0, 10, "CAP LS 302") == 0)
 		;
 	else if (str.compare(0, 4, "NICK") == 0)
         Nick(client, str.substr(5));

@@ -21,12 +21,13 @@ class Channel
 		//get
 		std::string			getName();
 		std::vector<Client>	getClients();
-		std::vector<Client>	getOperator();
+		std::vector<Client>	getOperator(); 
+
 
 		//set
-		void ClientAdd(Client newClient);
-		void OperatorAdd(Client newOperator);
-
+		void ClientAdd(Client &newClient);
+		void OperatorAdd(Client &newOperator);
+		void ClientRemove(Client &removeClient);
 };
 
 #endif

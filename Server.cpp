@@ -115,6 +115,7 @@ int receiveData(Client &client, char* buffer, size_t bufferSize)
 			std::cerr << "Error receiving data from client " << client.getClientFd() << std::endl;
 	}
 	client.appendBuffer(buffer);
+	std::cout << buffer << std::endl;
 	return bytesReceived;
 }
 
@@ -192,10 +193,12 @@ void Server::routeCommand(int clientFd, const std::string& str)
     if (str.compare(0, 4, "NICK") == 0)
         Nick(this->_clients[clientFd], str.substr(5));
     else if (str.compare(0, 4, "JOIN") == 0)
-        Join(&_channels, &_clients[clientFd], str.substr(5));
+        Join(_channels, _clients[clientFd], str.substr(5));
     else if (str.compare(0, 7, "PRIVMSG") == 0)
         Privmsg(_clients[clientFd], str, _channels, _clients);
 	else if (str.compare(0, 4, "QUIT") == 0)
 		Quit(clientFd, _clients, _pollFds);
+	else if (str.compare(0, 4, "PART") == 0)
+		Part(_channels, _clients[clientFd], str.substr(5));
 }
 

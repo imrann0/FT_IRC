@@ -13,6 +13,7 @@ SRCS =  Server.cpp \
 		Commands/Privmsg.cpp \
 		Commands/user.cpp \
 		Commands/Quit.cpp \
+		Commands/Part.cpp
 
 OBJS = $(SRCS:.cpp=.o)
 

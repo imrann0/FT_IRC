@@ -119,14 +119,6 @@ int receiveData(Client &client, char* buffer, size_t bufferSize)
 	return bytesReceived;
 }
 
-void closeConnection(int clientFd, std::map<int, Client>& clients, std::vector<pollfd>& pollFds, size_t index)
-{
-	close(clientFd);
-	clients.erase(clientFd);
-	pollFds.erase(pollFds.begin() + index);
-}
-
-
 void	Server::processUserEvents()
 {
 	for (size_t i = 0; i < _pollFds.size(); ++i)
@@ -141,7 +133,7 @@ void	Server::processUserEvents()
 				int bytesReceived = receiveData(_clients[_pollFds[i].fd], buffer, sizeof(buffer));
 				if (bytesReceived <= 0)
 				{
-					closeConnection(_pollFds[i].fd, _clients, _pollFds, i);
+					Quit(_pollFds[i].fd, _clients, _pollFds, i);
 					continue ;
 				}
 				buffer[bytesReceived] = '\0';

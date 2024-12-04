@@ -5,7 +5,8 @@ CXXFLAGS = -Wall -Wextra -Werror -std=c++98
 SRCS =  Server.cpp Client.cpp Channel.cpp Tools.cpp main.cpp \
 		Commands/Nick.cpp \
 		Commands/Join.cpp \
-		Commands/Privmsg.cpp 
+		Commands/Privmsg.cpp \
+		Commands/Quit.cpp
 
 OBJS = $(SRCS:.cpp=.o)
 

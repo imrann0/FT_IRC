@@ -20,8 +20,8 @@ std::vector<pollfd>::iterator Find(std::vector<pollfd>& pollFds, int clientFd)
 
 void Quit(int clientFd, std::map<int, Client>& clients, std::vector<pollfd>& pollFds)
 {
-	std::string quitmessage = "Çıkış işlemi başarılı" ;
-	send(clientFd, quitmessage.c_str(), quitmessage.length(), 0);
+	std::string quitMessage = "QUIT : Good bye.\r\n";
+	send(clientFd, quitMessage.c_str(), quitMessage.length(), 0);
 	close(clientFd);
 	clients.erase(clientFd);
 	pollFds.erase(Find(pollFds, clientFd));

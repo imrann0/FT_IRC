@@ -8,7 +8,7 @@ Client::Client(int fd) : _clientFd(fd) , _registered(false) {}
 
 // Parameterized Constructor
 Client::Client(const std::string& nickname, const std::string& username, int fd)
-    : _clientFd(fd), _nickname(nickname), _username(username),  _registered(false) {}
+    : _clientFd(fd), _nickname(nickname), _username(username), _pass(false),  _registered(false) {}
 
 // Getters
 const std::string& Client::getNickname() const { return _nickname; }

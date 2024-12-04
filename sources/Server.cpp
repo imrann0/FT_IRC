@@ -144,15 +144,6 @@ void	Server::processUserEvents()
 	}
 }
 
-
-void	login(Client &client, std::string &str)
-{
-	if (str.compare(0, 10, "CAP LS 302") == 0)
-		;
-	else if (str.compare(0, 4, "NICK") == 0)
-        Nick(client, str.substr(5));
-	else if (str.compare(0, 4, "USER") == 0)
-        user(client, str.substr(5));
 /*
 	if (str.find("NICK") != std::string::npos &&
 		str.find("USER") != std::string::npos)
@@ -166,12 +157,24 @@ void	login(Client &client, std::string &str)
 	{
 
 	} */
+
+void	login(Server &server, Client &client, std::string &str)
+{
+	if (str.compare(0, 10, "CAP LS 302") == 0)
+		;
+	else if (str.compare(0, 4, "NICK") == 0)
+        Nick(client, str.substr(5));
+	else if (str.compare(0, 4, "USER") == 0)
+        user(client, str.substr(5));
+	else if (str.compare(0, 4, "PASS") == 0)
+		pass(server, client, str.substr(5));
 	else
-		yolla(client.getClientFd(), "Please Register First!");
+		yolla(client.getClientFd(), "ERROR: Please Register First!");
 	if (!client.getUsername().empty() &&
 		!client.getHostName().empty() &&
 		!client.getNickname().empty() &&
-		!client.getRealName().empty())
+		!client.getRealName().empty() &&
+		client.getPass() != true)
 		client.registerClient();
 }
 
@@ -182,7 +185,7 @@ void Server::processMessage(Client	&client)
 	while (client.getBufferLine(str))
 	{
 		if (client.isRegistered() == false)
-			login(client, str);
+			login(*this, client, str);
 		else
 			this->routeCommand(client.getClientFd(), str);
 	}
@@ -202,3 +205,4 @@ void Server::routeCommand(int clientFd, const std::string& str)
 		Part(_channels, _clients[clientFd], str.substr(5));
 }
 
+std::string	Server::getPassword() const {return (this->_password); }

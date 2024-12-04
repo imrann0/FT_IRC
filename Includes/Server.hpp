@@ -19,6 +19,9 @@ class Server
 		void	processUserEvents();
 		void	processMessage(Client &client);
 		void	routeCommand(int clientFd, const  std::string& str);
+
+		std::string	getPassword() const;
+
 	private:
 		std::string						serverName;
 		const int						_port;

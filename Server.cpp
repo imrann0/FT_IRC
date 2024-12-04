@@ -171,10 +171,10 @@ void	login(Client &client, std::string &str)
 		std::string response = "Please Register First!\r\n";
 		send(client.getClientFd(), response.c_str(), response.size(), 0);
 	}
-	if (/* !client.getUsername().empty() &&
-		!client.getHostName().empty() && */
-		!client.getNickname().empty() /* && */
-		/* !client.getRealName().empty() */)
+	if (!client.getUsername().empty() &&
+		!client.getHostName().empty() &&
+		!client.getNickname().empty() &&
+		!client.getRealName().empty())
 		client.registerClient();
 }
 
@@ -199,7 +199,7 @@ void Server::routeCommand(int clientFd, const std::string& str)
         Join(&_channels, &_clients[clientFd], str.substr(5));
     else if (str.compare(0, 7, "PRIVMSG") == 0)
         Privmsg(_clients[clientFd], str, _channels, _clients);
-	else if (str.compare(0, 7, "QUIT") == 0)
+	else if (str.compare(0, 4, "QUIT") == 0)
 		Quit(clientFd, _clients, _pollFds);
 }
 

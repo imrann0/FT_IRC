@@ -3,7 +3,14 @@
 #include <stdexcept>	// runtime_error
 
 Channel::Channel() {}
-Channel::Channel(const std::string& name) {_name = name;}
+Channel::Channel(const std::string& name) 
+{
+    _name = name;
+    _flags['i'] = false;
+    _flags['t'] = false;
+    _flags['k'] = false;
+    _flags['l'] = false;
+}
 std::string Channel::getName() {return _name;}
 std::vector<Client> Channel::getClients() {return _clients;}
 std::vector<Client> Channel::getOperator() { return _operator; }
@@ -21,4 +28,15 @@ void Channel::ClientRemove(Client &removeClient)
     }
     throw std::runtime_error("Remove: Client Not Found");
     
+}
+
+std::string Channel::getUsersNames()
+{
+    std::string usersNames = "";
+
+    for (it user = _clients.begin(); user != _clients.end(); user++)
+    {
+        usersNames.append(user->getNickname() + " ");
+    }
+    return (usersNames);
 }

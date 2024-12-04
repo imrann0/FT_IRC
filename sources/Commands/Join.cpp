@@ -15,7 +15,11 @@ void Join(std::map<std::string, Channel> &channels, Client &client, std::string 
 		std::cout << "Channel " << channelName << " already exists." << std::endl;
 		std::string message = ":" + client.getNickname() + "!~" + client.getUsername() + "@" + client.getHostName() + " JOIN :" + channelName  + "\r\n";
 		channels[channelName].ClientAdd(client);
+		std::string NameRpl = RPL_NAMREPLY(client.getPrefixName(), channelName, channels[channelName].getUsersNames()) + "\r\n";
+		std::string NameEndRpl = RPL_ENDOFNAMES(client.getPrefixName(), channelName) + "\r\n" ;
 		yolla(client.getClientFd(), message);
+		yolla(client.getClientFd(), NameRpl); // belki kontrol 
+		yolla(client.getClientFd(), NameEndRpl);
 	}
 	else
 	{
@@ -25,10 +29,16 @@ void Join(std::map<std::string, Channel> &channels, Client &client, std::string 
 		channel.ClientAdd(client);
 		channel.OperatorAdd(client);
 		channels.insert(std::make_pair(channelName, channel));
+
+
+		std::string NameRpl = RPL_NAMREPLY(client.getPrefixName(), channelName, channels[channelName].getUsersNames()) + "\r\n";
+		std::string NameEndRpl = RPL_ENDOFNAMES(client.getPrefixName(), channelName) + "\r\n";
 		int err = yolla(client.getClientFd(), message);
 		if (err < 0)
 			std::cerr  << std::strerror(err) << std::endl;
 		else
 			std::cout << "Channel Created" << std::endl;
+		yolla(client.getClientFd(), NameRpl); // belki kontrol 
+		yolla(client.getClientFd(), NameEndRpl);
 	}
 }

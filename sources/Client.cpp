@@ -45,15 +45,25 @@ void Client::setClientFd(int fd){ _clientFd = fd; }
 
 void Client::setPass(bool pass) { this->_pass = pass; }
 
-std::string	Client::getPrefixName() {
-    std::string prefixName = _nickname;
-    if (!(_username.empty()))
-        prefixName += '!' + _username;
-    if (!(_hostname.empty()))
-        prefixName += '@' + _hostname;
-    return (prefixName);
-}
+std::string	Client::getPrefixName()
+{
+    std::string prefix;
+	std::string usname;
 
+	if (_username.empty())
+	 	usname = "";
+	else
+		usname = "!" + _username;
+
+	std::string hostname;
+	if (_hostname.empty())
+		hostname = "";
+	else
+		hostname = "@" + _hostname;
+
+	prefix = _nickname + usname + hostname;
+	return prefix;
+}
 void Client::appendBuffer(const std::string& appendBuffer) { this->_buffer.append(appendBuffer); }
 
 bool Client::operator==(const Client& other) const { return _clientFd == other._clientFd;}

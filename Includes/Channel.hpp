@@ -3,15 +3,21 @@
 
 #include <string>
 #include <vector>
+#include <map>
 #include "Client.hpp"
 
 typedef std::vector<Client>::iterator it;
+
+#define RPL_NAMREPLY(source, channel, users)            ": 353 " + source + " = " + channel + " :" + users
+#define RPL_ENDOFNAMES(source, channel)                 ": 366 " + source + " " + channel + " :End of /NAMES list." 
+
 
 class Channel
 {
 	private:
 		std::string _name;
 		std::string _topic;
+		std::map<char, bool> _flags;
 		std::vector<Client> _clients;
 		std::vector<Client> _operator;
 
@@ -23,6 +29,7 @@ class Channel
 		std::string			getName();
 		std::vector<Client>	getClients();
 		std::vector<Client>	getOperator();
+		std::string			getUsersNames();
 		//bool ExitOperatorStatus(Client &client);
 
 

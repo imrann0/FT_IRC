@@ -98,24 +98,26 @@ void Server::acceptClient()
 	clientPollFd.events = POLLIN;
 	_pollFds.push_back(clientPollFd);
 	_clients.insert(std::make_pair(clientSocket, Client(clientSocket)));
-
 	std::cout << clientSocket << " Login" << std::endl;
 	yolla(clientSocket, "Welcome to the server!\n");
 }
 
 
-int receiveData(Client &client, char* buffer, size_t bufferSize)
+int receiveData(Client &client)
 {
-	std::memset(buffer, 0, bufferSize);
-	int bytesReceived = recv(client.getClientFd(), buffer, bufferSize - 1, 0);
+	char	buffer[1024];
+
+	std::memset(buffer, 0, sizeof(buffer));
+	int bytesReceived = recv(client.getClientFd(), buffer, sizeof(buffer) - 1, 0);
 	if (bytesReceived <= 0) {
 		if (bytesReceived == 0)
 			std::cout << "Client " << client.getClientFd() << " disconnected." << std::endl;
 		else
 			std::cerr << "Error receiving data from client " << client.getClientFd() << std::endl;
 	}
+	buffer[bytesReceived] = '\0';
 	client.appendBuffer(buffer);
-	std::cout << buffer << std::endl;
+	std::cout << client.getBuffer() << std::endl;
 	return bytesReceived;
 }
 
@@ -129,14 +131,12 @@ void	Server::processUserEvents()
 				Server::acceptClient();
 			else
 			{
-				char buffer[1024];
-				int bytesReceived = receiveData(_clients[_pollFds[i].fd], buffer, sizeof(buffer));
+				int bytesReceived = receiveData(_clients[_pollFds[i].fd]);
 				if (bytesReceived <= 0)
 				{
 					Quit(_pollFds[i].fd, _clients, _pollFds);
 					continue ;
 				}
-				buffer[bytesReceived] = '\0';
 				processMessage(_clients[_pollFds[i].fd]);
 			}
 

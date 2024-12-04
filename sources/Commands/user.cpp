@@ -6,15 +6,16 @@
 /*   By: bdemirbu <bdemirbu@student.42kocaeli.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 10:47:10 by bdemirbu          #+#    #+#             */
-/*   Updated: 2024/12/04 14:24:07 by bdemirbu         ###   ########.fr       */
+/*   Updated: 2024/12/04 16:39:26 by bdemirbu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Client.hpp"
 
+
 void	user(Client &client, std::string str)
 {
-
+	// USER burak a b c d
 	size_t firstSpace = str.find(" "); // ilk boşluğu bul
 	size_t secondSpace = str.find(" ", firstSpace + 1); // ikinci boşluğu bul
 	size_t thirdSpace = str.find(" ", secondSpace + 1); // üçüncü boşluğu bul
@@ -34,3 +35,4 @@ void	user(Client &client, std::string str)
 	client.setRealName(realname);
 	client.setHostName(hostname);
 }
+

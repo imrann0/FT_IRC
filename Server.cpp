@@ -99,9 +99,8 @@ void Server::acceptClient()
 	_pollFds.push_back(clientPollFd);
 	_clients.insert(std::make_pair(clientSocket, Client(clientSocket)));
 
-	std::string welcomeMessage = "Welcome to the server!\n";
 	std::cout << clientSocket << " Login" << std::endl;
-	send(clientSocket, welcomeMessage.c_str(), welcomeMessage.size(), 0);
+	yolla(clientSocket, "Welcome to the server!\n");
 }
 
 
@@ -167,10 +166,7 @@ void	login(Client &client, std::string &str)
 
 	} */
 	else
-	{
-		std::string response = "Please Register First!\r\n";
-		send(client.getClientFd(), response.c_str(), response.size(), 0);
-	}
+		yolla(client.getClientFd(), "Please Register First!");
 	if (!client.getUsername().empty() &&
 		!client.getHostName().empty() &&
 		!client.getNickname().empty() &&

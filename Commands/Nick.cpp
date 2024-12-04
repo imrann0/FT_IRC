@@ -1,4 +1,5 @@
 #include "../Client.hpp"
+#include "../Include/Command.hpp"
 #include <iostream>
 #include <cstring>	 	//  strerror
 #include <sys/socket.h> // send
@@ -16,7 +17,7 @@ void Nick(Client &client, std::string nickname)
 		return ;
 	}
 	std::string a =  ":" + client.getNickname() + "!" + client.getUsername() + "@localhost NICK " + nickname + "\r\n";
-	int err = send(client.getClientFd(), a.c_str(), a.length(), 0);
+	int err = yolla(client.getClientFd(), a);
 	if (err < 0)
 		std::cerr  << std::strerror(err) << std::endl;
 	else

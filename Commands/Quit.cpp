@@ -3,6 +3,7 @@
 #include <unistd.h>		// close
 #include <poll.h>
 #include "../Client.hpp"
+#include "../Include/Command.hpp"
 #include <stdexcept>
 #include <sys/socket.h> // send
 
@@ -20,8 +21,7 @@ std::vector<pollfd>::iterator Find(std::vector<pollfd>& pollFds, int clientFd)
 
 void Quit(int clientFd, std::map<int, Client>& clients, std::vector<pollfd>& pollFds)
 {
-	std::string quitMessage = "QUIT : Good bye.\r\n";
-	send(clientFd, quitMessage.c_str(), quitMessage.length(), 0);
+	yolla(clientFd, "QUIT : Good bye.\r\n");
 	close(clientFd);
 	clients.erase(clientFd);
 	pollFds.erase(Find(pollFds, clientFd));

@@ -27,6 +27,6 @@ void Join(std::map<std::string, Channel> *channels, Client *client, std::string 
 		if (err < 0)
 			std::cerr  << std::strerror(err) << std::endl;
 		else
-			std::cout << "NICK UPDATE SUCCSES" << std::endl;
+			std::cout << "Channel Created" << std::endl;
 	}
 }

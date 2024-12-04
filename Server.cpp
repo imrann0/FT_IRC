@@ -133,7 +133,7 @@ void	Server::processUserEvents()
 				int bytesReceived = receiveData(_clients[_pollFds[i].fd], buffer, sizeof(buffer));
 				if (bytesReceived <= 0)
 				{
-					Quit(_pollFds[i].fd, _clients, _pollFds, i);
+					Quit(_pollFds[i].fd, _clients, _pollFds);
 					continue ;
 				}
 				buffer[bytesReceived] = '\0';
@@ -199,5 +199,7 @@ void Server::routeCommand(int clientFd, const std::string& str)
         Join(&_channels, &_clients[clientFd], str.substr(5));
     else if (str.compare(0, 7, "PRIVMSG") == 0)
         Privmsg(_clients[clientFd], str, _channels, _clients);
+	else if (str.compare(0, 7, "QUIT") == 0)
+		Quit(clientFd, _clients, _pollFds);
 }
 

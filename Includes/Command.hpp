@@ -1,7 +1,7 @@
 #ifndef COMMAND_HPP
 # define COMMAND_HPP
 
-#include "../Server.hpp"
+#include "Server.hpp"
 
 void	Nick(Client &client, std::string nickname);
 void	Join(std::map<std::string, Channel> &channels, Client &client, std::string channelName);

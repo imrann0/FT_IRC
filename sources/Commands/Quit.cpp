@@ -2,8 +2,8 @@
 #include <vector>
 #include <unistd.h>		// close
 #include <poll.h>
-#include "../Client.hpp"
-#include "../Include/Command.hpp"
+#include "Client.hpp"
+#include "Command.hpp"
 #include <stdexcept>
 #include <sys/socket.h> // send
 

@@ -1,7 +1,7 @@
 #include "Server.hpp"
 #include "Channel.hpp"
 #include "Tools.hpp"
-#include "Include/Command.hpp"
+#include "Command.hpp"
 
 #include <sys/socket.h> // socket, bind
 #include <fcntl.h>		// fcntl, F_SETFL, O_NONBLOCK

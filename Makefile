@@ -1,19 +1,19 @@
 NAME = Server
 
 CXX = c++
-CXXFLAGS = -Wall -Wextra -Werror -std=c++98 -g
-SRCS =  Server.cpp \
-		Client.cpp \
-		Channel.cpp \
-		Tools.cpp \
-		main.cpp \
-		yolla.cpp \
-		Commands/Nick.cpp \
-		Commands/Join.cpp \
-		Commands/Privmsg.cpp \
-		Commands/user.cpp \
-		Commands/Quit.cpp \
-		Commands/Part.cpp
+CXXFLAGS = -Wall -Wextra -Werror -std=c++98 -IIncludes
+SRCS =  sources/Server.cpp \
+		sources/Client.cpp \
+		sources/Channel.cpp \
+		sources/Tools.cpp \
+		sources/main.cpp \
+		sources/yolla.cpp \
+		sources/Commands/Nick.cpp \
+		sources/Commands/Join.cpp \
+		sources/Commands/Privmsg.cpp \
+		sources/Commands/user.cpp \
+		sources/Commands/Quit.cpp \
+		sources/Commands/Part.cpp
 
 OBJS = $(SRCS:.cpp=.o)
 

@@ -1,4 +1,4 @@
-#include "../Include/Command.hpp"
+#include "Command.hpp"
 #include <sys/socket.h> // send
 #include <map>
 #include <cstring>

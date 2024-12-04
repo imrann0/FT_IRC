@@ -6,11 +6,11 @@
 /*   By: bdemirbu <bdemirbu@student.42kocaeli.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 10:47:10 by bdemirbu          #+#    #+#             */
-/*   Updated: 2024/12/04 10:54:43 by bdemirbu         ###   ########.fr       */
+/*   Updated: 2024/12/04 14:24:07 by bdemirbu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../Client.hpp"
+#include "Client.hpp"
 
 void	user(Client &client, std::string str)
 {

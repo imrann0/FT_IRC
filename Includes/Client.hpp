@@ -40,7 +40,8 @@ private:
 	std::string _realname;		// İstemcinin gerçek adı
 	std::string _hostname;
 	std::string _buffer;
-	bool _registered;			// İstemci kayıt oldu mu? (NICK ve USER komutlarını tamamladıktan sonra)
+	bool		_pass;
+	bool		_registered;	// İstemci kayıt oldu mu? (NICK ve USER komutlarını tamamladıktan sonra)
 };
 
 #endif

@@ -3,7 +3,7 @@
 #include <unistd.h>		// close
 #include <poll.h>
 #include "Client.hpp"
-#include "Command.hpp"
+#include "Tools.hpp"
 #include <stdexcept>
 #include <sys/socket.h> // send
 

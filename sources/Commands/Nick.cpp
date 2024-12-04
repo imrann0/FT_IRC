@@ -1,5 +1,5 @@
 #include "Client.hpp"
-#include "Command.hpp"
+#include "Tools.hpp"
 #include <iostream>
 #include <cstring>	 	//  strerror
 #include <sys/socket.h> // send

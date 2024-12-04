@@ -1,4 +1,6 @@
-#include "Command.hpp"
+#include "Tools.hpp"
+#include "Channel.hpp"
+#include <iostream>
 #include <sys/socket.h> // send
 #include <map>
 #include <cstring>

@@ -1,6 +1,5 @@
 #include "Channel.hpp"
 #include <algorithm>
-#include <stdexcept>	// runtime_error
 
 Channel::Channel() {}
 Channel::Channel(const std::string& name) {_name = name;}
@@ -17,8 +16,6 @@ void Channel::ClientRemove(Client &removeClient)
     if (a != _clients.end())
     {
         _clients.erase(a);
-        return ;
     }
-    throw std::runtime_error("Remove: Client Not Found");
-    
+    throw std::runtime
 }

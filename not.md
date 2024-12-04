@@ -21,13 +21,13 @@ send(client->getClientFd(), mes.c_str(), mes.length(), 0);
 ∗ KONU - Kanal konusunu değiştirin veya görüntüleyin
 ∗ MODE - Kanalın modunu değiştirin:
 - i: Yalnızca davet edilen kanalı ayarla/kaldır
-- t: TOPIC komutunun kısıtlamalarını kanala ayarlayın/kaldırın 
+- t: TOPIC komutunun kısıtlamalarını kanala ayarlayın/kaldırın
 - k: Kanal anahtarını (şifre) ayarlama/kaldırma // burak
 - o: Kanal operatörü ayrıcalığı verme/alma // burak
 - l: Kanal için kullanıcı limitini ayarlayın/kaldırın
 - Elbette sizden temiz bir kod yazmanız bekleniyor.
 
-# Channel 
+# Channel
 - /list
 
 # o - Operatör Yetkisi Verme/Alma (give/take channel operator privileges)
@@ -58,7 +58,7 @@ Gizli bir kanal, yalnızca kullanıcı kanala katılmışsa veya birisi tarafın
 MODE #channel +s → Kanalı gizli hale getirir.
 MODE #channel -s → Kanalı gizlilikten çıkarır.
 
-# i - Sadece Davetle Katılım (invite-only channel flag) --- 
+# i - Sadece Davetle Katılım (invite-only channel flag) ---
 
 Kanala yalnızca davet edilen kullanıcılar katılabilir.
 Operatörler kullanıcıları davet edebilir (/invite komutu ile).
@@ -67,7 +67,7 @@ Operatörler kullanıcıları davet edebilir (/invite komutu ile).
 MODE #channel +i → Kanalı sadece davetle katılım yapılabilir hale getirir.
 MODE #channel -i → Davetsiz katılımı mümkün kılar.
 
-# t - Konu Sadece Operatörler Tarafından Değiştirilebilir (topic settable by channel operator only flag) -- 
+# t - Konu Sadece Operatörler Tarafından Değiştirilebilir (topic settable by channel operator only flag) --
 
 Kanalın konusu (topic) yalnızca kanal operatörleri tarafından değiştirilebilir.
 Normal kullanıcılar konuyu değiştiremez.
@@ -121,3 +121,10 @@ Kullanımı:
 
 MODE #channel +k <şifre> → Kanala bir şifre ekler.
 MODE #channel -k → Kanal şifresini kaldırır.
+
+
+
+
+
+//! LOGİNDE QUIT ATMAM LAZIM _clients ve _pollfd BANA VER !!!!
+//! verileri vector<std::string> olarak vereceğim :) split yazdım YİNEEEEEE

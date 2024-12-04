@@ -9,6 +9,7 @@ SRCS =  sources/Server.cpp \
 		sources/Channel.cpp \
 		sources/Tools.cpp \
 		sources/main.cpp \
+		sources/split.cpp \
 		sources/yolla.cpp \
 		sources/Commands/Nick.cpp \
 		sources/Commands/Join.cpp \

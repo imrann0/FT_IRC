@@ -73,9 +73,11 @@ bool Client::getBufferLine(std::string &str)
     unsigned long   find;
 
     find = this->_buffer.find("\n");
-    if (find == std::string::npos || this->_buffer[find -1] != '\r')
+    if (find == std::string::npos /* || str.compare(str.length() - 2, 2, "\r\n") */)
         return (false);
-    str = this->_buffer.substr(0, find);
+    str = this->_buffer.substr(0, find - 1);
+    std::cout << (int)str[find -2] << std::endl;
     this->_buffer.erase(0, find + 1);
     return (true);
 }
+

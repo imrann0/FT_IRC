@@ -99,7 +99,7 @@ void Server::acceptClient()
 	_pollFds.push_back(clientPollFd);
 	_clients.insert(std::make_pair(clientSocket, Client(clientSocket)));
 	std::cout << clientSocket << " Login" << std::endl;
-	yolla(clientSocket, "Welcome to the server!\n");
+	yolla(clientSocket, "Conneted the server!\r\n");
 }
 
 
@@ -166,16 +166,21 @@ void	login(Server &server, Client &client, std::string &str)
         Nick(client, str.substr(5));
 	else if (str.compare(0, 4, "USER") == 0)
         user(client, str.substr(5));
+	else if (str.compare(0, 4, "QUIT") == 0)
+		Quit(client.getClientFd(), server._clients, server._pollFds); //!!!!!!!!!!!!!!!!!
 	else if (str.compare(0, 4, "PASS") == 0)
 		pass(server, client, str.substr(5));
 	else
-		yolla(client.getClientFd(), "ERROR: Please Register First!");
+		yolla(client.getClientFd(), "ERROR: Please Register First!\r\n");
 	if (!client.getUsername().empty() &&
 		!client.getHostName().empty() &&
 		!client.getNickname().empty() &&
 		!client.getRealName().empty() &&
-		client.getPass() != true)
+		client.getPass() == true)
+	{
+		yolla(client.getClientFd(), "Welcome to server :)\r\n");
 		client.registerClient();
+	}
 }
 
 void Server::processMessage(Client	&client)
@@ -203,6 +208,8 @@ void Server::routeCommand(int clientFd, const std::string& str)
 		Quit(clientFd, _clients, _pollFds);
 	else if (str.compare(0, 4, "PART") == 0)
 		Part(_channels, _clients[clientFd], str.substr(5));
+	else
+		yolla(clientFd, "ERROR: Unknow Command!");
 }
 
 std::string	Server::getPassword() const {return (this->_password); }

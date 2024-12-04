@@ -22,14 +22,14 @@ class Server
 
 		std::string	getPassword() const;
 
+		std::vector<pollfd>				_pollFds;
+		std::map<int, Client>			_clients;
 	private:
 		std::string						serverName;
 		const int						_port;
 		const std::string				_password;
 		int								_socket;
 		struct sockaddr_in				server_addr;
-		std::vector<pollfd>				_pollFds;
-		std::map<int, Client>			_clients;
 		std::map<std::string, Channel>	_channels;
 };
 

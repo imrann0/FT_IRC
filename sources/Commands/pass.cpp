@@ -6,7 +6,7 @@
 /*   By: bdemirbu <bdemirbu@student.42kocaeli.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 16:54:06 by bdemirbu          #+#    #+#             */
-/*   Updated: 2024/12/04 17:54:34 by bdemirbu         ###   ########.fr       */
+/*   Updated: 2024/12/04 19:47:33 by bdemirbu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,12 @@
 
 void pass(Server &server, Client &client, std::string str)
 {
-	std::cout << "girdi: |"<<str << "|"
-	<< "\nşifre: |"<< server.getPassword() << "\n|\n";
-	if (server.getPassword() == str)
+	if (str == server.getPassword())
 		client.setPass(true);
 	else
 	{
 		client.setPass(false);
-		yolla(client.getClientFd(), "ERROR: Invalid Password");
+		yolla(client.getClientFd(), "ERROR: Invalid Password\r\n");
 
 	}
 }

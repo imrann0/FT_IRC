@@ -6,7 +6,7 @@
 /*   By: bdemirbu <bdemirbu@student.42kocaeli.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 10:47:10 by bdemirbu          #+#    #+#             */
-/*   Updated: 2024/12/04 16:39:26 by bdemirbu         ###   ########.fr       */
+/*   Updated: 2024/12/04 19:49:16 by bdemirbu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,9 @@
 
 void	user(Client &client, std::string str)
 {
-	// USER burak a b c d
+	// Command: USER
+	// Parameters: <username> <hostname> <servername> <realname>
+	
 	size_t firstSpace = str.find(" "); // ilk boşluğu bul
 	size_t secondSpace = str.find(" ", firstSpace + 1); // ikinci boşluğu bul
 	size_t thirdSpace = str.find(" ", secondSpace + 1); // üçüncü boşluğu bul

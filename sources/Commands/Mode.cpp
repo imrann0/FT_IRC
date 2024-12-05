@@ -12,6 +12,7 @@ void    o(Channel &channel, Client &client, std::string channelName, std::string
             size_t pos = str.find(" ");
             std::string clientName = str.substr(pos + 1);
             Client newOperator = channel.getClient(clientName);
+            std::cout << "bune "<< clientName << "$" << channelName << "$\n"; 
             if (str[0] == '+')
             {
                 newOperator.MsgToClient(RPL_MODE(client.getPrefixName(), channelName, "+o ", clientName));
@@ -44,10 +45,19 @@ void Mode(std::map<std::string, Channel> &channles, Client &client, std::string 
 {
     size_t pos = str.find(" ");
     std::string channelName = str.substr(0, pos);
+    str = str.substr(pos + 1);
     if (channles.find(channelName) == channles.end())
     {
-        client.MsgToClient(ERR_NOSUCHCHANNEL(client.getPrefixName(), channelName));
-        std::cout << "Yoook Amına" << std::endl;
+        try
+        {
+            client.MsgToClient(ERR_NOSUCHCHANNEL(client.getPrefixName(), channelName));
+        }
+        catch(const std::exception& e)
+        {
+            std::cerr << e.what() << '\n';
+        }
+        
+
     }
     if (str.compare(1, 1, "o") == 0)
         o(channles[channelName], client, channelName, str);

@@ -84,5 +84,6 @@ bool Client::getBufferLine(std::string &str)
 void	Client::MsgToClient(const std::string &message)
 {
 	std::string buf = message + "\r\n";
-	send(_clientFd, buf.c_str(), buf.length(), 0);
+	if (send(_clientFd, buf.c_str(), buf.length(), 0) < 0)
+		throw std::runtime_error("Send Error");
 }

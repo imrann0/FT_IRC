@@ -14,6 +14,7 @@ void Nick(Client &client, std::string nickname)
 	if (client.getNickname().empty())
 	{
 		client.setNickname(nickname);
+		yolla(client.getClientFd(),  "Nick Created\r\n");
 		return ;
 	}
 	std::string a =  ":" + client.getNickname() + "!" + client.getUsername() + "@localhost NICK " + nickname + "\r\n";

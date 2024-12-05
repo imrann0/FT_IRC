@@ -158,7 +158,7 @@ void	Server::processUserEvents()
 
 	} */
 
-void	login(Server &server, Client &client, std::string &str)
+void	Server::login(Client &client, std::string &str)
 {
 	if (str.compare(0, 10, "CAP LS 302") == 0)
 		;
@@ -167,9 +167,9 @@ void	login(Server &server, Client &client, std::string &str)
 	else if (str.compare(0, 4, "USER") == 0)
         user(client, str.substr(5));
 	else if (str.compare(0, 4, "QUIT") == 0)
-		Quit(client.getClientFd(), server._clients, server._pollFds); //!!!!!!!!!!!!!!!!!
+		Quit(client.getClientFd(), _clients, _pollFds);
 	else if (str.compare(0, 4, "PASS") == 0)
-		pass(server, client, str.substr(5));
+		pass(*this , client, str.substr(5));
 	else
 		yolla(client.getClientFd(), "ERROR: Please Register First!\r\n");
 	if (!client.getUsername().empty() &&
@@ -190,14 +190,14 @@ void Server::processMessage(Client	&client)
 	while (client.getBufferLine(str))
 	{
 		if (client.isRegistered() == false)
-			login(*this, client, str);
+			login(client, str);
 		else
 			this->routeCommand(client.getClientFd(), str);
 	}
 }
 
 void Server::routeCommand(int clientFd, const std::string& str)
-{
+{ 
     if (str.compare(0, 4, "NICK") == 0)
         Nick(this->_clients[clientFd], str.substr(5));
     else if (str.compare(0, 4, "JOIN") == 0)

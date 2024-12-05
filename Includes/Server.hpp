@@ -19,12 +19,12 @@ class Server
 		void	processUserEvents();
 		void	processMessage(Client &client);
 		void	routeCommand(int clientFd, const  std::string& str);
+		void	login(Client &client, std::string &str);
 
 		std::string	getPassword() const;
-
+	private:
 		std::vector<pollfd>				_pollFds;
 		std::map<int, Client>			_clients;
-	private:
 		std::string						serverName;
 		const int						_port;
 		const std::string				_password;

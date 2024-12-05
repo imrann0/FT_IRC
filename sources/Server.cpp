@@ -208,6 +208,8 @@ void Server::routeCommand(int clientFd, const std::string& str)
 		Quit(clientFd, _clients, _pollFds);
 	else if (str.compare(0, 4, "PART") == 0)
 		Part(_channels, _clients[clientFd], str.substr(5));
+	else if (str.compare(0, 4, "MODE") == 0)
+		Mode(_channels, _clients[clientFd], str.substr(5));
 	else
 		yolla(clientFd, "ERROR: Unknow Command!");
 }

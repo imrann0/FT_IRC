@@ -29,14 +29,17 @@ class Channel
 		std::string			getName();
 		std::vector<Client>	getClients();
 		std::vector<Client>	getOperator();
-		std::string			getUsersNames();
-		//bool ExitOperatorStatus(Client &client);
+		std::string 		getUsersNames();
+		Client&				getClient(std::string target);
+		bool 				IsFlags(char c);
+		bool				IsOperator(Client &client);
 
 
 		//set
 		void ClientAdd(Client &newClient);
 		void OperatorAdd(Client &newOperator);
 		void ClientRemove(Client &removeClient);
+		void Brodcast(std::string &message);
 };
 
 #endif

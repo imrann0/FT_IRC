@@ -13,17 +13,20 @@ void Join(std::map<std::string, Channel> &channels, Client &client, std::string 
 	if  (channels.find(channelName) != channels.end())
 	{
 		std::cout << "Channel " << channelName << " already exists." << std::endl;
-		std::string message = ":" + client.getNickname() + "!~" + client.getUsername() + "@" + client.getHostName() + " JOIN :" + channelName  + "\r\n";
+    	std::string joinMessage = ":" + client.getPrefixName() + " JOIN :" + channelName + "\r\n";
 		channels[channelName].ClientAdd(client);
+		channels[channelName].Brodcast(joinMessage);
+		//yolla(client.getClientFd(), message);
+		
+		
 		std::string NameRpl = RPL_NAMREPLY(client.getPrefixName(), channelName, channels[channelName].getUsersNames()) + "\r\n";
 		std::string NameEndRpl = RPL_ENDOFNAMES(client.getPrefixName(), channelName) + "\r\n" ;
-		yolla(client.getClientFd(), message);
 		yolla(client.getClientFd(), NameRpl); // belki kontrol 
 		yolla(client.getClientFd(), NameEndRpl);
 	}
 	else
 	{
-		std::string message = ":" + client.getNickname() + "!~" + client.getUsername() + "@" + client.getHostName() + " JOIN :" + channelName  + "\r\n";
+    	std::string joinMessage = ":" + client.getPrefixName() + " JOIN :" + channelName + "\r\n";
 		Channel  channel(channelName);
 		std::cout << "Channel Nick Name" << client.getNickname() << std::endl;
 		channel.ClientAdd(client);
@@ -33,11 +36,12 @@ void Join(std::map<std::string, Channel> &channels, Client &client, std::string 
 
 		std::string NameRpl = RPL_NAMREPLY(client.getPrefixName(), channelName, channels[channelName].getUsersNames()) + "\r\n";
 		std::string NameEndRpl = RPL_ENDOFNAMES(client.getPrefixName(), channelName) + "\r\n";
-		int err = yolla(client.getClientFd(), message);
+		/*int err = yolla(client.getClientFd(), message);
 		if (err < 0)
 			std::cerr  << std::strerror(err) << std::endl;
 		else
-			std::cout << "Channel Created" << std::endl;
+			std::cout << "Channel Created" << std::endl;*/
+		channels[channelName].Brodcast(joinMessage);
 		yolla(client.getClientFd(), NameRpl); // belki kontrol 
 		yolla(client.getClientFd(), NameEndRpl);
 	}

@@ -1,6 +1,7 @@
 #include "Server.hpp"
 #include "Channel.hpp"
 #include "Tools.hpp"
+#include "error.hpp"
 #include "Command.hpp"
 
 #include <sys/socket.h> // socket, bind
@@ -116,6 +117,7 @@ int receiveData(Client &client)
 			std::cerr << "Error receiving data from client " << client.getClientFd() << std::endl;
 	}
 	buffer[bytesReceived] = '\0';
+	std::cout << "ilk:" << buffer << "$" << std::endl;
 	client.appendBuffer(buffer);
 	std::cout << client.getBuffer() << std::endl;
 	return bytesReceived;
@@ -158,18 +160,18 @@ void	Server::processUserEvents()
 
 	} */
 
-void	Server::login(Client &client, std::string &str)
+void	Server::login(Client &client, std::vector<std::string>	&str)
 {
-	if (str.compare(0, 10, "CAP LS 302") == 0)
+	if (str[0] == "CAP")
 		;
-	else if (str.compare(0, 4, "NICK") == 0)
-        Nick(client, str.substr(5));
-	else if (str.compare(0, 4, "USER") == 0)
-        user(client, str.substr(5));
-	else if (str.compare(0, 4, "QUIT") == 0)
+	else if (str[0] == "NICK")
+        Nick(client, str);
+	else if (str[0] == "USER")
+        user(client, str);
+	else if (str[0] == "QUIT")
 		Quit(client.getClientFd(), _clients, _pollFds);
-	else if (str.compare(0, 4, "PASS") == 0)
-		pass(*this , client, str.substr(5));
+	else if (str[0] == "PASS")
+		pass(*this , client, str);
 	else
 		yolla(client.getClientFd(), "ERROR: Please Register First!\r\n");
 	if (!client.getUsername().empty() &&
@@ -185,34 +187,41 @@ void	Server::login(Client &client, std::string &str)
 
 void Server::processMessage(Client	&client)
 {
-	std::string	str;
+	std::string	command;
 
-	while (client.getBufferLine(str))
+	while (client.getBufferLine(command))
 	{
+		std::vector<std::string>	str = split(command, ' ');
+		if (str.size() == 0)
+		{
+			client.MsgToClient("ERROR: Empty command");
+			continue;
+		}
 		if (client.isRegistered() == false)
 			login(client, str);
 		else
-			this->routeCommand(client.getClientFd(), str);
+			this->routeCommand(client, str,/* geçiçi parametre */ command);
 	}
 }
 
-void Server::routeCommand(int clientFd, const std::string& str)
-{ 
-	std::cout << "ilk:" << str << "$" << std::endl;
-    if (str.compare(0, 4, "NICK") == 0)
-        Nick(this->_clients[clientFd], str.substr(5));
-    else if (str.compare(0, 4, "JOIN") == 0)
-        Join(_channels, _clients[clientFd], str.substr(5));
-    else if (str.compare(0, 7, "PRIVMSG") == 0)
-        Privmsg(_clients[clientFd], str, _channels, _clients);
-	else if (str.compare(0, 4, "QUIT") == 0)
-		Quit(clientFd, _clients, _pollFds);
-	else if (str.compare(0, 4, "PART") == 0)
-		Part(_channels, _clients[clientFd], str.substr(5));
-	else if (str.compare(0, 4, "MODE") == 0)
-		Mode(_channels, _clients[clientFd], str.substr(5));
+void Server::routeCommand(Client &client, std::vector<std::string> &cmd , /* geçiçi parametre */ std::string &str)
+{
+	if (cmd[0] == "USER")
+		client.MsgToClient(ERR_NEEDMOREPARAMS(cmd[0]));
+    else if (cmd[0] == "NICK")
+        Nick(client, cmd);
+    else if (cmd[0] == "JOIN")
+        Join(_channels, client, cmd);
+    else if (cmd[0] == "PRIVMSG")
+        Privmsg(client, str, _channels, _clients);
+	else if (cmd[0] == "QUIT")
+		Quit(client.getClientFd(), _clients, _pollFds);
+	else if (cmd[0] == "PART")
+		Part(_channels, client, str.substr(5));
+	else if (cmd[0] == "MODE")
+		Mode(_channels, client, str.substr(5));
 	else
-		yolla(clientFd, "ERROR: Unknow Command!");
+		client.MsgToClient("ERROR: Unknow Command!");
 }
 
 std::string	Server::getPassword() const {return (this->_password); }

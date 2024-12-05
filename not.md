@@ -8,12 +8,15 @@ TOPIC
 MODE
 
 
+# bdemirbu
+- ":" operatorünü araştır buna göre parse yapılacak
+- hata durumlarında throw fırlat
+- if/else ağacından kurtul
+
+
+
 std::string mes = "001" + nickname + " :Welcome to the Internet Relay Network " + nickname + "!" +username + "@" + hostname + "\r\n";
 send(client->getClientFd(), mes.c_str(), mes.length(), 0);
-
-
-# bdemirbu
-- send düzenle
 
 # operatörler:
 ∗ KICK - Bir istemciyi kanaldan çıkarır

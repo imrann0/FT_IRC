@@ -6,7 +6,7 @@
 /*   By: bdemirbu <bdemirbu@student.42kocaeli.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 19:49:45 by bdemirbu          #+#    #+#             */
-/*   Updated: 2024/12/04 20:14:26 by bdemirbu         ###   ########.fr       */
+/*   Updated: 2024/12/05 18:05:08 by bdemirbu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ std::vector<std::string>	split(std::string str, char	c)
 	unsigned long				start;
 	std::string					findStr;
 
+	if (str.find_first_not_of(c) == std::string::npos)
+		return ret;
 	end = str.find(c);
 	start = 0;
 	while (end != std::string::npos)

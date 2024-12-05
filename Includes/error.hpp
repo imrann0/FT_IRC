@@ -1,27 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pass.cpp                                           :+:      :+:    :+:   */
+/*   error.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bdemirbu <bdemirbu@student.42kocaeli.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/04 16:54:06 by bdemirbu          #+#    #+#             */
-/*   Updated: 2024/12/05 18:30:14 by bdemirbu         ###   ########.fr       */
+/*   Created: 2024/12/05 19:46:03 by bdemirbu          #+#    #+#             */
+/*   Updated: 2024/12/05 20:27:28 by bdemirbu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Client.hpp"
-#include "Server.hpp"
-#include "Tools.hpp"
-#include <string>
+#ifndef	ERROR_HPP
+#define	ERROR_HPP
 
-void pass(Server &server, Client &client, std::vector<std::string> cmd)
-{
-	if (cmd.size() != 2 || cmd[1] != server.getPassword())
-	{
-		client.setPass(false);
-		client.MsgToClient("ERROR: Invalid Password");
-		return ;
-	}
-	client.setPass(true);
-}
+#define ERR_NEEDMOREPARAMS(command)	command + " :Not enough parameters"
+#define ERR_ALREADYREGISTRED		":You may not reregister"
+
+#endif // ERROR_HPP

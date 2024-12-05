@@ -4,26 +4,25 @@
 #include <cstring>	 	//  strerror
 #include <sys/socket.h> // send
 
-void Nick(Client &client, std::string nickname)
+void Nick(Client &client, std::vector<std::string> cmd)
 {
-	nickname.erase(nickname.find_last_not_of("\r\n") + 1);
-	if (nickname.length() == 0)
+	if (cmd.size() == 1)
 	{
 		std::cout << ":localhost 431 * " << client.getClientFd() << " nickname " << client.getNickname();
 	}
 	if (client.getNickname().empty())
 	{
-		client.setNickname(nickname);
+		client.setNickname(cmd[1]);
 		yolla(client.getClientFd(),  "Nick Created\r\n");
 		return ;
 	}
-	std::string a =  ":" + client.getNickname() + "!" + client.getUsername() + "@localhost NICK " + nickname + "\r\n";
+	std::string a =  ":" + client.getNickname() + "!" + client.getUsername() + "@localhost NICK " + cmd[1] + "\r\n";
 	int err = yolla(client.getClientFd(), a);
 	if (err < 0)
 		std::cerr  << std::strerror(err) << std::endl;
 	else
 		std::cout << "NICK UPDATE SUCCSES" << std::endl;
 
-	client.setNickname(nickname);
+	client.setNickname(cmd[1]);
 	std::cout << "Client" << client.getClientFd() << " set nickname: " << client.getNickname() << std::endl;
 }

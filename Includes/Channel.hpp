@@ -13,6 +13,9 @@ typedef std::vector<Client>::iterator it;
 #define RPL_JOIN(nick, channel)                         ":" + nick + " JOIN " + channel
 #define RPL_MODE(source, channel, modes, args)          ":" + source + " MODE " + channel + " " + modes + " " + args
 
+// Error
+#define ERR_NOSUCHCHANNEL(source, channel)              "403 " + source + " " + channel + " :No such channel"
+
 class Channel
 {
 	private:

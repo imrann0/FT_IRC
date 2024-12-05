@@ -128,3 +128,61 @@ MODE #channel -k → Kanal şifresini kaldırır.
 
 //! LOGİNDE QUIT ATMAM LAZIM _clients ve _pollfd BANA VER !!!!
 //! verileri vector<std::string> olarak vereceğim :) split yazdım YİNEEEEEE
+
+
+Kanal ve Kullanıcı Yönetimi Hataları
+ERR_NEEDMOREPARAMS (461)
+
+Açıklama: Komut için eksik parametreler verilmiş.
+Mesaj Örneği: :server 461 nickname command :Not enough parameters
+RPL_CHANNELMODEIS (324)
+
+Açıklama: Bir kanalın mevcut modlarını bildirir.
+Mesaj Örneği: :server 324 nickname #channel +nt
+ERR_CHANOPRIVSNEEDED (482)
+
+Açıklama: Kanalın yönetici (operatör) yetkisine ihtiyaç duyulduğunu belirtir.
+Mesaj Örneği: :server 482 nickname #channel :You're not channel operator
+ERR_NOSUCHNICK (401)
+
+Açıklama: Belirtilen kullanıcı bulunamadı.
+Mesaj Örneği: :server 401 nickname target :No such nick/channel
+ERR_NOTONCHANNEL (442)
+
+Açıklama: Kullanıcı, belirtilen kanalda değil.
+Mesaj Örneği: :server 442 nickname #channel :You're not on that channel
+ERR_KEYSET (467)
+
+Açıklama: Kanalın bir anahtarı (şifresi) zaten ayarlanmış.
+Mesaj Örneği: :server 467 nickname #channel :Channel key already set
+Ban Listesi ile İlgili Yanıtlar
+RPL_BANLIST (367)
+
+Açıklama: Bir kanalın yasaklılar listesindeki (ban list) bir giriş.
+Mesaj Örneği: :server 367 nickname #channel bannedUser!ident@host
+RPL_ENDOFBANLIST (368)
+
+Açıklama: Ban listesinin sonu.
+Mesaj Örneği: :server 368 nickname #channel :End of channel ban list
+Modlar ve Bilinmeyen Komutlarla İlgili Yanıtlar
+ERR_UNKNOWNMODE (472)
+
+Açıklama: Bilinmeyen bir mod kullanıldığını belirtir.
+Mesaj Örneği: :server 472 nickname unknownMode :is unknown mode char to me
+ERR_NOSUCHCHANNEL (403)
+
+Açıklama: Belirtilen kanal mevcut değil.
+Mesaj Örneği: :server 403 nickname #channel :No such channel
+Kullanıcı Modları ile İlgili Yanıtlar
+ERR_USERSDONTMATCH (502)
+
+Açıklama: Kullanıcı, kendi modunu değiştirmeye çalışmıyor.
+Mesaj Örneği: :server 502 nickname :Cannot change mode for other users
+RPL_UMODEIS (221)
+
+Açıklama: Kullanıcının aktif modlarını gösterir.
+Mesaj Örneği: :server 221 nickname +i
+ERR_UMODEUNKNOWNFLAG (501)
+
+Açıklama: Bilinmeyen bir kullanıcı modu belirtilmiş.
+Mesaj Örneği: :server 501 nickname :Unknown MODE flag

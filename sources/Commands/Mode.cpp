@@ -3,7 +3,7 @@
 #include <iostream>
 #include <map>
 
-void    o(Channel &channel, Client &client, std::string str)
+void    o(Channel &channel, Client &client, std::string channelName, std::string &str)
 {
     if (channel.IsOperator(client))
     {
@@ -14,14 +14,22 @@ void    o(Channel &channel, Client &client, std::string str)
             Client newOperator = channel.getClient(clientName);
             if (str[0] == '+')
             {
+                newOperator.MsgToClient(RPL_MODE(client.getPrefixName(), channelName, "+o ", clientName));
                 channel.OperatorAdd(newOperator);
-                newOperator.MsgToClient(RPL_MODE(client.getPrefixName(), str.substr(pos), "+o ", clientName));
+                std::string nameReplyMessage = RPL_NAMREPLY(client.getPrefixName(), channelName, channel.getUsersNames());
+                std::string endOfNamesMessage = RPL_ENDOFNAMES(client.getPrefixName(), channelName);
+                channel.Brodcast(nameReplyMessage);
+                channel.Brodcast(endOfNamesMessage);
                 return ;
             }
             else if (str[0] == '-')
             {
-                
-                newOperator.MsgToClient(RPL_MODE(client.getPrefixName(), str.substr(pos), "-o ", clientName));
+                newOperator.MsgToClient(RPL_MODE(client.getPrefixName(), channelName, "-o ", clientName));
+                channel.OperatorRemove(client);
+                std::string nameReplyMessage = RPL_NAMREPLY(client.getPrefixName(), channelName, channel.getUsersNames());
+                std::string endOfNamesMessage = RPL_ENDOFNAMES(client.getPrefixName(), channelName);
+                channel.Brodcast(nameReplyMessage);
+                channel.Brodcast(endOfNamesMessage);
                 return ;
             }
         }
@@ -29,8 +37,6 @@ void    o(Channel &channel, Client &client, std::string str)
         {
             std::cerr << e.what() << '\n';
         }
-        
-
     }
 }
 
@@ -38,7 +44,11 @@ void Mode(std::map<std::string, Channel> &channles, Client &client, std::string 
 {
     size_t pos = str.find(" ");
     std::string channelName = str.substr(0, pos);
-    str = str.substr(pos + 1);
+    if (channles.find(channelName) == channles.end())
+    {
+        client.MsgToClient(ERR_NOSUCHCHANNEL(client.getPrefixName(), channelName));
+        std::cout << "Yoook Amına" << std::endl;
+    }
     if (str.compare(1, 1, "o") == 0)
-        o(channles[channelName], client, str);
+        o(channles[channelName], client, channelName, str);
 }

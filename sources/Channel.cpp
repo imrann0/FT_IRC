@@ -48,8 +48,13 @@ void Channel::OperatorRemove(Client &removeClient)
 std::string Channel::getUsersNames()
 {
     std::string usersNames = "";
-    for (it user = _clients.begin(); user != _clients.end(); user++) {
-        usersNames += user->getNickname() + " ";
+    for (it user = _clients.begin(); user != _clients.end(); user++)
+    {
+        if (this->IsOperator(*user))
+            usersNames += "@" + user->getNickname() + " ";
+        else
+            usersNames += user->getNickname() + " ";
+            
     }
     if (!usersNames.empty())
         usersNames.erase(usersNames.size() - 1);
@@ -77,7 +82,5 @@ Client&  Channel::getClient(std::string target)
 void Channel::Brodcast(std::string &message)
 {
     for (it begin = _clients.begin(); begin != _clients.end(); begin++)
-    {
-        yolla(begin->getClientFd(), message);
-    }
+        begin->MsgToClient(message);
 }

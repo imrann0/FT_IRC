@@ -198,6 +198,7 @@ void Server::processMessage(Client	&client)
 
 void Server::routeCommand(int clientFd, const std::string& str)
 { 
+	std::cout << "ilk:" << str << "$" << std::endl;
     if (str.compare(0, 4, "NICK") == 0)
         Nick(this->_clients[clientFd], str.substr(5));
     else if (str.compare(0, 4, "JOIN") == 0)

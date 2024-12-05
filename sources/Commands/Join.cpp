@@ -17,8 +17,8 @@ void Join(std::map<std::string, Channel> &channels, Client &client, std::string 
 		channels[channelName].ClientAdd(client);
 		channels[channelName].Brodcast(joinMessage);
 
-		std::string nameReplyMessage = RPL_NAMREPLY(client.getPrefixName(), channelName, channels[channelName].getUsersNames()) + "\r\n";
-        std::string endOfNamesMessage = RPL_ENDOFNAMES(client.getPrefixName(), channelName) + "\r\n";
+		std::string nameReplyMessage = RPL_NAMREPLY(client.getPrefixName(), channelName, channels[channelName].getUsersNames());
+        std::string endOfNamesMessage = RPL_ENDOFNAMES(client.getPrefixName(), channelName);
         channels[channelName].Brodcast(nameReplyMessage);
         channels[channelName].Brodcast(endOfNamesMessage);
 	}

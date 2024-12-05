@@ -30,6 +30,7 @@ public:
 	void	setHostName(const std::string& hostname);
 	void	setPass(bool pass);
 	void	registerClient();
+	void	MsgToClient(const std::string &message);
 
 	std::string getPrefixName();
 	void		appendBuffer(const std::string& appendBuffer);

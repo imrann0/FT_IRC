@@ -22,15 +22,28 @@ void Channel::OperatorAdd(Client &newOperator) { _operator.push_back(newOperator
 
 void Channel::ClientRemove(Client &removeClient)
 {
-    it a = find(_clients.begin(), _clients.end(), removeClient);
-    if (a != _clients.end())
+    it user = find(_clients.begin(), _clients.end(), removeClient);
+    if (user != _clients.end())
     {
-        _clients.erase(a);
+        _clients.erase(user);
         return ;
     }
     throw std::runtime_error("Channel Remove Error: Client Not Found");
     
 }
+
+void Channel::OperatorRemove(Client &removeClient)
+{
+    it user = find(_operator.begin(), _operator.end(), removeClient);
+    if (user != _operator.end())
+    {
+        _operator.erase(user);
+        return ;
+    }
+    throw std::runtime_error("Channel Remove Error: Client Not Found");
+    
+}
+
 
 std::string Channel::getUsersNames()
 {

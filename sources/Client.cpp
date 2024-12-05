@@ -1,5 +1,6 @@
 #include "Client.hpp"
 #include <iostream>
+#include <sys/socket.h> // send
 
 // Default Constructor
 Client::Client() :  _clientFd(-1) , _registered(false) {}
@@ -73,10 +74,15 @@ bool Client::getBufferLine(std::string &str)
     unsigned long   find;
 	
     find = this->_buffer.find("\n");
-    if (find == std::string::npos /* || str.compare(str.length() - 2, 2, "\r\n") */)
+    if (find == std::string::npos )/* || str.compare(str.length() - 2, 2, "\r\n") */
         return (false);
     str = this->_buffer.substr(0, find - 1);
     this->_buffer.erase(0, find + 1);
     return (true);
 }
 
+void	Client::MsgToClient(const std::string &message)
+{
+	std::string buf = message + "\r\n";
+	send(_clientFd, buf.c_str(), buf.length(), 0);
+}

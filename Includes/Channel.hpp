@@ -9,8 +9,9 @@
 typedef std::vector<Client>::iterator it;
 
 #define RPL_NAMREPLY(source, channel, users)            ": 353 " + source + " = " + channel + " :" + users
-#define RPL_ENDOFNAMES(source, channel)                 ": 366 " + source + " " + channel + " :End of /NAMES list." 
-
+#define RPL_ENDOFNAMES(source, channel)                 ": 366 " + source + " " + channel + " :End of /NAMES list."
+#define RPL_JOIN(nick, channel)                         ":" + nick + " JOIN " + channel
+#define RPL_MODE(source, channel, modes, args)          ":" + source + " MODE " + channel + " " + modes + " " + args
 
 class Channel
 {
@@ -34,11 +35,11 @@ class Channel
 		bool 				IsFlags(char c);
 		bool				IsOperator(Client &client);
 
-
 		//set
 		void ClientAdd(Client &newClient);
-		void OperatorAdd(Client &newOperator);
 		void ClientRemove(Client &removeClient);
+		void OperatorRemove(Client &removeClient);
+		void OperatorAdd(Client &newOperator);
 		void Brodcast(std::string &message);
 };
 

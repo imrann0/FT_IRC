@@ -14,9 +14,14 @@ void    o(Channel &channel, Client &client, std::string str)
             Client newOperator = channel.getClient(clientName);
             if (str[0] == '+')
             {
-                std::cout << clientName << std::endl;
                 channel.OperatorAdd(newOperator);
-                yolla(newOperator.getClientFd(), "Yeni Operator Oldun\r\n");
+                newOperator.MsgToClient(RPL_MODE(client.getPrefixName(), str.substr(pos), "+o ", clientName));
+                return ;
+            }
+            else if (str[0] == '-')
+            {
+                
+                newOperator.MsgToClient(RPL_MODE(client.getPrefixName(), str.substr(pos), "-o ", clientName));
                 return ;
             }
         }
@@ -31,8 +36,6 @@ void    o(Channel &channel, Client &client, std::string str)
 
 void Mode(std::map<std::string, Channel> &channles, Client &client, std::string str)
 {
-    (void)client;
-    (void)channles;
     size_t pos = str.find(" ");
     std::string channelName = str.substr(0, pos);
     str = str.substr(pos + 1);

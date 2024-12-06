@@ -22,7 +22,8 @@ void Join(std::map<std::string, Channel> &channels, Client &client, std::vector<
 			client.MsgToClient(ERR_CHANNELISFULL(client.getNickname(), cmd[1]));
 		else
 		{
-			std::cout << "Channel " << cmd[1] << " already exists." << std::endl;
+			if (channels[cmd[1]].IsFlags('i') == true && channels[cmd[1]].IsInvites(client.getNickname()) == false)
+				return ;
 			std::string joinMessage = RPL_JOIN(client.getPrefixName(), cmd[1]);
 			channels[cmd[1]].ClientAdd(client);
 			channels[cmd[1]].Brodcast(joinMessage);

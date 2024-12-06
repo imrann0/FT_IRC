@@ -4,5 +4,5 @@
 
 void Invite(std::map<std::string, Channel> &channels, Client &client, std::vector<std::string> cmd)
 {
-
+    
 }

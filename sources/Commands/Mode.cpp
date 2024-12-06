@@ -92,6 +92,50 @@ void    l(Channel &channel, Client &client, std::vector<std::string> cmd)
         client.MsgToClient(ERR_CHANOPRIVSNEEDED(client.getNickname(), channel.getName()));
 }
 
+void i(Channel &channel, Client &client, std::vector<std::string> cmd)
+{
+    if (channel.IsOperator(client))
+    {
+        std::string modeMessage;
+        if (cmd[2][0] == '+')
+        {
+            if (cmd.size() == 4)
+            {
+                modeMessage = RPL_MODE(client.getPrefixName(), cmd[1], "+i", cmd[3]);
+                channel.setFlags('l', true);
+                channel.setInvite(cmd[3]);
+                channel.Brodcast(modeMessage);
+            }
+            else if (cmd.size() == 3)
+            {
+                modeMessage = RPL_MODEONE(client.getPrefixName(), cmd[1], "+i");
+                channel.setFlags('i', true);
+                channel.Brodcast(modeMessage);
+            };
+
+        }
+        else if (cmd[2][0] == '-')
+        {
+            if (cmd.size() == 4)
+            {
+                modeMessage =  RPL_MODE(client.getPrefixName(), cmd[1], "-i", cmd[3]);
+                channel.removeInvite(cmd[3]);
+                channel.Brodcast(modeMessage);
+            }
+            else if (cmd.size() == 3)
+            {
+                modeMessage = RPL_MODEONE(client.getPrefixName(), cmd[1], "-i");
+                channel.setFlags('i', false);
+                channel.Brodcast(modeMessage);
+            };
+        }
+        else
+            client.MsgToClient(ERR_NEEDMOREPARAMS(client.getNickname(), cmd[0]));
+    }
+    else
+        client.MsgToClient(ERR_CHANOPRIVSNEEDED(client.getNickname(), channel.getName()));
+}
+
 void Mode(std::map<std::string, Channel> &channles, Client &client ,std::vector<std::string> cmd)
 {
     (void)channles;
@@ -116,6 +160,8 @@ void Mode(std::map<std::string, Channel> &channles, Client &client ,std::vector<
             t(channles[cmd[1]], client, cmd);
         else if (cmd[2].compare(1, 1, "l") == 0)
             l(channles[cmd[1]], client, cmd);
+        else if (cmd[2].compare(1, 1, "i") == 0)
+            i(channles[cmd[1]], client, cmd);
     }
 
 }

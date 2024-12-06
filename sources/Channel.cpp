@@ -7,6 +7,7 @@ Channel::Channel() {}
 Channel::Channel(const std::string& name) 
 {
     _name = name;
+    _maxLimit = 0;
     _flags['i'] = false;
     _flags['t'] = false;
     _flags['k'] = false;
@@ -17,12 +18,13 @@ std::string         Channel::getName()          {return _name;}
 std::vector<Client> Channel::getClients()       {return _clients;}
 std::vector<Client> Channel::getOperator()      { return _operator; }
 std::string         Channel::getTopic() const   {return _topic;}
-bool                 Channel::getLimit() const   {return (_maxLimit < _clients.size()); }
+bool                Channel::getLimit() const   {return (_maxLimit < _clients.size()); }
 
 void    Channel::setLimit(size_t Limit) {_maxLimit = Limit;}
 void    Channel::TopicAdd(std::string &topic) {_topic = topic;}
 void    Channel::ClientAdd(Client &newClient) { _clients.push_back(newClient);}
 void    Channel::OperatorAdd(Client &newOperator) { _operator.push_back(newOperator);}
+void    Channel::setInvite(std::string &invited) { _invites.push_back(invited); }
 
 void Channel::ClientRemove(Client &removeClient)
 {
@@ -52,15 +54,25 @@ void    Channel::setFlags(char c, bool status)
         throw std::runtime_error("Channel: Not Flag");
 }
 
+
 void Channel::OperatorRemove(Client &removeClient)
 {
     it user = find(_operator.begin(), _operator.end(), removeClient);
     if (user != _operator.end())
-    {
         _operator.erase(user);
-        return ;
-    }
-    throw std::runtime_error("Channel Remove Error: Client Not Found");
+    else
+        throw std::runtime_error("Channel Remove Error: Client Not Found");
+    
+}
+
+
+void Channel::removeInvite(std::string &invited)
+{
+    std::vector<std::string>::iterator in = std::find(_invites.begin(), _invites.end(), invited);
+    if (in != _invites.end())
+        _invites.erase(in);
+    else
+        throw std::runtime_error("Channel Remove Error: Invited Not Found");
     
 }
 
@@ -96,6 +108,13 @@ bool Channel::IsClient(Client &client)
     return (false);
 }
 
+bool    Channel::IsInvites(const std::string &invited) 
+{
+    std::vector<std::string>::const_iterator in = find(_invites.begin(), _invites.end(), invited);
+    if (in != _invites.end())
+        return true;
+    return (false);
+}
 
 Client&  Channel::getClient(std::string target)
 {

@@ -32,6 +32,7 @@ class Channel
 		std::vector<Client>		_clients;
 		std::vector<Client> 	_operator;
 		size_t					_maxLimit;
+		std::vector<std::string>	_invites; 
 
 	public:
 		Channel();
@@ -48,8 +49,11 @@ class Channel
 		bool 				IsFlags(char c);
 		bool				IsOperator(Client &client);
 		bool				IsClient(Client &client);
+		bool				IsInvites(const std::string &invited);
 
 		//set
+		void	setInvite(std::string &invited);
+		void	removeInvite(std::string &invited);
 		void	setLimit(size_t Limit);
 		void	setFlags(char c, bool status);
 		void	ClientAdd(Client &newClient);

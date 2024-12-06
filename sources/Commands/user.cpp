@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "Client.hpp"
+#include "Channel.hpp" // Err hata kodu için eklendi
 #include "Tools.hpp"
 #include "error.hpp"
 
@@ -26,7 +27,7 @@ void	user(Client &client, std::vector<std::string> cmd)
 {
 	if (cmd.size() != 5)
 	{
-		client.MsgToClient(ERR_NEEDMOREPARAMS(cmd[0]));
+		client.MsgToClient(ERR_NEEDMOREPARAMS(client.getNickname(), cmd[0]));
 		return;
 	}
 	if (cmd[4][0] == ':') {

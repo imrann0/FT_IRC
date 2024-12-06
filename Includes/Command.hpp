@@ -10,6 +10,6 @@ void    Quit(int clientFd, std::map<int, Client>& clients, std::vector<pollfd>& 
 void	user(Client &client, std::vector<std::string> cmd);
 void    Part(std::map<std::string, Channel> &channels, Client client, std::string str);
 void	pass(Server &server, Client &client, std::vector<std::string> cmd);
-void    Mode(std::map<std::string, Channel> &channles, Client &client, std::string str);
-
+void    Mode(std::map<std::string, Channel> &channles, Client &client ,std::vector<std::string> cmd);
+void    Topic(Channel &channel, Client &client, std::vector<std::string> cmd);
 #endif

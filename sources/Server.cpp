@@ -207,7 +207,7 @@ void Server::processMessage(Client	&client)
 void Server::routeCommand(Client &client, std::vector<std::string> &cmd , /* geçiçi parametre */ std::string &str)
 {
 	if (cmd[0] == "USER")
-		client.MsgToClient(ERR_NEEDMOREPARAMS(cmd[0]));
+		client.MsgToClient(ERR_NEEDMOREPARAMS(client.getNickname(), cmd[0]));
     else if (cmd[0] == "NICK")
         Nick(client, cmd);
     else if (cmd[0] == "JOIN")
@@ -219,7 +219,9 @@ void Server::routeCommand(Client &client, std::vector<std::string> &cmd , /* ge�
 	else if (cmd[0] == "PART")
 		Part(_channels, client, str.substr(5));
 	else if (cmd[0] == "MODE")
-		Mode(_channels, client, str.substr(5));
+		Mode(_channels, client, cmd);
+	else if (cmd[0] == "TOPIC")
+		Topic(_channels[cmd[1]], client, cmd);
 	else
 		client.MsgToClient("ERROR: Unknow Command!");
 }

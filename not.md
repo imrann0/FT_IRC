@@ -78,6 +78,7 @@ Normal kullanıcılar konuyu değiştiremez.
 
 MODE #channel +t → Kanal konusunu yalnızca operatörler değiştirebilir.
 MODE #channel -t → Herkes kanal konusunu değiştirebilir.
+
 # n - Dışarıdan Mesajlara Kapalı Kanal (no messages to channel from clients on the outside)
 
 Kanala yalnızca o kanalda bulunan kullanıcılar mesaj gönderebilir.

@@ -13,24 +13,29 @@ void Join(std::map<std::string, Channel> &channels, Client &client, std::vector<
 	// if (channelName[0] != '#') {} // Eklenebilir
 	if (cmd.size() > 3 || cmd.size() == 1)
 	{
-		client.MsgToClient(ERR_NEEDMOREPARAMS(cmd[0]));
+		client.MsgToClient(ERR_NEEDMOREPARAMS(client.getNickname(), cmd[0]));
 		return ;
 	}
 	if (channels.find(cmd[1]) != channels.end())
 	{
-		std::cout << "Channel " << cmd[1] << " already exists." << std::endl;
-    	std::string joinMessage = RPL_JOIN(client.getPrefixName(), cmd[1]) + "\r\n";
-		channels[cmd[1]].ClientAdd(client);
-		channels[cmd[1]].Brodcast(joinMessage);
+		if (channels[cmd[1]].getLimit() == false)
+			client.MsgToClient(ERR_CHANNELISFULL(client.getNickname(), cmd[1]));
+		else
+		{
+			std::cout << "Channel " << cmd[1] << " already exists." << std::endl;
+			std::string joinMessage = RPL_JOIN(client.getPrefixName(), cmd[1]);
+			channels[cmd[1]].ClientAdd(client);
+			channels[cmd[1]].Brodcast(joinMessage);
 
-		std::string nameReplyMessage = RPL_NAMREPLY(client.getPrefixName(), cmd[1], channels[cmd[1]].getUsersNames());
-        std::string endOfNamesMessage = RPL_ENDOFNAMES(client.getPrefixName(), cmd[1]);
-        channels[cmd[1]].Brodcast(nameReplyMessage);
-        channels[cmd[1]].Brodcast(endOfNamesMessage);
+			std::string nameReplyMessage = RPL_NAMREPLY(client.getPrefixName(), cmd[1], channels[cmd[1]].getUsersNames());
+			std::string endOfNamesMessage = RPL_ENDOFNAMES(client.getPrefixName(), cmd[1]);
+			channels[cmd[1]].Brodcast(nameReplyMessage);
+			channels[cmd[1]].Brodcast(endOfNamesMessage);
+		}
 	}
 	else
 	{
-    	std::string joinMessage = RPL_JOIN(client.getPrefixName(), cmd[1]) + "\r\n";
+    	std::string joinMessage = RPL_JOIN(client.getPrefixName(), cmd[1]);
 		Channel  channel(cmd[1]);
 		std::cout << "Channel Nick Name" << client.getNickname() << std::endl;
 
@@ -41,11 +46,5 @@ void Join(std::map<std::string, Channel> &channels, Client &client, std::vector<
 		client.MsgToClient(RPL_NAMREPLY(client.getPrefixName(), cmd[1], channels[cmd[1]].getUsersNames()));
 		client.MsgToClient(RPL_ENDOFNAMES(client.getPrefixName(), cmd[1]));
 		client.MsgToClient(RPL_MODE(client.getPrefixName(), cmd[1], "+o ", client.getNickname()));
-
-		/*int err = yolla(client.getClientFd(), message);
-		if (err < 0)
-			std::cerr  << std::strerror(err) << std::endl;
-		else
-			std::cout << "Channel Created" << std::endl;*/
 	}
 }

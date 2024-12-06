@@ -13,12 +13,16 @@ Channel::Channel(const std::string& name)
     _flags['l'] = false;
 }
 
-std::string Channel::getName() {return _name;}
-std::vector<Client> Channel::getClients() {return _clients;}
-std::vector<Client> Channel::getOperator() { return _operator; }
+std::string         Channel::getName()          {return _name;}
+std::vector<Client> Channel::getClients()       {return _clients;}
+std::vector<Client> Channel::getOperator()      { return _operator; }
+std::string         Channel::getTopic() const   {return _topic;}
+bool                 Channel::getLimit() const   {return (_maxLimit < _clients.size()); }
 
-void Channel::ClientAdd(Client &newClient) { _clients.push_back(newClient);}
-void Channel::OperatorAdd(Client &newOperator) { _operator.push_back(newOperator);}
+void    Channel::setLimit(size_t Limit) {_maxLimit = Limit;}
+void    Channel::TopicAdd(std::string &topic) {_topic = topic;}
+void    Channel::ClientAdd(Client &newClient) { _clients.push_back(newClient);}
+void    Channel::OperatorAdd(Client &newOperator) { _operator.push_back(newOperator);}
 
 void Channel::ClientRemove(Client &removeClient)
 {
@@ -30,6 +34,22 @@ void Channel::ClientRemove(Client &removeClient)
     }
     throw std::runtime_error("Channel Remove Error: Client Not Found");
     
+}
+
+bool    Channel::IsFlags(char c)
+{
+    if (_flags.find(c) != _flags.end())
+        return (_flags.begin()->second);
+    else 
+        return (false);
+}
+
+void    Channel::setFlags(char c, bool status)
+{
+    if (_flags.find(c) != _flags.end())
+        _flags.begin()->second = status;
+    else
+        throw std::runtime_error("Channel: Not Flag");
 }
 
 void Channel::OperatorRemove(Client &removeClient)

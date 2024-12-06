@@ -13,7 +13,6 @@
 #ifndef	ERROR_HPP
 #define	ERROR_HPP
 
-#define ERR_NEEDMOREPARAMS(command)	command + " :Not enough parameters"
 #define ERR_ALREADYREGISTRED		":You may not reregister"
 
 #endif // ERROR_HPP

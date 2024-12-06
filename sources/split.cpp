@@ -6,7 +6,7 @@
 /*   By: bdemirbu <bdemirbu@student.42kocaeli.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 19:49:45 by bdemirbu          #+#    #+#             */
-/*   Updated: 2024/12/05 18:05:08 by bdemirbu         ###   ########.fr       */
+/*   Updated: 2024/12/06 20:15:15 by bdemirbu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,11 @@ std::vector<std::string>	split(std::string str, char	c)
 	while (end != std::string::npos)
 	{
 		findStr = str.substr(start, end - start);
+		if (findStr[0] == ':')
+		{
+			start++;
+			break ;
+		}
 		if (!findStr.empty())
 			ret.push_back(findStr);
 		start = end + 1;

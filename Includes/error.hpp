@@ -6,7 +6,7 @@
 /*   By: bdemirbu <bdemirbu@student.42kocaeli.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 19:46:03 by bdemirbu          #+#    #+#             */
-/*   Updated: 2024/12/05 20:27:28 by bdemirbu         ###   ########.fr       */
+/*   Updated: 2024/12/06 20:26:45 by bdemirbu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,5 +14,6 @@
 #define	ERROR_HPP
 
 #define ERR_ALREADYREGISTRED		":You may not reregister"
+#define ERR_UNKNOWNCOMMAND(command)	(command) + " :Unknown command"
 
 #endif // ERROR_HPP

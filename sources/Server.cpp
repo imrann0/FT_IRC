@@ -200,11 +200,11 @@ void Server::processMessage(Client	&client)
 		if (client.isRegistered() == false)
 			login(client, str);
 		else
-			this->routeCommand(client, str,/* geçiçi parametre */ command);
+			this->routeCommand(client, str);
 	}
 }
 
-void Server::routeCommand(Client &client, std::vector<std::string> &cmd , /* geçiçi parametre */ std::string &str)
+void Server::routeCommand(Client &client, std::vector<std::string> &cmd)
 {
 	if (cmd[0] == "USER")
 		client.MsgToClient(ERR_NEEDMOREPARAMS(client.getNickname(), cmd[0]));
@@ -213,11 +213,11 @@ void Server::routeCommand(Client &client, std::vector<std::string> &cmd , /* ge�
     else if (cmd[0] == "JOIN")
         Join(_channels, client, cmd);
     else if (cmd[0] == "PRIVMSG")
-        Privmsg(client, str, _channels, _clients);
+        Privmsg(client, cmd, _channels, _clients);
 	else if (cmd[0] == "QUIT")
 		Quit(client.getClientFd(), _clients, _pollFds);
 	else if (cmd[0] == "PART")
-		Part(_channels, client, str.substr(5));
+		Part(_channels, client, cmd);
 	else if (cmd[0] == "MODE")
 		Mode(_channels, client, cmd);
 	else if (cmd[0] == "TOPIC")

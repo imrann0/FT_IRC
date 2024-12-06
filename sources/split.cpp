@@ -6,7 +6,7 @@
 /*   By: bdemirbu <bdemirbu@student.42kocaeli.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 19:49:45 by bdemirbu          #+#    #+#             */
-/*   Updated: 2024/12/06 20:15:15 by bdemirbu         ###   ########.fr       */
+/*   Updated: 2024/12/06 20:37:51 by bdemirbu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,5 +40,11 @@ std::vector<std::string>	split(std::string str, char	c)
 	findStr = str.substr(start, end);
 	if (!findStr.empty())
 		ret.push_back(findStr);
+	if (findStr.find(" :") != std::string::npos)
+	{
+		// birden fazla " :" kullanımı hatası
+		return ret;
+	}
+
 	return (ret);
 }

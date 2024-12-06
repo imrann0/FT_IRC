@@ -31,7 +31,7 @@ void    o(Channel &channel, Client &client, std::vector<std::string> &cmd)
                 std::string endOfNamesMessage = RPL_ENDOFNAMES(client.getPrefixName(), cmd[1]);
                 channel.Brodcast(nameReplyMessage);
                 channel.Brodcast(endOfNamesMessage);
-                return ;   
+                return ;
             }
             else
                 client.MsgToClient(ERR_NEEDMOREPARAMS(client.getNickname(), cmd[0]));

@@ -1,21 +1,10 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   user.cpp                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bdemirbu <bdemirbu@student.42kocaeli.com>  +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/04 10:47:10 by bdemirbu          #+#    #+#             */
-/*   Updated: 2024/12/05 19:52:39 by bdemirbu         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "Client.hpp"
 #include "Channel.hpp" // Err hata kodu için eklendi
 #include "Tools.hpp"
 #include "error.hpp"
 
 #include <iostream>
+
 /*
 	Command: USER
 	Parameters: <username> <hostname> <servername> <realname>

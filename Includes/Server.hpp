@@ -18,7 +18,7 @@ class Server
 		void	acceptClient();
 		void	processUserEvents();
 		void	processMessage(Client &client);
-		void	routeCommand(Client &Client, std::vector<std::string> &cmd,/* geçiçi */ std::string &str);
+		void	routeCommand(Client &Client, std::vector<std::string> &cmd);
 		void	login(Client &client, std::vector<std::string>	&str);
 
 		std::string	getPassword() const;

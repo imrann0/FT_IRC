@@ -16,12 +16,14 @@ typedef std::vector<Client>::iterator it;
 #define RPL_NOTOPIC(source, channel)                 	"331 " + source + " " + channel + " :No topic is set"
 #define RPL_TOPIC(client, channel, topic) 				": 332 " + client + " " + channel + " " + topic
 #define RPL_MODEONE(source, channel, modes) 			":" + source + " MODE " + channel + " " + modes
+#define RPL_INVITING(client, invited, channel) 			" 341 " + client + " " + invited + " " + channel
 
 // Error
 #define ERR_NOSUCHCHANNEL(source, channel)              ": 403 " + source + " " + channel + " :No such channel"
 #define ERR_CHANOPRIVSNEEDED(client, channel)			": 482 " + client + " " + channel + " :You're not channel operator"
 #define ERR_NEEDMOREPARAMS(client, command)				": 461 " + client + " " + command + " :Not enough parameters"
 #define ERR_CHANNELISFULL(client, channel)				": 471 " + client + " " + channel + " :Channel is full"
+#define ERR_NOSUCHNICK(client, channel)					": 473 " + client + " " + channel + " :Cannot join channel (+i)"
 
 class Channel
 {

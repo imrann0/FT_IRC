@@ -222,6 +222,8 @@ void Server::routeCommand(Client &client, std::vector<std::string> &cmd , /* ge√
 		Mode(_channels, client, cmd);
 	else if (cmd[0] == "TOPIC")
 		Topic(_channels[cmd[1]], client, cmd);
+	else if (cmd[0] == "INVITE")
+		Invite(_channels, client, cmd);
 	else
 		client.MsgToClient("ERROR: Unknow Command!");
 }

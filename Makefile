@@ -19,6 +19,7 @@ SRCS =  sources/Server.cpp \
 		sources/Commands/pass.cpp \
 		sources/Commands/Mode.cpp \
 		sources/Commands/Topic.cpp \
+		sources/Commands/Invite.cpp \
 		sources/Commands/Part.cpp
 
 OBJS = $(addprefix $(OBJ_DIR)/, $(SRCS:.cpp=.o))

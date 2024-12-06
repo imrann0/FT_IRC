@@ -12,4 +12,5 @@ void    Part(std::map<std::string, Channel> &channels, Client client, std::strin
 void	pass(Server &server, Client &client, std::vector<std::string> cmd);
 void    Mode(std::map<std::string, Channel> &channles, Client &client ,std::vector<std::string> cmd);
 void    Topic(Channel &channel, Client &client, std::vector<std::string> cmd);
+void    Invite(std::map<std::string, Channel> &channels, Client &client, std::vector<std::string> cmd);
 #endif

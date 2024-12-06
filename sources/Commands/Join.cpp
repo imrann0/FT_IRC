@@ -23,8 +23,8 @@ void Join(std::map<std::string, Channel> &channels, Client &client, std::vector<
 		else
 		{
 			if (channels[cmd[1]].IsFlags('i') == true && channels[cmd[1]].IsInvites(client.getNickname()) == false)
-				client.MsgToClient(ERR_NOSUCHNICK(client.getNickname(), cmd[1]));
-			else 
+				client.MsgToClient(ERR_INVITEONLYCHAN(client.getNickname(), cmd[1]));
+			else
 			{
 				std::string joinMessage = RPL_JOIN(client.getPrefixName(), cmd[1]);
 				channels[cmd[1]].ClientAdd(client);

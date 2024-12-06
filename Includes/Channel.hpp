@@ -23,8 +23,8 @@ typedef std::vector<Client>::iterator it;
 #define ERR_CHANOPRIVSNEEDED(client, channel)			": 482 " + client + " " + channel + " :You're not channel operator"
 #define ERR_NEEDMOREPARAMS(client, command)				": 461 " + client + " " + command + " :Not enough parameters"
 #define ERR_CHANNELISFULL(client, channel)				": 471 " + client + " " + channel + " :Channel is full"
-#define ERR_NOSUCHNICK(client, channel)					": 473 " + client + " " + channel + " :Cannot join channel (+i)"
-
+#define ERR_INVITEONLYCHAN(client, channel)					": 473 " + client + " " + channel + " :Cannot join channel (+i)"
+#define ERR_NOSUCHNICK(client, invited)					": 401" + client + " " + invited + " :No such nick"
 class Channel
 {
 	private:
@@ -34,7 +34,7 @@ class Channel
 		std::vector<Client>		_clients;
 		std::vector<Client> 	_operator;
 		size_t					_maxLimit;
-		std::vector<std::string>	_invites; 
+		std::vector<std::string>	_invites;
 
 	public:
 		Channel();
@@ -46,7 +46,7 @@ class Channel
 		std::vector<Client>	getOperator();
 		std::string 		getUsersNames();
 		bool					getLimit() const;
-		std::string			getTopic() const; 
+		std::string			getTopic() const;
 		Client&				getClient(std::string target);
 		bool 				IsFlags(char c);
 		bool				IsOperator(Client &client);

@@ -26,11 +26,11 @@ typedef std::vector<Client>::iterator it;
 class Channel
 {
 	private:
-		std::string _name;
-		std::string _topic;
-		std::map<char, bool> _flags;
-		std::vector<Client> _clients;
-		std::vector<Client> _operator;
+		std::string 			_name;
+		std::string 			_topic;
+		std::map<char, bool>	_flags;
+		std::vector<Client>		_clients;
+		std::vector<Client> 	_operator;
 		size_t					_maxLimit;
 
 	public:
@@ -47,6 +47,7 @@ class Channel
 		Client&				getClient(std::string target);
 		bool 				IsFlags(char c);
 		bool				IsOperator(Client &client);
+		bool				IsClient(Client &client);
 
 		//set
 		void	setLimit(size_t Limit);

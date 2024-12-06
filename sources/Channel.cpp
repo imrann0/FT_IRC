@@ -64,7 +64,6 @@ void Channel::OperatorRemove(Client &removeClient)
     
 }
 
-
 std::string Channel::getUsersNames()
 {
     std::string usersNames = "";
@@ -88,6 +87,15 @@ bool Channel::IsOperator(Client &client)
         return (true);
     return (false);
 }
+
+bool Channel::IsClient(Client &client)
+{
+    it user = find(_clients.begin(), _clients.end(), client);
+    if (user != _clients.end())
+        return (true);
+    return (false);
+}
+
 
 Client&  Channel::getClient(std::string target)
 {

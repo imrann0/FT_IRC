@@ -2,9 +2,10 @@
 #include <algorithm>
 #include <stdexcept>	// runtime_error
 #include "Tools.hpp"
+#include <sstream>
 
 Channel::Channel() {}
-Channel::Channel(const std::string& name) 
+Channel::Channel(const std::string& name)
 {
     _name = name;
     _maxLimit = 0;
@@ -19,6 +20,7 @@ std::vector<Client> Channel::getClients()       {return _clients;}
 std::vector<Client> Channel::getOperator()      { return _operator; }
 std::string         Channel::getTopic() const   {return _topic;}
 bool                Channel::getLimit() const   {return (_maxLimit < _clients.size()); }
+std::string         Channel::getSizeClient() const {std::ostringstream oss; oss << _clients.size(); return oss.str();}
 
 void    Channel::setLimit(size_t Limit) {_maxLimit = Limit;}
 void    Channel::TopicAdd(std::string &topic) {_topic = topic;}
@@ -35,14 +37,14 @@ void Channel::ClientRemove(Client &removeClient)
         return ;
     }
     throw std::runtime_error("Channel Remove Error: Client Not Found");
-    
+
 }
 
 bool    Channel::IsFlags(char c)
 {
     if (_flags.find(c) != _flags.end())
         return (_flags.begin()->second);
-    else 
+    else
         return (false);
 }
 
@@ -62,7 +64,7 @@ void Channel::OperatorRemove(Client &removeClient)
         _operator.erase(user);
     else
         throw std::runtime_error("Channel Remove Error: Client Not Found");
-    
+
 }
 
 
@@ -73,7 +75,7 @@ void Channel::removeInvite(std::string &invited)
         _invites.erase(in);
     else
         throw std::runtime_error("Channel Remove Error: Invited Not Found");
-    
+
 }
 
 std::string Channel::getUsersNames()
@@ -85,7 +87,7 @@ std::string Channel::getUsersNames()
             usersNames += "@" + user->getNickname() + " ";
         else
             usersNames += user->getNickname() + " ";
-            
+
     }
     if (!usersNames.empty())
         usersNames.erase(usersNames.size() - 1);
@@ -108,7 +110,7 @@ bool Channel::IsClient(Client &client)
     return (false);
 }
 
-bool    Channel::IsInvites(const std::string &invited) 
+bool    Channel::IsInvites(const std::string &invited)
 {
     std::vector<std::string>::const_iterator in = find(_invites.begin(), _invites.end(), invited);
     if (in != _invites.end())

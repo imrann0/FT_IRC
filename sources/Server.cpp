@@ -182,6 +182,7 @@ void	Server::login(Client &client, std::vector<std::string>	&str)
 	{
 		yolla(client.getClientFd(), "Welcome to server :)\r\n");
 		client.registerClient();
+		this->list(client);
 	}
 }
 
@@ -224,8 +225,23 @@ void Server::routeCommand(Client &client, std::vector<std::string> &cmd)
 		Topic(_channels[cmd[1]], client, cmd);
 	else if (cmd[0] == "INVITE")
 		Invite(_channels, _clients, client, cmd);
+	else if (cmd[0] == "LIST")
+		this->list(client);
 	else
 		client.MsgToClient("ERROR: Unknow Command!");
 }
 
 std::string	Server::getPassword() const {return (this->_password); }
+
+
+void Server::list(Client &client)
+{
+	client.MsgToClient(RPL_LISTSTART(client.getNickname()));
+	std::map<std::string, Channel>::iterator channel;
+	for (channel = _channels.begin(); channel != _channels.end(); ++channel)
+	{
+		std::string mes = RPL_LIST(client.getNickname(), channel->second.getName(), channel->second.getSizeClient(), channel->second.getTopic());
+		client.MsgToClient(mes);
+	}
+	client.MsgToClient(RPL_LISTEND(client.getNickname()));
+}

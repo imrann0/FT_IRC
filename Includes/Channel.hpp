@@ -45,9 +45,10 @@ class Channel
 		std::vector<Client>	getClients();
 		std::vector<Client>	getOperator();
 		std::string 		getUsersNames();
-		bool					getLimit() const;
+		bool				getLimit() const;
 		std::string			getTopic() const;
 		Client&				getClient(std::string target);
+		std::string			getSizeClient() const;
 		bool 				IsFlags(char c);
 		bool				IsOperator(Client &client);
 		bool				IsClient(Client &client);

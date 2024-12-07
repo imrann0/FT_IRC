@@ -12,21 +12,21 @@ void Privmsg(Client client, std::vector<std::string> &cmd, std::map<std::string,
 	// :<sender_nickname>!<sender_username>@<sender_host> PRIVMSG <recipient_nickname> :<message> ->özel mesaj
 	// Mesajı parçalara ayır (alıcı ve içerik)
 
+	std::string privMessage;
 	if (cmd.size() != 3)
 	{
 		//eksik argüman hatası;
 		return ;
 	}
-	if (cmd[1][0] == '#')
+	else if (cmd[1][0] == '#')
 	{
-		std::vector<Client> users = channels[cmd[1]].getClients();
-
-		for (it user = users.begin(); user != users.end(); user++)
+		if (channels.find(cmd[1]) == channels.end())
+			client.MsgToClient(ERR_NOSUCHCHANNEL(client.getPrefixName(), cmd[1]));
+		else
 		{
-			if (user->getClientFd() == client.getClientFd())
-				continue ;
-			std::string message = ":" + client.getNickname() + "!" + user->getUsername() + "@" + user->getHostName() + " " + cmd[2] + "\r\n";
-			user->MsgToClient(message);
+			privMessage = RPL_PRIVMSG(client.getPrefixName(), cmd[1], cmd[2]);
+			channels[cmd[1]].Brodcast(privMessage);
+
 		}
 	}
 	else
@@ -34,8 +34,8 @@ void Privmsg(Client client, std::vector<std::string> &cmd, std::map<std::string,
         try
         {
             Client targetClient = getClientNameFd(clients, cmd[1]);
-		    std::string mes = ":" + client.getNickname() + "!~" + client.getUsername() + "@" + client.getHostName() + " PRIVMSG " + targetClient.getNickname() + " :" + cmd[2] + "\r\n";
-			yolla(targetClient.getClientFd(), mes);
+			privMessage = RPL_PRIVMSG(client.getPrefixName(), targetClient.getNickname(), cmd[2]);
+			targetClient.MsgToClient(privMessage);
             //send(clientFd, mes.c_str(), mes.length(), 0);
         }
         catch (const std::exception& e)

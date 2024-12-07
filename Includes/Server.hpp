@@ -12,6 +12,7 @@
 #define RPL_LISTSTART(client)				 	": 321 " + client + " RPL_LISTSTART"
 #define RPL_LIST(client, channel, size, topic)	": 322 " + client + " " + channel + " " + size + " :" + topic
 #define RPL_LISTEND(client)						": 323 " + client + " RPL_LISTEND :End of /LIST"
+
 class Server
 {
 	public:

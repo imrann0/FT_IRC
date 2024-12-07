@@ -9,6 +9,7 @@
 
 typedef std::vector<Client>::iterator it;
 
+#define RPL_PRIVMSG(source, target, message)            ":" + source + " PRIVMSG " + target + " :" + message
 #define RPL_NAMREPLY(source, channel, users)            ": 353 " + source + " = " + channel + " :" + users
 #define RPL_ENDOFNAMES(source, channel)                 ": 366 " + source + " " + channel + " :End of /NAMES list."
 #define RPL_JOIN(nick, channel)                         ":" + nick + " JOIN " + channel

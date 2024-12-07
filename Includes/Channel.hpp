@@ -18,6 +18,8 @@ typedef std::vector<Client>::iterator it;
 #define RPL_TOPIC(client, channel, topic) 				": 332 " + client + " " + channel + " " + topic
 #define RPL_MODEONE(source, channel, modes) 			":" + source + " MODE " + channel + " " + modes
 #define RPL_INVITING(client, invited, channel) 			" 341 " + client + " " + invited + " " + channel
+#define RPL_PART(source, channel)                       ":" + source + " PART :" + channel
+
 
 // Error
 #define ERR_NOSUCHCHANNEL(source, channel)              ": 403 " + source + " " + channel + " :No such channel"
@@ -26,6 +28,7 @@ typedef std::vector<Client>::iterator it;
 #define ERR_CHANNELISFULL(client, channel)				": 471 " + client + " " + channel + " :Channel is full"
 #define ERR_INVITEONLYCHAN(client, channel)					": 473 " + client + " " + channel + " :Cannot join channel (+i)"
 #define ERR_NOSUCHNICK(client, invited)					": 401" + client + " " + invited + " :No such nick"
+#define ERR_NOTONCHANNEL(client, channel)				": 442 " + client + " #" + channel + " :The user is not on this channel."
 class Channel
 {
 	private:

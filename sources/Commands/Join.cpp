@@ -18,8 +18,11 @@ void Join(std::map<std::string, Channel> &channels, Client &client, std::vector<
 	}
 	if (channels.find(cmd[1]) != channels.end())
 	{
-		if (channels[cmd[1]].getLimit() == false)
-			client.MsgToClient(ERR_CHANNELISFULL(client.getNickname(), cmd[1]));
+		if (channels[cmd[1]].IsFlags('l'))
+		{
+			if (channels[cmd[1]].getLimit() == false)
+				client.MsgToClient(ERR_CHANNELISFULL(client.getNickname(), cmd[1]));
+		}
 		else
 		{
 			if (channels[cmd[1]].IsFlags('i') == true && channels[cmd[1]].IsInvites(client.getNickname()) == false)

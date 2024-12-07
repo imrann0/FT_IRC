@@ -16,8 +16,8 @@ Channel::Channel(const std::string& name)
 }
 
 std::string         Channel::getName()          {return _name;}
-std::vector<Client> Channel::getClients()       {return _clients;}
-std::vector<Client> Channel::getOperator()      { return _operator; }
+std::vector<Client> &Channel::getClients()       {return _clients;}
+std::vector<Client> &Channel::getOperator()      { return _operator; }
 std::string         Channel::getTopic() const   {return _topic;}
 bool                Channel::getLimit() const   {return (_maxLimit < _clients.size()); }
 std::string         Channel::getSizeClient() const {std::ostringstream oss; oss << _clients.size(); return oss.str();}
@@ -107,6 +107,14 @@ bool Channel::IsClient(Client &client)
     it user = find(_clients.begin(), _clients.end(), client);
     if (user != _clients.end())
         return (true);
+    return (false);
+}
+
+bool Channel::IsClient(std::string &client)
+{
+    for (size_t i = 0; i < _clients.size(); i++)
+        if (_clients[i].getUsername() == client)
+            return (true);
     return (false);
 }
 

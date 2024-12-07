@@ -33,12 +33,12 @@ typedef std::vector<Client>::iterator it;
 class Channel
 {
 	private:
-		std::string 			_name;
-		std::string 			_topic;
-		std::map<char, bool>	_flags;
-		std::vector<Client>		_clients;
-		std::vector<Client> 	_operator;
-		size_t					_maxLimit;
+		std::string 				_name;
+		std::string 				_topic;
+		std::map<char, bool>		_flags;
+		std::vector<Client>			_clients;
+		std::vector<Client> 		_operator;
+		size_t						_maxLimit;
 		std::vector<std::string>	_invites;
 
 	public:
@@ -47,23 +47,28 @@ class Channel
 
 		//get
 		std::string			getName();
-		std::vector<Client>	getClients();
-		std::vector<Client>	getOperator();
+		std::vector<Client>	&getClients();
+		std::vector<Client>	&getOperator();
 		std::string 		getUsersNames();
 		bool				getLimit() const;
 		std::string			getTopic() const;
-		Client&				getClient(std::string target);
+		Client				&getClient(std::string target);
 		std::string			getSizeClient() const;
+
+		// is
 		bool 				IsFlags(char c);
 		bool				IsOperator(Client &client);
 		bool				IsClient(Client &client);
+		bool				IsClient(std::string &client);
 		bool				IsInvites(const std::string &invited);
 
 		//set
 		void	setInvite(std::string &invited);
-		void	removeInvite(std::string &invited);
 		void	setLimit(size_t Limit);
 		void	setFlags(char c, bool status);
+
+		// member function
+		void	removeInvite(std::string &invited);
 		void	ClientAdd(Client &newClient);
 		void	ClientRemove(Client &removeClient);
 		void	OperatorRemove(Client &removeClient);

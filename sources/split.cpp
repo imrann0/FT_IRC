@@ -6,7 +6,7 @@
 /*   By: bdemirbu <bdemirbu@student.42kocaeli.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 19:49:45 by bdemirbu          #+#    #+#             */
-/*   Updated: 2024/12/07 14:34:20 by bdemirbu         ###   ########.fr       */
+/*   Updated: 2024/12/08 15:42:37 by bdemirbu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,16 +28,15 @@ std::vector<std::string>	split(std::string str, char	c)
 	{
 		findStr = str.substr(start, end - start);
 		if (findStr[0] == ':') // "," ile ayırmada sıkıntı
-		{
-			start++;
 			break ;
-		}
 		if (!findStr.empty())
 			ret.push_back(findStr);
 		start = end + 1;
 		end = str.find(c, start);
 	}
 	findStr = str.substr(start);
+	if (findStr[0] == ':') // "," ile ayırmada sıkıntı
+		findStr = str.substr(start + 1);
 	if (!findStr.empty())
 		ret.push_back(findStr);
 	if (findStr.find(" :") != std::string::npos)

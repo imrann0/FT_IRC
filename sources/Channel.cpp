@@ -113,7 +113,7 @@ bool Channel::IsClient(Client &client)
 bool Channel::IsClient(std::string &client)
 {
     for (size_t i = 0; i < _clients.size(); i++)
-        if (_clients[i].getUsername() == client)
+        if (_clients[i].getNickname() == client)
             return (true);
     return (false);
 }

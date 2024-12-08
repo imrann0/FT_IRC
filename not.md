@@ -9,8 +9,8 @@ MODE
 
 
 # bdemirbu
-- ":" operatorünü araştır buna göre parse yapılacak
-- hata durumlarında throw fırlat
+- split'te , ile ayırmadan kaynaklı sıkıntı çıkıyor ":" için ayrı fonksiyon yaz
+- hata durumlarında throw fırlat her hata için fonksiyon kick.cpp içindeki ERR_NOTONCHANNEL gibi
 - if/else ağacından kurtul
 
 

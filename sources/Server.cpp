@@ -146,20 +146,6 @@ void	Server::processUserEvents()
 	}
 }
 
-/*
-	if (str.find("NICK") != std::string::npos &&
-		str.find("USER") != std::string::npos)
-	{
-		int p = str.find("NICK");
-		str = str.substr(p, str.length() - p);
-		chatRegisterClient(str, &client);
-	}
-	else if (str.find("NICK") != std::string::npos ||
-		str.find("USER") != std::string::npos)
-	{
-
-	} */
-
 void	Server::login(Client &client, std::vector<std::string>	&str)
 {
 	if (str[0] == "CAP")
@@ -189,10 +175,13 @@ void	Server::login(Client &client, std::vector<std::string>	&str)
 void Server::processMessage(Client	&client)
 {
 	std::string	command;
-
 	while (client.getBufferLine(command))
 	{
 		std::vector<std::string>	str = split(command, ' ');
+		for (size_t i = 0; i < str.size(); i++)
+		{
+			std::cout << "|" << str[i] << "|" << (int)str[i][0] << "|" << std::endl;
+		}
 		if (str.size() == 0)
 		{
 			client.MsgToClient("ERROR: Empty command");
@@ -211,6 +200,8 @@ void Server::routeCommand(Client &client, std::vector<std::string> &cmd)
 		client.MsgToClient(ERR_NEEDMOREPARAMS(client.getNickname(), cmd[0]));
     else if (cmd[0] == "NICK")
         Nick(client, cmd);
+	else if (cmd[0] == "KICK")
+        kick(_channels, client, cmd);
     else if (cmd[0] == "JOIN")
         Join(_channels, client, cmd);
     else if (cmd[0] == "PRIVMSG")

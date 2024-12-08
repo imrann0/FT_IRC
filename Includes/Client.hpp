@@ -18,8 +18,10 @@ public:
 	const std::string&	getBuffer() const;
 	const std::string&	getHostName() const;
 	bool				getBufferLine(std::string &str);
-	bool				isRegistered() const;
 	bool				getPass() const;
+
+	// is?
+	bool				isRegistered() const;
 
 	// Setters
 	void	setClientFd(int fd);

@@ -23,7 +23,7 @@ class Server
 		void	processMessage(Client &client);
 		void	routeCommand(Client &Client, std::vector<std::string> &cmd);
 		void	login(Client &client, std::vector<std::string>	&str);
-		void list(Client &client);
+		void	list(Client &client);
 
 		std::string	getPassword() const;
 	private:

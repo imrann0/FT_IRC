@@ -21,7 +21,7 @@ std::vector<pollfd>::iterator Find(std::vector<pollfd>& pollFds, int clientFd)
 
 void Quit(int clientFd, std::map<int, Client>& clients, std::vector<pollfd>& pollFds)
 {
-	yolla(clientFd, "QUIT : Good bye.\r\n");
+	clients[clientFd].MsgToClient("QUIT : Good bye.");
 	close(clientFd);
 	clients.erase(clientFd);
 	pollFds.erase(Find(pollFds, clientFd));

@@ -99,7 +99,7 @@ void Server::acceptClient()
 	_pollFds.push_back(clientPollFd);
 	_clients.insert(std::make_pair(clientSocket, Client(clientSocket)));
 	std::cout << clientSocket << " Login" << std::endl;
-		yolla(clientSocket, "Conneted the server!\r\n");
+	_clients[clientSocket].MsgToClient("Conneted the server!");
 }
 
 

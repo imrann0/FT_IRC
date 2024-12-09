@@ -10,7 +10,6 @@ SRCS =  sources/Server.cpp \
 		sources/Tools.cpp \
 		sources/main.cpp \
 		sources/split.cpp \
-		sources/yolla.cpp \
 		sources/Commands/Nick.cpp \
 		sources/Commands/Join.cpp \
 		sources/Commands/Privmsg.cpp \

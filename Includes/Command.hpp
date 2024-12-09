@@ -15,4 +15,5 @@ void    Topic(Channel &channel, Client &client, std::vector<std::string> cmd);
 void    Invite(std::map<std::string, Channel> &channels, std::map<int, Client> &clients ,Client &client, std::vector<std::string> cmd);
 void	kick(std::map<std::string, Channel> &channels, Client &client, std::vector<std::string> &cmd);
 void    who(std::map<std::string, Channel> &channels, Client client,  std::vector<std::string> &cmd);
+
 #endif

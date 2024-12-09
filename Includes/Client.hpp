@@ -17,6 +17,7 @@ public:
 	const std::string&	getRealName() const;
 	const std::string&	getBuffer() const;
 	const std::string&	getHostName() const;
+	const std::string&	getOldName() const;
 	bool				getBufferLine(std::string &str);
 	bool				getPass() const;
 	bool				getNickStatus() const;
@@ -25,6 +26,7 @@ public:
 
 	// Setters
 	void	setClientFd(int fd);
+	void	setOldNickName(const std::string& oldNickName);
 	void	setNickname(const std::string& nickname);
 	void	setBuffer(const std::string& Buffer);
 	void	setUsername(const std::string& username);
@@ -41,6 +43,7 @@ public:
 
 private:
 	int _clientFd;
+	std::string _oldNickName;
 	std::string _nickname;		// İstemcinin takma adı
 	std::string _username;		// İstemcinin kullanıcı adı
 	std::string _realname;		// İstemcinin gerçek adı

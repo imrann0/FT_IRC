@@ -20,6 +20,7 @@ SRCS =  sources/Server.cpp \
 		sources/Commands/Mode.cpp \
 		sources/Commands/kick.cpp \
 		sources/Commands/Topic.cpp \
+		sources/Commands/Who.cpp \
 		sources/Commands/Invite.cpp \
 		sources/Commands/Part.cpp
 

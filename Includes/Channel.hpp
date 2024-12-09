@@ -26,10 +26,10 @@ typedef std::vector<Client>::iterator it;
 #define ERR_CHANOPRIVSNEEDED(client, channel)			": 482 " + client + " " + channel + " :You're not channel operator"
 #define ERR_NEEDMOREPARAMS(client, command)				": 461 " + client + " " + command + " :Not enough parameters"
 #define ERR_CHANNELISFULL(client, channel)				": 471 " + client + " " + channel + " :Channel is full"
-#define ERR_INVITEONLYCHAN(client, channel)					": 473 " + client + " " + channel + " :Cannot join channel (+i)"
-#define ERR_NOSUCHNICK(client, invited)					": 401" + client + " " + invited + " :No such nick"
+#define ERR_INVITEONLYCHAN(client, channel)				": 473 " + client + " " + channel + " :Cannot join channel (+i)"
+#define ERR_NOSUCHNICK(client, invited)					": 401 " + client + " " + invited + " :No such nick"
 #define ERR_NOTONCHANNEL(client, channel)				": 442 " + client + " " + channel + " :The user is not on this channel."
-
+#define ERR_NICKNAMEINUSE(client)						": 433 " + client + " :Nickname is already in use"
 class Channel
 {
 	private:

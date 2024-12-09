@@ -141,7 +141,6 @@ void	Server::processUserEvents()
 				}
 				processMessage(_clients[_pollFds[i].fd]);
 			}
-
 		}
 	}
 }
@@ -151,7 +150,7 @@ void	Server::login(Client &client, std::vector<std::string>	&str)
 	if (str[0] == "CAP")
 		;
 	else if (str[0] == "NICK")
-        Nick(client, str);
+        Nick(_clients, client, str);
 	else if (str[0] == "USER")
         user(client, str);
 	else if (str[0] == "QUIT")
@@ -199,7 +198,7 @@ void Server::routeCommand(Client &client, std::vector<std::string> &cmd)
 	if (cmd[0] == "USER")
 		client.MsgToClient(ERR_NEEDMOREPARAMS(client.getNickname(), cmd[0]));
     else if (cmd[0] == "NICK")
-        Nick(client, cmd);
+        Nick(_clients, client, cmd);
 	else if (cmd[0] == "KICK")
         kick(_channels, client, cmd);
     else if (cmd[0] == "JOIN")
@@ -218,6 +217,8 @@ void Server::routeCommand(Client &client, std::vector<std::string> &cmd)
 		Invite(_channels, _clients, client, cmd);
 	else if (cmd[0] == "LIST")
 		this->list(client);
+	else if (cmd[0] == "WHO")
+		who(_channels, client, cmd);
 	else
 		client.MsgToClient("ERROR: Unknow Command!");
 }

@@ -10,7 +10,7 @@ void    o(Channel &channel, Client &client, std::vector<std::string> &cmd)
     {
         try
         {
-            Client newOperator; 
+            Client newOperator;
             if (cmd[2][0] == '+' && cmd.size() == 4)
             {
                 newOperator =  channel.getClient(cmd[3]);
@@ -152,8 +152,9 @@ void Mode(std::map<std::string, Channel> &channles, Client &client ,std::vector<
             return ;
         }
     }
-    if (cmd.size() > 2)
+    else if (cmd.size() > 2)
     {
+        std::cout << "bunun burda ne işi var aq" << cmd.size() << std::endl;
         if (cmd[2].compare(1, 1, "o") == 0)
             o(channles[cmd[1]], client, cmd);
         else if (cmd[2].compare(1, 1, "t") == 0)

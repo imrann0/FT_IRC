@@ -19,7 +19,7 @@ typedef std::vector<Client>::iterator it;
 #define RPL_MODEONE(source, channel, modes) 			":" + source + " MODE " + channel + " " + modes
 #define RPL_INVITING(client, invited, channel) 			" 341 " + client + " " + invited + " " + channel
 #define RPL_PART(source, channel)                       ":" + source + " PART :" + channel
-
+#define RPL_NICK(source,nickname)                       ":" + source + " NICK " + nickname
 
 // Error
 #define ERR_NOSUCHCHANNEL(source, channel)              ": 403 " + source + " " + channel + " :No such channel"
@@ -30,6 +30,7 @@ typedef std::vector<Client>::iterator it;
 #define ERR_NOSUCHNICK(client, invited)					": 401 " + client + " " + invited + " :No such nick"
 #define ERR_NOTONCHANNEL(client, channel)				": 442 " + client + " " + channel + " :The user is not on this channel."
 #define ERR_NICKNAMEINUSE(client)						": 433 " + client + " :Nickname is already in use"
+#define ERR_ERRONEUSNICKNAME(client)					": 432 " + client + " :Erroneous nickname"
 class Channel
 {
 	private:

@@ -19,7 +19,7 @@ public:
 	const std::string&	getHostName() const;
 	bool				getBufferLine(std::string &str);
 	bool				getPass() const;
-
+	bool				getNickStatus() const;
 	// is?
 	bool				isRegistered() const;
 
@@ -33,6 +33,7 @@ public:
 	void	setPass(bool pass);
 	void	registerClient();
 	void	MsgToClient(const std::string &message);
+	void	setNickStatus(bool status);
 
 	std::string getPrefixName();
 	void		appendBuffer(const std::string& appendBuffer);
@@ -47,6 +48,7 @@ private:
 	std::string _buffer;
 	bool		_pass;
 	bool		_registered;	// İstemci kayıt oldu mu? (NICK ve USER komutlarını tamamladıktan sonra)
+	bool		_nickStatus;
 };
 
 #endif

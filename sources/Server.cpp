@@ -74,10 +74,7 @@ void	Server::Debug()
 		{
 			if (_pollFds[i].revents & POLLIN)
 			{
-				if (_pollFds[i].fd == _socket)
-					acceptClient();
-				else
-					processUserEvents();
+				processUserEvents();
 			}
 		}
 	}
@@ -100,7 +97,7 @@ void Server::acceptClient()
 	_pollFds.push_back(clientPollFd);
 	_clients.insert(std::make_pair(clientSocket, Client(clientSocket)));
 	std::cout << clientSocket << " Login" << std::endl;
-	yolla(clientSocket, "Conneted the server!\r\n");
+		yolla(clientSocket, "Conneted the server!\r\n");
 }
 
 
@@ -117,9 +114,7 @@ int receiveData(Client &client)
 			std::cerr << "Error receiving data from client " << client.getClientFd() << std::endl;
 	}
 	buffer[bytesReceived] = '\0';
-	std::cout << "ilk:" << buffer << "$" << std::endl;
 	client.appendBuffer(buffer);
-	std::cout << client.getBuffer() << std::endl;
 	return bytesReceived;
 }
 
@@ -159,15 +154,16 @@ void	Server::login(Client &client, std::vector<std::string>	&str)
 		pass(*this , client, str);
 	else
 		yolla(client.getClientFd(), "ERROR: Please Register First!\r\n");
-	if (!client.getUsername().empty() &&
+
+	if (client.getNickStatus() == false)
+		client.MsgToClient("Nick Reply");
+	else if (!client.getUsername().empty() &&
 		!client.getHostName().empty() &&
 		!client.getNickname().empty() &&
 		!client.getRealName().empty() &&
 		client.getPass() == true)
 	{
-		yolla(client.getClientFd(), "Welcome to server :)\r\n");
-		client.registerClient();
-		this->list(client);
+	 
 	}
 }
 
@@ -176,11 +172,8 @@ void Server::processMessage(Client	&client)
 	std::string	command;
 	while (client.getBufferLine(command))
 	{
+		std::cout << "|" << command << "|" << std::endl;
 		std::vector<std::string>	str = split(command, ' ');
-		for (size_t i = 0; i < str.size(); i++)
-		{
-			std::cout << "|" << str[i] << "|" << (int)str[i][0] << "|" << std::endl;
-		}
 		if (str.size() == 0)
 		{
 			client.MsgToClient("ERROR: Empty command");

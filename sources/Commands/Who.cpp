@@ -13,7 +13,10 @@
 #define RPL_ENDOFWHO(client, channel) ":* 315 " + client + " " + channel + " :End of WHO list"
 void    who(std::map<std::string, Channel> &channels, Client client,  std::vector<std::string> &cmd)
 {
-    if (cmd.size() != 2)
+    (void)channels;
+    (void)client;
+    (void)cmd;
+    /*if (cmd.size() != 2)
         client.MsgToClient(ERR_NEEDMOREPARAMS(client.getNickname(), cmd[0])); // kalan parametreler eklencek
     else if (channels.find(cmd[1]) == channels.end())
         client.MsgToClient(ERR_NOSUCHCHANNEL(client.getPrefixName(), cmd[1]));
@@ -26,5 +29,5 @@ void    who(std::map<std::string, Channel> &channels, Client client,  std::vecto
             client.MsgToClient(RPL_WHOREPLY(client.getNickname(), cmd[1], client.getUsername() ,client.getHostName(), user[0]->getNickname(),status, user[0]->getRealName()));
         }
         client.MsgToClient(RPL_ENDOFWHO(client.getNickname(), cmd[1]));
-    }
+    }*/
 }

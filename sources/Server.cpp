@@ -153,7 +153,7 @@ void	Server::login(Client &client, std::vector<std::string>	&str)
 	else if (str[0] == "PASS")
 		pass(*this , client, str);
 	else
-		yolla(client.getClientFd(), "ERROR: Please Register First!\r\n");
+		client.MsgToClient("ERROR: Please Register First!\r\n");
 
 	if (client.getNickStatus() == false)
 		client.MsgToClient("Nick Reply");
@@ -163,7 +163,9 @@ void	Server::login(Client &client, std::vector<std::string>	&str)
 		!client.getRealName().empty() &&
 		client.getPass() == true)
 	{
-
+		client.MsgToClient("Welcome to server :)\r\n");
+		client.registerClient();
+		this->list(client);
 	}
 }
 

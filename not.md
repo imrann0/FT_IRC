@@ -9,12 +9,9 @@ MODE
 
 
 # bdemirbu
-- split'te , ile ayırmadan kaynaklı sıkıntı çıkıyor ":" için ayrı fonksiyon yaz
 - her hata için fonksiyon kick.cpp içindeki ERR_NOTONCHANNEL gibi
 - if/else ağacından kurtul
-- k: Kanal anahtarını (şifre) ayarlama/kaldırma // test
-
-
+- k: test
 
 std::string mes = "001" + nickname + " :Welcome to the Internet Relay Network " + nickname + "!" +username + "@" + hostname + "\r\n";
 send(client->getClientFd(), mes.c_str(), mes.length(), 0);
@@ -126,14 +123,6 @@ Kullanımı:
 
 MODE #channel +k <şifre> → Kanala bir şifre ekler.
 MODE #channel -k → Kanal şifresini kaldırır.
-
-
-
-
-
-//! LOGİNDE QUIT ATMAM LAZIM _clients ve _pollfd BANA VER !!!!
-//! verileri vector<std::string> olarak vereceğim :) split yazdım YİNEEEEEE
-
 
 Kanal ve Kullanıcı Yönetimi Hataları
 ERR_NEEDMOREPARAMS (461)

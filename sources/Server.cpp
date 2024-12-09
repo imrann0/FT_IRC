@@ -153,7 +153,7 @@ void	Server::login(Client &client, std::vector<std::string>	&str)
 	else if (str[0] == "PASS")
 		pass(*this , client, str);
 	else
-		client.MsgToClient("ERROR: Please Register First!\r\n");
+		client.MsgToClient("ERROR: Please Register First!");
 
 	if (client.getNickStatus() == false)
 		client.MsgToClient("Nick Reply");
@@ -163,7 +163,7 @@ void	Server::login(Client &client, std::vector<std::string>	&str)
 		!client.getRealName().empty() &&
 		client.getPass() == true)
 	{
-		client.MsgToClient("Welcome to server :)\r\n");
+		client.MsgToClient("Welcome to server :)");
 		client.registerClient();
 		this->list(client);
 	}
@@ -174,17 +174,24 @@ void Server::processMessage(Client	&client)
 	std::string	command;
 	while (client.getBufferLine(command))
 	{
-		std::cout << "komut : " <<command << std::endl;
-		std::vector<std::string>	str = split(command, ' ');
-		if (str.size() == 0)
+		try
 		{
-			client.MsgToClient("ERROR: Empty command");
-			continue;
+			std::cout << "komut : " <<command << std::endl;
+			std::vector<std::string>	str = split(command, ' ');
+			if (str.size() == 0)
+			{
+				client.MsgToClient("ERROR: Empty command");
+				continue;
+			}
+			if (client.isRegistered() == false)
+				login(client, str);
+			else
+				this->routeCommand(client, str);
 		}
-		if (client.isRegistered() == false)
-			login(client, str);
-		else
-			this->routeCommand(client, str);
+		catch(const std::string& e)
+		{
+			client.MsgToClient(e);
+		}
 	}
 }
 

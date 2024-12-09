@@ -12,32 +12,26 @@ void Join(std::map<std::string, Channel> &channels, Client &client, std::vector<
     // :user!~user@host JOIN :#mychannel  -- rpl'dir
 	// if (channelName[0] != '#') {} // Eklenebilir
 	if (cmd.size() > 3 || cmd.size() == 1)
-	{
 		client.MsgToClient(ERR_NEEDMOREPARAMS(client.getNickname(), cmd[0]));
-		return ;
-	}
-	if (channels.find(cmd[1]) != channels.end())
+	else if (channels.find(cmd[1]) != channels.end())
 	{
 		if (channels[cmd[1]].IsFlags('l'))
 		{
 			if (channels[cmd[1]].getLimit() == false)
 				client.MsgToClient(ERR_CHANNELISFULL(client.getNickname(), cmd[1]));
 		}
+		else if (channels[cmd[1]].IsFlags('i') == true && channels[cmd[1]].IsInvites(client.getNickname()) == false)
+			client.MsgToClient(ERR_INVITEONLYCHAN(client.getNickname(), cmd[1]));
 		else
 		{
-			if (channels[cmd[1]].IsFlags('i') == true && channels[cmd[1]].IsInvites(client.getNickname()) == false)
-				client.MsgToClient(ERR_INVITEONLYCHAN(client.getNickname(), cmd[1]));
-			else
-			{
-				std::string joinMessage = RPL_JOIN(client.getPrefixName(), cmd[1]);
-				channels[cmd[1]].ClientAdd(client);
-				channels[cmd[1]].Brodcast(joinMessage);
+			std::string joinMessage = RPL_JOIN(client.getPrefixName(), cmd[1]);
+			channels[cmd[1]].ClientAdd(client);
+			channels[cmd[1]].Brodcast(joinMessage);
 
-				std::string nameReplyMessage = RPL_NAMREPLY(client.getPrefixName(), cmd[1], channels[cmd[1]].getUsersNames());
-				std::string endOfNamesMessage = RPL_ENDOFNAMES(client.getPrefixName(), cmd[1]);
-				channels[cmd[1]].Brodcast(nameReplyMessage);
-				channels[cmd[1]].Brodcast(endOfNamesMessage);
-			}
+			std::string nameReplyMessage = RPL_NAMREPLY(client.getPrefixName(), cmd[1], channels[cmd[1]].getUsersNames());
+			std::string endOfNamesMessage = RPL_ENDOFNAMES(client.getPrefixName(), cmd[1]);
+			channels[cmd[1]].Brodcast(nameReplyMessage);
+			channels[cmd[1]].Brodcast(endOfNamesMessage);
 		}
 	}
 	else

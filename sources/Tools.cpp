@@ -58,3 +58,12 @@ bool IsClient(const std::map<int, Client>& clients, const std::string& client)
         return false;
     }
 }
+
+char	IsFlag(std::string &flag)
+{
+	if (flag[0] == '-')
+	{
+		/* code */
+	}
+
+}

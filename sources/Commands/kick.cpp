@@ -25,15 +25,10 @@
 #include <iostream>
 void	kick(std::map<std::string, Channel> &channels, Client &client, std::vector<std::string> &cmd)
 {
-
-	if (cmd.size() <= 2 || cmd.size() >= 5)
-	{
-		client.MsgToClient(ERR_NEEDMOREPARAMS(client.getUsername(), cmd[0]));
-		return ;
-	}
+	if (cmd.size() <= 2 || cmd.size() > 4)
+		throw ERR_NEEDMOREPARAMS(client.getUsername(), cmd[0]);
 	std::vector<std::string>	users = split(cmd[2], ',');
 	std::vector<std::string>	channelsName = split(cmd[1], ',');
-	
 	if (users.size() != 1 || channelsName.size() != 1)
 		client.MsgToClient(ERR_NEEDMOREPARAMS(client.getUsername(), cmd[0]));
 	else if (channels.find(channelsName[0]) == channels.end())
@@ -51,7 +46,7 @@ void	kick(std::map<std::string, Channel> &channels, Client &client, std::vector<
 			reason = cmd[3];
 		std::string message = RPL_KICK(client.getNickname(), client.getUsername(), client.getHostName(),
 									channels[channelsName[0]].getName(),
-									channels[channelsName[0]].getClient(users[0]).getUsername(),
+									channels[channelsName[0]].getClient(users[0]).getNickname(),
 									reason);
 		channels[channelsName[0]].Brodcast(message);
 		channels[channelsName[0]].ClientRemove(channels[channelsName[0]].getClient(users[0]));

@@ -67,6 +67,7 @@ class Channel
 	private:
 		std::string 				_name;
 		std::string 				_topic;
+		std::string 				_password;
 		std::map<char, bool>		_flags;
 		std::vector<Client *>		_clients;
 		std::vector<Client *>		_operator;

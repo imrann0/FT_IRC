@@ -33,12 +33,7 @@ void	kick(std::map<std::string, Channel> &channels, Client &client, std::vector<
 	}
 	std::vector<std::string>	users = split(cmd[2], ',');
 	std::vector<std::string>	channelsName = split(cmd[1], ',');
-
-for (size_t i = 0; i < users.size(); i++)
-{
-	std::cout << users[i] << std::endl;
-}
-
+	
 	if (users.size() != 1 || channelsName.size() != 1)
 		client.MsgToClient(ERR_NEEDMOREPARAMS(client.getUsername(), cmd[0]));
 	else if (channels.find(channelsName[0]) == channels.end())

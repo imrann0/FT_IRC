@@ -19,11 +19,11 @@ void    who(std::map<std::string, Channel> &channels, Client client,  std::vecto
         client.MsgToClient(ERR_NOSUCHCHANNEL(client.getPrefixName(), cmd[1]));
     else
     {
-        std::vector<Client>::iterator user = channels[cmd[1]].getClients().begin();
+        std::vector<Client *>::iterator user = channels[cmd[1]].getClients().begin();
         for (; user != channels[cmd[1]].getClients().end(); ++user)
         {
-            std::string status = channels[cmd[1]].IsOperator(*user) ? "O" : "H";
-            client.MsgToClient(RPL_WHOREPLY(client.getNickname(), cmd[1], client.getUsername() ,client.getHostName(), user->getNickname(),status, user->getRealName()));
+            std::string status = channels[cmd[1]].IsOperator(*user[0]) ? "O" : "H";
+            client.MsgToClient(RPL_WHOREPLY(client.getNickname(), cmd[1], client.getUsername() ,client.getHostName(), user[0]->getNickname(),status, user[0]->getRealName()));
         }
         client.MsgToClient(RPL_ENDOFWHO(client.getNickname(), cmd[1]));
     }

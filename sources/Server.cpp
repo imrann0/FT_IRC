@@ -119,7 +119,6 @@ int receiveData(Client &client)
 	buffer[bytesReceived] = '\0';
 	std::cout << "ilk:" << buffer << "$" << std::endl;
 	client.appendBuffer(buffer);
-	std::cout << client.getBuffer() << std::endl;
 	return bytesReceived;
 }
 
@@ -176,11 +175,8 @@ void Server::processMessage(Client	&client)
 	std::string	command;
 	while (client.getBufferLine(command))
 	{
+		std::cout << "komut : " <<command << std::endl;
 		std::vector<std::string>	str = split(command, ' ');
-		for (size_t i = 0; i < str.size(); i++)
-		{
-			std::cout << "|" << str[i] << "|" << (int)str[i][0] << "|" << std::endl;
-		}
 		if (str.size() == 0)
 		{
 			client.MsgToClient("ERROR: Empty command");

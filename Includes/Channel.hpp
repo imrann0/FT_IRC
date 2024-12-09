@@ -7,7 +7,7 @@
 #include <cstddef> // size_t
 #include "Client.hpp"
 
-typedef std::vector<Client>::iterator it;
+typedef std::vector<Client *>::iterator it;
 
 #define RPL_PRIVMSG(source, target, message)            ":" + source + " PRIVMSG " + target + " :" + message
 #define RPL_NAMREPLY(source, channel, users)            ": 353 " + source + " = " + channel + " :" + users
@@ -36,8 +36,8 @@ class Channel
 		std::string 				_name;
 		std::string 				_topic;
 		std::map<char, bool>		_flags;
-		std::vector<Client>			_clients;
-		std::vector<Client> 		_operator;
+		std::vector<Client *>		_clients;
+		std::vector<Client *>		_operator;
 		size_t						_maxLimit;
 		std::vector<std::string>	_invites;
 
@@ -46,21 +46,21 @@ class Channel
 		Channel(const std::string& name);
 
 		//get
-		std::string			getName();
-		std::vector<Client>	&getClients();
-		std::vector<Client>	&getOperator();
-		std::string 		getUsersNames();
-		bool				getLimit() const;
-		std::string			getTopic() const;
-		Client				&getClient(std::string target);
-		std::string			getSizeClient() const;
+		std::string				getName();
+		std::vector<Client *>	&getClients();
+		std::vector<Client *>	&getOperator();
+		std::string 			getUsersNames();
+		bool					getLimit() const;
+		std::string				getTopic() const;
+		Client					&getClient(std::string target);
+		std::string				getSizeClient() const;
 
 		// is
-		bool 				IsFlags(char c);
-		bool				IsOperator(Client &client);
-		bool				IsClient(Client &client);
-		bool				IsClient(std::string &client);
-		bool				IsInvites(const std::string &invited);
+		bool	IsFlags(char c);
+		bool	IsOperator(Client &client);
+		bool	IsClient(Client &client);
+		bool	IsClient(std::string &client);
+		bool	IsInvites(const std::string &invited);
 
 		//set
 		void	setInvite(std::string &invited);

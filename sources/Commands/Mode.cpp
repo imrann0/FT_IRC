@@ -10,10 +10,9 @@ void    o(Channel &channel, Client &client, std::vector<std::string> &cmd)
     {
         try
         {
-            Client newOperator; 
+            Client &newOperator = channel.getClient(cmd[3]);
             if (cmd[2][0] == '+' && cmd.size() == 4)
             {
-                newOperator =  channel.getClient(cmd[3]);
                 newOperator.MsgToClient(RPL_MODE(client.getPrefixName(), cmd[1], "+o ", cmd[3]));
                 channel.OperatorAdd(newOperator);
                 std::string nameReplyMessage = RPL_NAMREPLY(client.getPrefixName(), cmd[1], channel.getUsersNames());
@@ -24,7 +23,6 @@ void    o(Channel &channel, Client &client, std::vector<std::string> &cmd)
             }
             else if (cmd[2][0] == '-' && cmd.size() == 4)
             {
-                newOperator =  channel.getClient(cmd[3]);
                 newOperator.MsgToClient(RPL_MODE(client.getPrefixName(), cmd[1], "-o ", cmd[3]));
                 channel.OperatorRemove(newOperator);
                 std::string nameReplyMessage = RPL_NAMREPLY(client.getPrefixName(), cmd[1], channel.getUsersNames());

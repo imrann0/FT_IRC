@@ -31,6 +31,37 @@ typedef std::vector<Client *>::iterator it;
 #define ERR_NOTONCHANNEL(client, channel)				": 442 " + client + " " + channel + " :The user is not on this channel."
 #define ERR_NICKNAMEINUSE(client)						": 433 " + client + " :Nickname is already in use"
 #define ERR_ERRONEUSNICKNAME(client)					": 432 " + client + " :Erroneous nickname"
+// -NICK ERRORS-
+#define ERR_ALREADYREGISTRED(client)							": 462 " + client + " :You may not register"
+#define ERR_NONICKNAMEGIVEN(client)							": 431 " + client + " :No nickname given" //?
+#define ERR_NICKCOLLISION(client)							": 436 " + client + " :Nickname collision KILL"
+
+// -USER ERRORS-
+
+// -JOIN ERRORS-
+#define ERR_BADCHANMASK(client, channel)				": 476 " + client + " " + channel + " :Bad Channel Mask"
+#define ERR_USERONCHANNEL(client, invited, channel)		": 443 " + client + " " + invited + " " + channel + " :is already on channel"
+#define ERR_NOTREGISTERED(client)						": 451 " + client + " :You have not registered"
+
+// -PART ERRORS-
+
+// -MODE ERRORS-
+#define ERR_UMODEUNKNOWNFLAG(client)					": 501 " + client + " :Unknown MODE flag"
+#define ERR_USERSDONTMATCH(client)						": 502 " + client + " :Cannot change mode for other users"
+
+// -KICK ERRORS-
+#define ERR_USERNOTINCHANNEL(client, invited, channel)	": 441 " + client + " " + invited + " " + channel + " :They aren't on that channel"
+
+// -INVITE ERRORS-
+#define ERR_BANNEDFROMCHAN(client, channel)				": 474 " + client + " " + channel + " :Cannot join channel (+b)"
+#define ERR_BADCHANNELKEY(client, channel)				": 475 " + client + " " + channel + " :Cannot join channel (+k)"
+#define ERR_NOPRIVILEGES(client)						": 481 " + client + " :Permission Denied- You're not an IRC operator"
+#define ERR_RESTRICTED(client)							": 484 " + client + " :Your connection is restricted!"
+#define ERR_SUMMONDISABLED(client)						": 445 " + client + " :SUMMON has been disabled"
+#define ERR_USERSDISABLED(client)						": 446 " + client + " :USERS has been disabled"
+#define ERR_PASSWDMISMATCH(client)						": 464 " + client + " :Password incorrect"
+#define ERR_YOUREBANNEDCREEP(client)					": 465 " + client + " :You are banned from this server"
+
 class Channel
 {
 	private:

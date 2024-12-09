@@ -12,7 +12,7 @@ MODE
 - split'te , ile ayırmadan kaynaklı sıkıntı çıkıyor ":" için ayrı fonksiyon yaz
 - her hata için fonksiyon kick.cpp içindeki ERR_NOTONCHANNEL gibi
 - if/else ağacından kurtul
-- k: Kanal anahtarını (şifre) ayarlama/kaldırma // burak
+- k: Kanal anahtarını (şifre) ayarlama/kaldırma // test
 
 
 

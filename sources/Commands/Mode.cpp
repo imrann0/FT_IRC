@@ -177,7 +177,7 @@ void Mode(std::map<std::string, Channel> &channles, Client &client ,std::vector<
         else if (cmd[2].compare(1, 1, "k") == 0)
             k(channles[cmd[1]], client, cmd);
         else
-            ; // ERR_UNKNOWNMODE
+            throw ""; // ERR_UNKNOWNMODE
     }
 
 }

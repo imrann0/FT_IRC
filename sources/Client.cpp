@@ -5,7 +5,7 @@
 // Default Constructor
 Client::Client() :  _clientFd(-1) , _registered(false), _nickStatus(true) {}
 
-Client::Client(int fd) : _clientFd(fd) , _registered(false), _nickStatus(true) {}
+Client::Client(int fd) : _clientFd(fd), _nickname(""), _registered(false), _nickStatus(true) {}
 
 // Parameterized Constructor
 Client::Client(const std::string& nickname, const std::string& username, int fd)

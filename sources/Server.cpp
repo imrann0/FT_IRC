@@ -14,6 +14,8 @@
 #include <cerrno>   // errno
 #include <algorithm> // std::error
 
+//								:<server_name> 001 <nick> :Welcome to the Internet Relay Network <nick>!<user>@<host>
+#define RPL_WELCOME(serverName, nick, user, host)	":" + serverName + " 001 " + nick + " :Welcome to the Internet Relay Network "+ nick +"!" + user + "@" + host
 
 Server::Server(int port, std::string password) : _port(port), _password(password)
 {
@@ -163,7 +165,7 @@ void	Server::login(Client &client, std::vector<std::string>	&str)
 		!client.getRealName().empty() &&
 		client.getPass() == true)
 	{
-		client.MsgToClient("Welcome to server :)");
+		client.MsgToClient(RPL_WELCOME(serverName, client.getNickname(), client.getUsername(), client.getHostName()));
 		client.registerClient();
 		this->list(client);
 	}

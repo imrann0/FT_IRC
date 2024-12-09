@@ -92,9 +92,16 @@ void    l(Channel &channel, Client &client, std::vector<std::string> cmd)
 
 void    k(Channel &channel, Client &client, std::vector<std::string> cmd)
 {
-    (void) cmd;
-    (void) channel;
-    (void) client;
+    if (cmd.size() > 4 || cmd.size() <= 2)
+        throw ERR_NEEDMOREPARAMS(client.getNickname(), cmd[0]);
+    if (cmd[2] != "+k" || cmd[2] != "-k")
+        throw ""; // ERR_UNKNOWNMODE
+    if (cmd[2][0] == '-')
+        channel.setPassword("");
+    else if (cmd.size() == 4)
+        channel.setPassword(cmd[3]);
+    else
+        throw ERR_NEEDMOREPARAMS(client.getNickname(), cmd[0]);
 }
 
 void i(Channel &channel, Client &client, std::vector<std::string> cmd)
@@ -158,7 +165,7 @@ void Mode(std::map<std::string, Channel> &channles, Client &client ,std::vector<
         }
     }
     else if (cmd.size() > 2)
-    { // düzelt!!
+    {
         if (cmd[2].compare(1, 1, "o") == 0)
             o(channles[cmd[1]], client, cmd);
         else if (cmd[2].compare(1, 1, "t") == 0)
@@ -169,6 +176,8 @@ void Mode(std::map<std::string, Channel> &channles, Client &client ,std::vector<
             i(channles[cmd[1]], client, cmd);
         else if (cmd[2].compare(1, 1, "k") == 0)
             k(channles[cmd[1]], client, cmd);
+        else
+            ; // ERR_UNKNOWNMODE
     }
 
 }

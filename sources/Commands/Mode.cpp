@@ -90,6 +90,13 @@ void    l(Channel &channel, Client &client, std::vector<std::string> cmd)
         client.MsgToClient(ERR_CHANOPRIVSNEEDED(client.getNickname(), channel.getName()));
 }
 
+void    k(Channel &channel, Client &client, std::vector<std::string> cmd)
+{
+    (void) cmd;
+    (void) channel;
+    (void) client;
+}
+
 void i(Channel &channel, Client &client, std::vector<std::string> cmd)
 {
     if (channel.IsOperator(client))
@@ -151,8 +158,7 @@ void Mode(std::map<std::string, Channel> &channles, Client &client ,std::vector<
         }
     }
     else if (cmd.size() > 2)
-    {
-        std::cout << "bunun burda ne işi var aq" << cmd.size() << std::endl;
+    { // düzelt!!
         if (cmd[2].compare(1, 1, "o") == 0)
             o(channles[cmd[1]], client, cmd);
         else if (cmd[2].compare(1, 1, "t") == 0)
@@ -161,6 +167,8 @@ void Mode(std::map<std::string, Channel> &channles, Client &client ,std::vector<
             l(channles[cmd[1]], client, cmd);
         else if (cmd[2].compare(1, 1, "i") == 0)
             i(channles[cmd[1]], client, cmd);
+        else if (cmd[2].compare(1, 1, "k") == 0)
+            k(channles[cmd[1]], client, cmd);
     }
 
 }

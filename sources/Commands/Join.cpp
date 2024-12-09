@@ -12,9 +12,12 @@ void Join(std::map<std::string, Channel> &channels, Client &client, std::vector<
     // :user!~user@host JOIN :#mychannel  -- rpl'dir
 	// if (channelName[0] != '#') {} // Eklenebilir
 	if (cmd.size() > 3 || cmd.size() == 1)
-		client.MsgToClient(ERR_NEEDMOREPARAMS(client.getNickname(), cmd[0]));
-	else if (channels.find(cmd[1]) != channels.end())
+		throw ERR_NEEDMOREPARAMS(client.getNickname(), cmd[0]);
+	std::string	password = cmd.size() == 3 ? cmd[2] : "" ;
+	if (channels.find(cmd[1]) != channels.end())
 	{
+		if (channels[cmd[1]].getPassword() != password)
+			throw ERR_BADCHANNELKEY(client.getNickname(), channels[cmd[1]].getName());
 		if (channels[cmd[1]].IsFlags('l'))
 		{
 			if (channels[cmd[1]].getLimit() == false)
@@ -37,7 +40,7 @@ void Join(std::map<std::string, Channel> &channels, Client &client, std::vector<
 	else
 	{
     	std::string joinMessage = RPL_JOIN(client.getPrefixName(), cmd[1]);
-		Channel  channel(cmd[1]);
+		Channel  channel(cmd[1], password);
 		std::cout << "Channel Nick Name" << client.getNickname() << std::endl;
 
 		channel.ClientAdd(client);

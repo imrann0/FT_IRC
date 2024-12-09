@@ -75,7 +75,7 @@ class Channel
 
 	public:
 		Channel();
-		Channel(const std::string& name);
+		Channel(const std::string& name, const std::string &password);
 
 		//get
 		std::string				getName();
@@ -86,6 +86,7 @@ class Channel
 		std::string				getTopic() const;
 		Client					&getClient(std::string target);
 		std::string				getSizeClient() const;
+		std::string				getPassword() const;
 
 		// is
 		bool	IsFlags(char c);
@@ -95,6 +96,7 @@ class Channel
 		bool	IsInvites(const std::string &invited);
 
 		//set
+		void	setPassword(std::string password);
 		void	setInvite(std::string &invited);
 		void	setLimit(size_t Limit);
 		void	setFlags(char c, bool status);

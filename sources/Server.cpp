@@ -13,7 +13,6 @@
 #include <string>
 #include <cerrno>   // errno
 #include <algorithm> // std::error
-
 //								:<server_name> 001 <nick> :Welcome to the Internet Relay Network <nick>!<user>@<host>
 #define RPL_WELCOME(serverName, nick, user, host)	":" + serverName + " 001 " + nick + " :Welcome to the Internet Relay Network "+ nick +"!" + user + "@" + host
 
@@ -90,6 +89,7 @@ void Server::acceptClient()
 	if (clientSocket == -1)
 	{
 		std::cerr << "Accept Error" << std::endl;
+		strerror(clientSocket);
 		return ;
 	}
 

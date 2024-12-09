@@ -23,22 +23,22 @@
 
 #define RPL_KICK(nick, user, host, channel, target ,reason) ":" + nick + "!" + user + "@" + host + " KICK " + channel + " " + target + " :" + reason
 #include <iostream>
-void	kick(std::map<std::string, Channel> &channels, Client &client, std::vector<std::string> &cmd)
+void	kick(std::map<std::string, Channel> &channels, Client &client, std::vector<std::string> &cmd) // +
 {
 	if (cmd.size() <= 2 || cmd.size() > 4)
-		throw ERR_NEEDMOREPARAMS(client.getUsername(), cmd[0]);
+		throw ERR_NEEDMOREPARAMS(client.getUsername(), cmd[0]); // +
 	std::vector<std::string>	users = split(cmd[2], ',');
 	std::vector<std::string>	channelsName = split(cmd[1], ',');
 	if (users.size() != 1 || channelsName.size() != 1)
-		client.MsgToClient(ERR_NEEDMOREPARAMS(client.getUsername(), cmd[0]));
+		throw ERR_NEEDMOREPARAMS(client.getUsername(), cmd[0]); // +
 	else if (channels.find(channelsName[0]) == channels.end())
-		std::cout <<  "ERR_NOSUCHCHANNEL" << std::endl;
+		throw ERR_NOSUCHCHANNEL(client.getUsername(), channelsName[0]); // +
 	else if (channels[channelsName[0]].IsClient(client) == false)
-		std::cout <<  "ERR_NOTONCHANNEL" << std::endl;
+		throw ERR_NOTONCHANNEL(client.getUsername(), channelsName[0]); // +
 	else if (channels[channelsName[0]].IsOperator(client) == false)
-		std::cout <<  "ERR_CHANOPRIVSNEEDED" << std::endl;
+		throw ERR_CHANOPRIVSNEEDED(client.getUsername(), channelsName[0]);
 	else if (channels[channelsName[0]].IsClient(users[0]) == false)
-		std::cout <<  "ERR_USERNOTINCHANNEL" << std::endl;
+		throw ERR_NOTONCHANNEL(client.getUsername(), channelsName[0]); // +
 	else
 	{
 		std::string reason = "";

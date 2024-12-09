@@ -50,7 +50,6 @@ typedef std::vector<Client *>::iterator it;
 #define ERR_USERSDONTMATCH(client)						": 502 " + client + " :Cannot change mode for other users"
 
 // -KICK ERRORS-
-#define ERR_USERNOTINCHANNEL(client, invited, channel)	": 441 " + client + " " + invited + " " + channel + " :They aren't on that channel"
 
 // -INVITE ERRORS-
 #define ERR_BANNEDFROMCHAN(client, channel)				": 474 " + client + " " + channel + " :Cannot join channel (+b)"

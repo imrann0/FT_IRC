@@ -218,7 +218,7 @@ void Server::routeCommand(Client &client, std::vector<std::string> &cmd)
 	else if (cmd[0] == "MODE")
 		Mode(_channels, client, cmd);
 	else if (cmd[0] == "TOPIC")
-		Topic(_channels[cmd[1]], client, cmd);
+		Topic(_channels, client, cmd);
 	else if (cmd[0] == "INVITE")
 		Invite(_channels, _clients, client, cmd);
 	else if (cmd[0] == "LIST")

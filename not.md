@@ -7,6 +7,8 @@ INVITE
 TOPIC
 MODE
 
+NOTİCE // hasan
+
 
 # bdemirbu
 - her hata için fonksiyon kick.cpp içindeki ERR_NOTONCHANNEL gibi

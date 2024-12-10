@@ -11,7 +11,7 @@ void	user(Client &client, std::vector<std::string> cmd);
 void    Part(std::map<std::string, Channel> &channels, Client client,  std::vector<std::string> &cmd);
 void	pass(Server &server, Client &client, std::vector<std::string> cmd);
 void    Mode(std::map<std::string, Channel> &channles, Client &client ,std::vector<std::string> cmd);
-void    Topic(Channel &channel, Client &client, std::vector<std::string> cmd);
+void    Topic(std::map<std::string, Channel> &channels, Client &client, std::vector<std::string> cmd);
 void    Invite(std::map<std::string, Channel> &channels, std::map<int, Client> &clients ,Client &client, std::vector<std::string> cmd);
 void	kick(std::map<std::string, Channel> &channels, Client &client, std::vector<std::string> &cmd);
 void    who(std::map<std::string, Channel> &channels, Client client,  std::vector<std::string> &cmd);

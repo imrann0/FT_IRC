@@ -1,40 +1,42 @@
 #include "Command.hpp"
 #include <vector>
 
-void    Topic(Channel &channel, Client &client, std::vector<std::string> cmd)
+void    Topic(std::map<std::string, Channel> &channels, Client &client, std::vector<std::string> cmd)
 {
-    if (channel.IsFlags('t') == false)
+    if (cmd.size() == 1)
+        throw ERR_NEEDMOREPARAMS(client.getNickname(), "TOPIC"); // +
+    else if (channels[cmd[1]].IsClient(client) == false)
+        throw ERR_NOTONCHANNEL(client.getNickname(), channels[cmd[1]].getName()); // +
+    else if (channels[cmd[1]].IsFlags('t') == false) // herkes değiştirebilir
     {
-        std::cout << channel.getTopic().empty() << " " << cmd.size() << std::endl;
         std::string topic;
         if (cmd.size()  == 3)
         {
-            topic = RPL_TOPIC(client.getNickname(), channel.getName(), cmd[2]);
-            channel.TopicAdd(topic);
+            topic = RPL_TOPIC(client.getNickname(), channels[cmd[1]].getName(), cmd[2]);
+            channels[cmd[1]].TopicAdd(topic);
         }
-        else if (!channel.getTopic().empty())
-            topic = RPL_TOPIC(client.getNickname(), channel.getName(), channel.getTopic());
+        else if (!channels[cmd[1]].getTopic().empty())
+            topic = RPL_TOPIC(client.getNickname(), channels[cmd[1]].getName(), channels[cmd[1]].getTopic());
         else
-            client.MsgToClient(RPL_NOTOPIC(client.getNickname(), channel.getName()));
-        channel.Brodcast(topic);
+            client.MsgToClient(RPL_NOTOPIC(client.getNickname(), channels[cmd[1]].getName()));
+        channels[cmd[1]].Brodcast(topic);
     }
-    else
+    else // sadece operator değiştirebilir
     {
-        if (channel.IsOperator(client))
+        if (channels[cmd[1]].IsOperator(client))
         {
             std::string topic;
             if (cmd.size()  == 3)
             {
-                topic = RPL_TOPIC(client.getNickname(), channel.getName(), cmd[2]);
-                channel.TopicAdd(topic);
+                topic = RPL_TOPIC(client.getNickname(), channels[cmd[1]].getName(), cmd[2]);
+                channels[cmd[1]].TopicAdd(topic);
             }
-            else if (!channel.getTopic().empty())
-                topic = RPL_TOPIC(client.getNickname(), channel.getName(), channel.getTopic());
+            else if (!channels[cmd[1]].getTopic().empty()) // 2 parametre varsa topici yazdır
+                topic = RPL_TOPIC(client.getNickname(), channels[cmd[1]].getName(), channels[cmd[1]].getTopic());
             else
-                client.MsgToClient(RPL_NOTOPIC(client.getNickname(), channel.getName()));
+                client.MsgToClient(RPL_NOTOPIC(client.getNickname(), channels[cmd[1]].getName()));
         }
         else
-            client.MsgToClient(ERR_CHANOPRIVSNEEDED(client.getNickname(), channel.getName()));
+            throw ERR_CHANOPRIVSNEEDED(client.getNickname(), channels[cmd[1]].getName()); // +
     }
-
 }

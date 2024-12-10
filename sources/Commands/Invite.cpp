@@ -2,9 +2,9 @@
 #include "Client.hpp"
 #include "Tools.hpp"
 #include <iostream>
-void    Invite(std::map<std::string, Channel> &channels, std::map<int, Client> &clients ,Client &client, std::vector<std::string> cmd)
+
+void    Invite(std::map<std::string, Channel> &channels, Client &client, std::vector<std::string> cmd)
 {
-	(void)clients;
 	if (cmd.size() != 3)
 	{
 		throw ERR_NEEDMOREPARAMS(client.getNickname(), cmd[0]); // +

@@ -36,7 +36,7 @@ void Privmsg(Client client, std::vector<std::string> &cmd, std::map<std::string,
         }
         catch (const std::exception& e)
         {
-			throw ERR_NOSUCHNICK(client.getNickname(), cmd[1]);
+			client.MsgToClient(ERR_NOSUCHNICK(client.getNickname(), cmd[1]));
             return;
         }
 

@@ -3,7 +3,7 @@
 
 #include "Client.hpp"
 
-class Bot : public Client
+class Bot
 {
 	public:
 		Bot();

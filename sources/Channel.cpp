@@ -51,7 +51,7 @@ void Channel::ClientRemove(Client &removeClient)
 bool    Channel::IsFlags(char c)
 {
     if (_flags.find(c) != _flags.end())
-        return (_flags.begin()->second);
+        return (_flags[c]);
     else
         return (false);
 }

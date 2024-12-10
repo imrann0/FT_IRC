@@ -94,15 +94,17 @@ void    k(Channel &channel, Client &client, std::vector<std::string> cmd)
 {
     if (cmd.size() > 4 || cmd.size() <= 2)
         throw ERR_NEEDMOREPARAMS(client.getNickname(), cmd[0]);
-    if (cmd[2] != "+k" || cmd[2] != "-k")
-        throw std::string(""); // ERR_UNKNOWNMODE
     if (cmd[2][0] == '-')
     {
+        std::string mes = RPL_MODEONE(client.getPrefixName(), cmd[1], cmd[2]);
+        channel.Brodcast(mes);
         channel.setFlags('k', false);
         channel.setPassword("");
     }
     else if (cmd.size() == 4)
     {
+        std::string mes = RPL_MODE(client.getPrefixName(), cmd[1], cmd[2], cmd[3]);
+        channel.Brodcast(mes);
         channel.setFlags('k', true);
         channel.setPassword(cmd[3]);
     }
@@ -172,18 +174,18 @@ void Mode(std::map<std::string, Channel> &channles, Client &client ,std::vector<
     }
     else if (cmd.size() > 2)
     {
-        if (cmd[2].compare(1, 1, "o") == 0)
+        if (cmd[2] == "+o" || cmd[2] == "-o")
             o(channles[cmd[1]], client, cmd);
-        else if (cmd[2].compare(1, 1, "t") == 0)
+        else if (cmd[2] == "+t" || cmd[2] == "-t")
             t(channles[cmd[1]], client, cmd);
-        else if (cmd[2].compare(1, 1, "l") == 0)
+        else if (cmd[2] == "+l" || cmd[2] == "-l")
             l(channles[cmd[1]], client, cmd);
-        else if (cmd[2].compare(1, 1, "i") == 0)
+        else if (cmd[2] == "+i" || cmd[2] == "-i")
             i(channles[cmd[1]], client, cmd);
-        else if (cmd[2].compare(1, 1, "k") == 0)
+        else if (cmd[2] == "+k" || cmd[2] == "-k")
             k(channles[cmd[1]], client, cmd);
         else
-            throw std::string(""); // ERR_UNKNOWNMODE
+            throw std::string("deneme2231"); // ERR_UNKNOWNMODE
     }
 
 }

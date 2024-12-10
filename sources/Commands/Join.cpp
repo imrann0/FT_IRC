@@ -16,26 +16,21 @@ void Join(std::map<std::string, Channel> &channels, Client &client, std::vector<
 	std::string	password = cmd.size() == 3 ? cmd[2] : "" ;
 	if (channels.find(cmd[1]) != channels.end())
 	{
-		if (channels[cmd[1]].getPassword() != password)
+		if (channels[cmd[1]].IsFlags('k') && channels[cmd[1]].getPassword() != password)
 			throw ERR_BADCHANNELKEY(client.getNickname(), channels[cmd[1]].getName());
-		if (channels[cmd[1]].IsFlags('l'))
-		{
-			if (channels[cmd[1]].getLimit() == false)
-				client.MsgToClient(ERR_CHANNELISFULL(client.getNickname(), cmd[1]));
-		}
-		else if (channels[cmd[1]].IsFlags('i') == true && channels[cmd[1]].IsInvites(client.getNickname()) == false)
-			client.MsgToClient(ERR_INVITEONLYCHAN(client.getNickname(), cmd[1]));
-		else
-		{
-			std::string joinMessage = RPL_JOIN(client.getPrefixName(), cmd[1]);
-			channels[cmd[1]].ClientAdd(client);
-			channels[cmd[1]].Brodcast(joinMessage);
+		if (channels[cmd[1]].IsFlags('l') && channels[cmd[1]].getLimit() == false)
+			throw (ERR_CHANNELISFULL(client.getNickname(), cmd[1]));
+		if (channels[cmd[1]].IsFlags('i') == true && channels[cmd[1]].IsInvites(client.getNickname()) == false)
+			throw (ERR_INVITEONLYCHAN(client.getNickname(), cmd[1]));
 
-			std::string nameReplyMessage = RPL_NAMREPLY(client.getPrefixName(), cmd[1], channels[cmd[1]].getUsersNames());
-			std::string endOfNamesMessage = RPL_ENDOFNAMES(client.getPrefixName(), cmd[1]);
-			channels[cmd[1]].Brodcast(nameReplyMessage);
-			channels[cmd[1]].Brodcast(endOfNamesMessage);
-		}
+		std::string joinMessage = RPL_JOIN(client.getPrefixName(), cmd[1]);
+		channels[cmd[1]].ClientAdd(client);
+		channels[cmd[1]].Brodcast(joinMessage);
+
+		std::string nameReplyMessage = RPL_NAMREPLY(client.getPrefixName(), cmd[1], channels[cmd[1]].getUsersNames());
+		std::string endOfNamesMessage = RPL_ENDOFNAMES(client.getPrefixName(), cmd[1]);
+		channels[cmd[1]].Brodcast(nameReplyMessage);
+		channels[cmd[1]].Brodcast(endOfNamesMessage);
 	}
 	else
 	{

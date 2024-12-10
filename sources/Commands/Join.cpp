@@ -11,14 +11,16 @@ void Join(std::map<std::string, Channel> &channels, Client &client, std::vector<
 {
 	if (cmd.size() > 3 || cmd.size() == 1)
 		throw ERR_NEEDMOREPARAMS(client.getNickname(), cmd[0]);
+	else if (cmd[1][0] != '#')
+		throw ERR_BADCHANMASK(client.getNickname(), cmd[1]);
 	std::string	password = cmd.size() == 3 ? cmd[2] : "" ;
 	if (channels.find(cmd[1]) != channels.end())
 	{
 		if (channels[cmd[1]].IsFlags('k') && channels[cmd[1]].getPassword() != password)
 			throw ERR_BADCHANNELKEY(client.getNickname(), channels[cmd[1]].getName());
-		if (channels[cmd[1]].IsFlags('l') && channels[cmd[1]].getLimit() == false)
+		else if (channels[cmd[1]].IsFlags('l') && channels[cmd[1]].getLimit() == false)
 			throw (ERR_CHANNELISFULL(client.getNickname(), cmd[1]));
-		if (channels[cmd[1]].IsFlags('i') == true && channels[cmd[1]].IsInvites(client.getNickname()) == false)
+		else if (channels[cmd[1]].IsFlags('i') == true && channels[cmd[1]].IsInvites(client.getNickname()) == false)
 			throw (ERR_INVITEONLYCHAN(client.getNickname(), cmd[1]));
 
 		std::string joinMessage = RPL_JOIN(client.getPrefixName(), cmd[1]);

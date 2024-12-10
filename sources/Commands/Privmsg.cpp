@@ -39,7 +39,7 @@ void Privmsg(Client client, std::vector<std::string> &cmd, std::map<std::string,
         }
         catch (const std::exception& e)
         {
-			client.MsgToClient("ERROR :User not found");	// ERR_NOSUCHNICK
+			throw ERR_NOSUCHNICK(client.getNickname(), cmd[1]);
             return;
         }
 

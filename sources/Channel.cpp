@@ -110,6 +110,14 @@ bool Channel::IsOperator(Client &client)
     return (false);
 }
 
+bool Channel::IsOperator(std::string &op)
+{
+    for (size_t i = 0; i < _operator.size(); i++)
+        if (_operator[i]->getNickname() == op)
+            return (true);
+    return (false);
+}
+
 bool Channel::IsClient(Client &client)
 {
     it user = find(_clients.begin(), _clients.end(), &client);

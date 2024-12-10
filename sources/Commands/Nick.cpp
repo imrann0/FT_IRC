@@ -29,27 +29,12 @@ bool isValidNickname(const std::string& nickname) {
             return false;
         }
     }
-
-    // 4. Boşluk karakteri içeremez
-    if (nickname.find(' ') != std::string::npos) {
-        std::cout << "Hata: Takma adda bosluk karakteri bulunamaz." << std::endl;
-        return false;
-    }
-
-    // 5. Takma adda kontrol karakterleri (ASCII 0-31) bulunmamalıdır
-    for (size_t i = 0; i < nickname.length(); ++i) {
-        char c = nickname[i];
-        if (c < 32) {  // ASCII kontrol karakterleri (0-31)
-            std::cout << "Hata: Takma adda kontrol karakteri bulunamaz." << std::endl;
-            return false;
-        }
-    }
-
-    // 6. Takma ad geçerli
+    std::cout << "---------------" << std::endl;
+    // 4. Takma ad geçerli
     return true;
 }
 
-void Nick(std::map<int, Client>& clients, Client &client, std::vector<std::string> cmd)
+void Nick(std::map<int, Client>& clients, Client &client, std::vector<std::string> cmd) // ?
 {
 	std::cout << cmd.size() << std::endl;
 	if (cmd.size() == 1)
@@ -59,7 +44,7 @@ void Nick(std::map<int, Client>& clients, Client &client, std::vector<std::strin
 	else if (IsClient(clients, cmd[1]) == true)
 		throw ERR_NICKNAMEINUSE(cmd[1]);
 	else if (isValidNickname(cmd[1]) == false)
-		throw ERR_NONICKNAMEGIVEN(cmd[1]);
+		throw ERR_ERRONEUSNICKNAME(cmd[1]);
 	else if (client.isRegistered() == true)
 	{
 		std::string a = RPL_NICK(client.getPrefixName(), cmd[1]);

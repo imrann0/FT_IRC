@@ -2,11 +2,15 @@
 # define	BOT_HPP
 
 #include "Client.hpp"
+#include "Channel.hpp"
 
 class Bot
 {
+	protected:
+		std::string	_name;
+		Channel		&_channel;
 	public:
-		Bot();
+		Bot(std::string	name, Channel &channel);
 		~Bot();
 };
 

@@ -12,7 +12,7 @@ Channel::Channel(const std::string& name, const std::string &password)
     _maxLimit = 0;
     _flags['i'] = false;
     _flags['t'] = false;
-    _flags['k'] = false;
+    _flags['k'] = password == "" ? false : true;
     _flags['l'] = false;
 }
 

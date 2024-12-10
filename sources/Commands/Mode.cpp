@@ -97,9 +97,15 @@ void    k(Channel &channel, Client &client, std::vector<std::string> cmd)
     if (cmd[2] != "+k" || cmd[2] != "-k")
         throw std::string(""); // ERR_UNKNOWNMODE
     if (cmd[2][0] == '-')
+    {
+        channel.setFlags('k', false);
         channel.setPassword("");
+    }
     else if (cmd.size() == 4)
+    {
+        channel.setFlags('k', true);
         channel.setPassword(cmd[3]);
+    }
     else
         throw ERR_NEEDMOREPARAMS(client.getNickname(), cmd[0]);
 }

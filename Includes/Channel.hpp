@@ -61,6 +61,13 @@ typedef std::vector<Client *>::iterator it;
 #define ERR_PASSWDMISMATCH(client)						": 464 " + client + " :Password incorrect"
 #define ERR_YOUREBANNEDCREEP(client)					": 465 " + client + " :You are banned from this server"
 
+// -PRIVMSG ERRORS-
+#define ERR_NORECIPIENT(client)							": 411 " + client + " :No recipient given"
+#define ERR_NOTEXTTOSEND(client)						": 412 " + client + " :No text to send"
+#define ERR_NOTOPLEVEL(client)							": 413 " + client + " :No toplevel domain specified"
+#define ERR_WILDTOPLEVEL(client)						": 414 " + client + " :Wildcard in toplevel domain"
+#define ERR_TOOMANYTARGETS(client)						": 407 " + client + " :Too many recipients"
+
 class Channel
 {
 	private:

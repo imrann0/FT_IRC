@@ -9,8 +9,6 @@
 
 void Join(std::map<std::string, Channel> &channels, Client &client, std::vector<std::string> &cmd)
 {
-    // :user!~user@host JOIN :#mychannel  -- rpl'dir
-	// if (channelName[0] != '#') {} // Eklenebilir
 	if (cmd.size() > 3 || cmd.size() == 1)
 		throw ERR_NEEDMOREPARAMS(client.getNickname(), cmd[0]);
 	std::string	password = cmd.size() == 3 ? cmd[2] : "" ;

@@ -7,21 +7,19 @@
 
 void Privmsg(Client client, std::vector<std::string> &cmd, std::map<std::string, Channel> channels, std::map<int, Client>& clients)
 {
-    // :Alice!alice@irc.example.com PRIVMSG #general :Herkese merhaba!
-    // :<sender>!<user>@<host> PRIVMSG <channel> :<message>
-	// :<sender_nickname>!<sender_username>@<sender_host> PRIVMSG <recipient_nickname> :<message> ->özel mesaj
-	// Mesajı parçalara ayır (alıcı ve içerik)
-
 	std::string privMessage;
-	if (cmd.size() != 3)
+	if (cmd.size() == 1)
 	{
-		//eksik argüman hatası;
-		return ;
+		throw ERR_NORECIPIENT(client.getNickname());
 	}
+	else if (cmd[1].find(',') != std::string::npos)
+		throw ERR_TOOMANYTARGETS(client.getNickname());
+	else if (cmd.size() == 2)
+		throw ERR_NOTEXTTOSEND(client.getNickname());
 	else if (cmd[1][0] == '#')
 	{
 		if (channels.find(cmd[1]) == channels.end())
-			client.MsgToClient(ERR_NOSUCHCHANNEL(client.getPrefixName(), cmd[1]));
+			throw (ERR_NOTOPLEVEL(client.getNickname()));
 		else
 		{
 			privMessage = RPL_PRIVMSG(client.getPrefixName(), cmd[1], cmd[2]);
@@ -35,7 +33,6 @@ void Privmsg(Client client, std::vector<std::string> &cmd, std::map<std::string,
             Client targetClient = getClientNameFd(clients, cmd[1]);
 			privMessage = RPL_PRIVMSG(client.getPrefixName(), targetClient.getNickname(), cmd[2]);
 			targetClient.MsgToClient(privMessage);
-            //send(clientFd, mes.c_str(), mes.length(), 0);
         }
         catch (const std::exception& e)
         {

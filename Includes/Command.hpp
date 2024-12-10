@@ -8,7 +8,7 @@ void	Join(std::map<std::string, Channel> &channels, Client &client, std::vector<
 void	Privmsg(Client client, std::vector<std::string> &cmd, std::map<std::string, Channel> channels, std::map<int, Client>& clients);
 void    Quit(int clientFd, std::map<int, Client>& clients, std::vector<pollfd>& pollFds);
 void	user(Client &client, std::vector<std::string> cmd);
-void    Part(std::map<std::string, Channel> &channels, Client client,  std::vector<std::string> &cmd);
+void    Part(std::map<std::string, Channel> &channels, Client &client,  std::vector<std::string> &cmd);
 void	pass(Server &server, Client &client, std::vector<std::string> cmd);
 void    Mode(std::map<std::string, Channel> &channles, Client &client ,std::vector<std::string> cmd);
 void    Topic(std::map<std::string, Channel> &channels, Client &client, std::vector<std::string> cmd);

@@ -20,7 +20,7 @@
 //		ERR_USERNOTINCHANNEL : :<server> 441 <nick> <user> <channel> :They aren't on that channel
 
 #define RPL_KICK(nick, user, host, channel, target ,reason) ":" + nick + "!" + user + "@" + host + " KICK " + channel + " " + target + " :" + reason
-
+#include <iostream>
 void	kick(std::map<std::string, Channel> &channels, Client &client, std::vector<std::string> &cmd) // +
 {
 	if (cmd.size() <= 2 || cmd.size() > 4)
@@ -39,9 +39,7 @@ void	kick(std::map<std::string, Channel> &channels, Client &client, std::vector<
 		throw ERR_NOTONCHANNEL(client.getUsername(), channelsName[0]); // +
 	else
 	{
-		std::string reason = "";
-		if (cmd.size() == 4)
-			reason = cmd[3];
+		std::string reason = cmd.size() != 4 ? "" : cmd[3];
 		std::string message = RPL_KICK(client.getNickname(), client.getUsername(), client.getHostName(),
 									channels[channelsName[0]].getName(),
 									channels[channelsName[0]].getClient(users[0]).getNickname(),

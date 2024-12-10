@@ -95,7 +95,7 @@ void    k(Channel &channel, Client &client, std::vector<std::string> cmd)
     if (cmd.size() > 4 || cmd.size() <= 2)
         throw ERR_NEEDMOREPARAMS(client.getNickname(), cmd[0]);
     if (cmd[2] != "+k" || cmd[2] != "-k")
-        throw ""; // ERR_UNKNOWNMODE
+        throw std::string(""); // ERR_UNKNOWNMODE
     if (cmd[2][0] == '-')
         channel.setPassword("");
     else if (cmd.size() == 4)
@@ -177,7 +177,7 @@ void Mode(std::map<std::string, Channel> &channles, Client &client ,std::vector<
         else if (cmd[2].compare(1, 1, "k") == 0)
             k(channles[cmd[1]], client, cmd);
         else
-            throw ""; // ERR_UNKNOWNMODE
+            throw std::string(""); // ERR_UNKNOWNMODE
     }
 
 }

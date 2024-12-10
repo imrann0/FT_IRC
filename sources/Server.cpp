@@ -207,6 +207,8 @@ void Server::routeCommand(Client &client, std::vector<std::string> &cmd)
         kick(_channels, client, cmd);
     else if (cmd[0] == "JOIN")
         Join(_channels, client, cmd);
+/* 	else if (cmd[0] == "WORLD")
+        world(client, cmd); */
     else if (cmd[0] == "PRIVMSG")
         Privmsg(client, cmd, _channels, _clients);
 	else if (cmd[0] == "QUIT")

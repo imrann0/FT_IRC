@@ -28,7 +28,7 @@ typedef std::vector<Client *>::iterator it;
 #define ERR_CHANNELISFULL(client, channel)				": 471 " + client + " " + channel + " :Channel is full"
 #define ERR_INVITEONLYCHAN(client, channel)				": 473 " + client + " " + channel + " :Cannot join channel (+i)"
 #define ERR_NOSUCHNICK(client, invited)					": 401 " + client + " " + invited + " :No such nick"
-#define ERR_NOTONCHANNEL(client, channel)				": 442 " + client + " " + channel + " :The user is not on this channel."
+#define ERR_NOTONCHANNEL(client, channel)				": 442 " + client + " " + channel + " :You're not on that channel"
 #define ERR_NICKNAMEINUSE(client)						": 433 " + client + " :Nickname is already in use"
 #define ERR_ERRONEUSNICKNAME(client)					": 432 " + client + " :Erroneous nickname"
 // -NICK ERRORS-
@@ -91,6 +91,7 @@ class Channel
 		// is
 		bool	IsFlags(char c);
 		bool	IsOperator(Client &client);
+		bool 	IsOperator(std::string &op);
 		bool	IsClient(Client &client);
 		bool	IsClient(std::string &client);
 		bool	IsInvites(const std::string &invited);

@@ -4,23 +4,25 @@ CXX = c++
 OBJ_DIR = .objs
 
 CXXFLAGS = -Wall -Wextra -Werror -std=c++98 -IIncludes
-SRCS =  sources/Server.cpp \
-		sources/Client.cpp \
+SRCS =  \
 		sources/Channel.cpp \
+		sources/Client.cpp \
+		sources/Server.cpp \
 		sources/Tools.cpp \
 		sources/main.cpp \
+		sources/Commands/Privmsg.cpp \
+		sources/Commands/Invite.cpp \
+		sources/Commands/Topic.cpp \
 		sources/Commands/Nick.cpp \
 		sources/Commands/Join.cpp \
-		sources/Commands/Privmsg.cpp \
 		sources/Commands/user.cpp \
 		sources/Commands/Quit.cpp \
 		sources/Commands/pass.cpp \
 		sources/Commands/Mode.cpp \
 		sources/Commands/kick.cpp \
-		sources/Commands/Topic.cpp \
-		sources/Commands/Who.cpp \
-		sources/Commands/Invite.cpp \
-		sources/Commands/Part.cpp
+		sources/Commands/Part.cpp \
+		sources/Commands/Who.cpp
+
 
 OBJS = $(addprefix $(OBJ_DIR)/, $(SRCS:.cpp=.o))
 

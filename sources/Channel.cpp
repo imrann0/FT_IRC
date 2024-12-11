@@ -5,6 +5,7 @@
 #include <sstream>
 
 Channel::Channel() {}
+
 Channel::Channel(const std::string& name, const std::string &password)
 {
     _password = password;

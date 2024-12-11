@@ -1,8 +1,8 @@
 #ifndef		BOT_HPP
 # define	BOT_HPP
 
-#include "Client.hpp"
-#include "Channel.hpp"
+#include <iostream>
+class Channel;
 
 class Bot
 {

@@ -77,6 +77,14 @@ void RemoveChannels(std::map<std::string, Channel> &channels, Client &client)
                 channels.erase(temp);
                 continue;
             }
+            else
+            {
+
+                std::string nameReplyMessage = RPL_NAMREPLY(client.getPrefixName(), it->second.getName(), it->second.getUsersNames());
+                std::string endOfNamesMessage = RPL_ENDOFNAMES(client.getPrefixName(), it->second.getName());
+                it->second.Brodcast(nameReplyMessage);
+                it->second.Brodcast(endOfNamesMessage);
+            }
         }
         ++it;
     }

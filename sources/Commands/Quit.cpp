@@ -6,6 +6,7 @@
 #include "Tools.hpp"
 #include <stdexcept>
 #include <sys/socket.h> // send
+#include <iostream>
 
 std::vector<pollfd>::iterator Find(std::vector<pollfd>& pollFds, int clientFd)
 {
@@ -23,6 +24,7 @@ void Quit(std::map<std::string, Channel> &channels, std::map<int, Client>& clien
 {
 	RemoveChannels(channels, clients[clientFd]);
 	clients[clientFd].MsgToClient("QUIT : Good bye.");
+	std::cout << clientFd << " Disconnected() :( " << std::endl;
 	clients.erase(clientFd);
 	pollFds.erase(Find(pollFds, clientFd));
 	close(clientFd);

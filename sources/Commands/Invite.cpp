@@ -13,9 +13,9 @@ void    Invite(std::map<std::string, Channel> &channels, std::map<int, Client> &
 			throw ERR_NOSUCHCHANNEL(client.getPrefixName(), cmd[2]);
 		else if (IsClient(clients, cmd[1]) == false)
 			throw (ERR_NOSUCHNICK(client.getNickname(), cmd[1]));
-		else if (channels[cmd[2]].IsClient(cmd[1]))
+		else if (channels[cmd[2]].IsClient(client) == false)
 			throw ERR_NOTONCHANNEL(client.getNickname(), cmd[2]);
-		else if (channels[cmd[2]].IsOperator(cmd[1]) == false)
+		else if (channels[cmd[2]].IsOperator(client) == false)
 			throw ERR_CHANOPRIVSNEEDED(client.getNickname(), cmd[2]);
 		else
 		{

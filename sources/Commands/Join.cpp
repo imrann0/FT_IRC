@@ -16,7 +16,6 @@ void Join(std::map<std::string, Channel> &channels, Client &client, std::vector<
 	std::string	password = cmd.size() == 3 ? cmd[2] : "" ;
 	if (channels.find(cmd[1]) != channels.end())
 	{
-		std::cout << "davet durumu" << channels[cmd[1]].IsFlags('i') << " davetli kullanıcımı"<< channels[cmd[1]].IsInvites(client.getNickname()) << std::endl;
 		if (channels[cmd[1]].IsFlags('k') && channels[cmd[1]].getPassword() != password)
 			throw ERR_BADCHANNELKEY(client.getNickname(), channels[cmd[1]].getName());
 		else if (channels[cmd[1]].IsFlags('l') && channels[cmd[1]].getLimit() == false)

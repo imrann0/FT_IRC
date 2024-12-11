@@ -12,9 +12,12 @@
 #include <poll.h>		//poll
 #include <string>
 #include <cerrno>   // errno
+#include <csignal>  // signal
 #include <algorithm> // std::error
 //								:<server_name> 001 <nick> :Welcome to the Internet Relay Network <nick>!<user>@<host>
 #define RPL_WELCOME(serverName, nick, user, host)	":" + serverName + " 001 " + nick + " :Welcome to the Internet Relay Network "+ nick +"!" + user + "@" + host
+
+int Server::_signal = 0;
 
 Server::Server(int port, std::string password) : _port(port), _password(password)
 {
@@ -61,9 +64,21 @@ Server::Server(int port, std::string password) : _port(port), _password(password
 	_pollFds.push_back(fds);
 }
 
+void  Server::setSignal(int signal)
+{
+	_signal = signal;
+}
+
+void signalHandler(int signal)
+{
+	Server::setSignal(signal);
+	std::cout << "Signal: " << signal << std::endl;
+}
+
 void	Server::Debug()
 {
-	while (true)
+	signal(SIGINT, signalHandler);
+	while (!_signal)
 	{
 		int ret = poll(_pollFds.data(), _pollFds.size(), -1);
 		if (ret == -1)

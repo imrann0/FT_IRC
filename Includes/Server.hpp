@@ -25,6 +25,7 @@ class Server
 		void	login(Client &client, std::vector<std::string>	&str);
 		void	list(Client &client);
 		int		receiveData(Client &client);
+		static void setSignal(int signal);
 
 		std::string	getPassword() const;
 	private:
@@ -36,6 +37,7 @@ class Server
 		int								_socket;
 		struct sockaddr_in				server_addr;
 		std::map<std::string, Channel>	_channels;
+		static int						_signal;
 };
 
 

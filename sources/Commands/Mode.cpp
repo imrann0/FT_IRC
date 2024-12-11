@@ -122,7 +122,7 @@ void i(Channel &channel, Client &client, std::vector<std::string> cmd)
             if (cmd.size() == 4)
             {
                 modeMessage = RPL_MODE(client.getPrefixName(), cmd[1], "+i", cmd[3]);
-                channel.setFlags('l', true);
+                channel.setFlags('i', true);
                 channel.setInvite(cmd[3]);
                 channel.Brodcast(modeMessage);
             }

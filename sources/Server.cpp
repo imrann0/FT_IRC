@@ -65,7 +65,7 @@ void	Server::Debug()
 {
 	while (true)
 	{
-		int ret = poll(_pollFds.data(), _pollFds.size(), -1); // poll nedir?
+		int ret = poll(_pollFds.data(), _pollFds.size(), -1);
 		if (ret == -1)
 		{
 			close(_socket);
@@ -88,8 +88,8 @@ void Server::acceptClient()
 	int clientSocket = accept(_socket, (struct sockaddr*)&clientAddr, &clientLen);
 	if (clientSocket == -1)
 	{
-		std::cerr << "Accept Error" << std::endl;
-		strerror(clientSocket);
+		std::cerr << "Accept Error: "  << strerror(clientSocket) << "bu error" << std::endl;
+
 		return ;
 	}
 
@@ -167,7 +167,6 @@ void	Server::login(Client &client, std::vector<std::string>	&str)
 	{
 		client.MsgToClient(RPL_WELCOME(serverName, client.getNickname(), client.getUsername(), client.getHostName()));
 		client.registerClient();
-		this->list(client);
 	}
 }
 

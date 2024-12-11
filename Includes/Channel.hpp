@@ -68,6 +68,11 @@ typedef std::vector<Client *>::iterator it;
 #define ERR_WILDTOPLEVEL(client)						": 414 " + client + " :Wildcard in toplevel domain"
 #define ERR_TOOMANYTARGETS(client)						": 407 " + client + " :Too many recipients"
 
+// -MOTD ERRORS-
+#define ERR_KEYSET(client, channel)						": 467 " + client + " " + channel + " :Channel key already set"
+#define ERR_UNKNOWNMODE(client, channel, modes)			": 472 " + client + " " + channel + " " + modes + " :is unknown mode char to me"
+
+
 class Channel
 {
 	private:

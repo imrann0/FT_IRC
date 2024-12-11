@@ -19,7 +19,7 @@ std::vector<pollfd>::iterator Find(std::vector<pollfd>& pollFds, int clientFd)
 }
 
 
-void Quit(int clientFd, std::map<int, Client>& clients, std::vector<pollfd>& pollFds)
+void Quit(std::map<std::string, Channel> channels, std::map<int, Client>& clients, int clientFd, std::vector<pollfd>& pollFds)
 {
 	clients[clientFd].MsgToClient("QUIT : Good bye.");
 	close(clientFd);

@@ -136,7 +136,7 @@ void	Server::processUserEvents()
 				int bytesReceived = receiveData(_clients[_pollFds[i].fd]);
 				if (bytesReceived <= 0)
 				{
-					Quit(_pollFds[i].fd, _clients, _pollFds);
+					Quit(_channels ,_clients, _pollFds[i].fd , _pollFds);
 					continue ;
 				}
 				processMessage(_clients[_pollFds[i].fd]);
@@ -154,7 +154,7 @@ void	Server::login(Client &client, std::vector<std::string>	&str)
 	else if (str[0] == "USER")
         user(client, str);
 	else if (str[0] == "QUIT")
-		Quit(client.getClientFd(), _clients, _pollFds);
+		Quit(_channels, _clients, client.getClientFd(), _pollFds);
 	else if (str[0] == "PASS")
 		pass(*this , client, str);
 	else
@@ -216,7 +216,7 @@ void Server::routeCommand(Client &client, std::vector<std::string> &cmd)
     else if (cmd[0] == "PRIVMSG")
         Privmsg(client, cmd, _channels, _clients);
 	else if (cmd[0] == "QUIT")
-		Quit(client.getClientFd(), _clients, _pollFds);
+		Quit(_channels, _clients, client.getClientFd(), _pollFds);
 	else if (cmd[0] == "PART")
 		Part(_channels, client, cmd);
 	else if (cmd[0] == "MODE")

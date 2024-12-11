@@ -49,7 +49,7 @@ Server::Server(int port, std::string password) : _port(port), _password(password
 
 	std::cout << "Bind başarılı. Sunucu " << _port << " portuna bağlandı.\n";
 
-	if (listen(_socket, 5) == -1)
+	if (listen(_socket, 100) == -1)
 	{
 		close(_socket);
 		throw std::runtime_error("Listen Error");
@@ -103,7 +103,7 @@ void Server::acceptClient()
 }
 
 
-int receiveData(Client &client)
+int Server::receiveData(Client &client)
 {
 	char	buffer[1024];
 
@@ -111,7 +111,10 @@ int receiveData(Client &client)
 	int bytesReceived = recv(client.getClientFd(), buffer, sizeof(buffer) - 1, 0);
 	if (bytesReceived <= 0) {
 		if (bytesReceived == 0)
+		{
 			std::cout << "Client " << client.getClientFd() << " disconnected." << std::endl;
+			RemoveChannels(_channels, client);
+		}
 		else
 			std::cerr << "Error receiving data from client " << client.getClientFd() << std::endl;
 	}

@@ -1,4 +1,5 @@
 #include "Tools.hpp"
+#include "Channel.hpp"
 #include <iostream>
 #include <algorithm>
 #include <vector>
@@ -55,3 +56,29 @@ bool IsClient(const std::map<int, Client>& clients, const std::string& client)
         return false;
     }
 }
+
+void RemoveChannels(std::map<std::string, Channel> &channels, Client &client)
+{
+    std::map<std::string, Channel>::iterator it = channels.begin();
+
+    while (it != channels.end())
+    {
+        if (it->second.IsClient(client))
+        {
+            if (it->second.IsOperator(client))
+                it->second.OperatorRemove(client);
+
+            it->second.ClientRemove(client);
+
+            if (it->second.getSizeClient() == "0")
+            {
+                std::map<std::string, Channel>::iterator temp = it;
+                ++it;
+                channels.erase(temp);
+                continue;
+            }
+        }
+        ++it;
+    }
+}
+

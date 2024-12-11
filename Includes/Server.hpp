@@ -24,6 +24,7 @@ class Server
 		void	routeCommand(Client &Client, std::vector<std::string> &cmd);
 		void	login(Client &client, std::vector<std::string>	&str);
 		void	list(Client &client);
+		int		receiveData(Client &client);
 
 		std::string	getPassword() const;
 	private:

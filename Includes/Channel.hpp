@@ -6,6 +6,7 @@
 #include <map>
 #include <cstddef> // size_t
 #include "Client.hpp"
+#include "Wordl.hpp"
 
 typedef std::vector<Client *>::iterator it;
 
@@ -82,6 +83,7 @@ class Channel
 		std::map<char, bool>		_flags;
 		std::vector<Client *>		_clients;
 		std::vector<Client *>		_operator;
+		Wordl						_bot;
 		size_t						_maxLimit;
 		std::vector<std::string>	_invites;
 
@@ -99,6 +101,7 @@ class Channel
 		Client					&getClient(std::string target);
 		std::string				getSizeClient() const;
 		std::string				getPassword() const;
+		Wordl   				&getBot();
 
 		// is
 		bool	IsFlags(char c);
@@ -121,7 +124,7 @@ class Channel
 		void	OperatorRemove(Client &removeClient);
 		void	OperatorAdd(Client &newOperator);
 		void	TopicAdd(std::string &topic);
-		void	Brodcast(std::string &message);
+		void	Brodcast(std::string message);
 };
 
 #endif

@@ -21,26 +21,25 @@ class Client
 		const std::string&	getOldName() const;
 		bool				getBufferLine(std::string &str);
 		bool				getPass() const;
-		bool				getNickStatus() const;
+		std::string			getPrefixName();
+
 		// is?
 		bool				isRegistered() const;
 
 		// Setters
-		void	setClientFd(int fd);
 		void	setOldNickName(const std::string& oldNickName);
-		void	setNickname(const std::string& nickname);
-		void	setBuffer(const std::string& Buffer);
 		void	setUsername(const std::string& username);
 		void	setRealName(const std::string& realname);
 		void	setHostName(const std::string& hostname);
+		void	setNickname(const std::string& nickname);
+		void	setBuffer(const std::string& Buffer); // fonksiyon kullanılmıyor
+		void	setClientFd(int fd); // fonksiyon kullanılmıyor
 		void	setPass(bool pass);
-		void	registerClient();
-		void	MsgToClient(const std::string &message);
-		void	setNickStatus(bool status);
+		void	registerClient(); // ismini set olarak düzenle
 
-		std::string getPrefixName();
-		void		appendBuffer(const std::string& appendBuffer);
-		bool		operator==(const Client& other) const;
+		void	MsgToClient(const std::string &message);
+		void	appendBuffer(const std::string& appendBuffer);
+		bool	operator==(const Client& other) const;
 
 	protected:
 		int _clientFd;
@@ -52,7 +51,6 @@ class Client
 		std::string _buffer;
 		bool		_pass;
 		bool		_registered;	// İstemci kayıt oldu mu? (NICK ve USER komutlarını tamamladıktan sonra)
-		bool		_nickStatus;
 };
 
 #endif

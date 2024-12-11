@@ -41,6 +41,7 @@ void Join(std::map<std::string, Channel> &channels, Client &client, std::vector<
 		channel.ClientAdd(client);
 		channel.OperatorAdd(client);
 		channels[cmd[1]] = channel;
+		channels[cmd[1]].getBot().setChannel(channels[cmd[1]]);
 		channels[cmd[1]].Brodcast(joinMessage);
 		client.MsgToClient(RPL_NAMREPLY(client.getPrefixName(), cmd[1], channels[cmd[1]].getUsersNames()));
 		client.MsgToClient(RPL_ENDOFNAMES(client.getPrefixName(), cmd[1]));

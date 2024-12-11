@@ -1,6 +1,7 @@
 #include "Server.hpp"
 #include "Channel.hpp"
 #include "Tools.hpp"
+#include "Wordl.hpp"
 #include "error.hpp"
 #include "Command.hpp"
 
@@ -175,9 +176,7 @@ void	Server::login(Client &client, std::vector<std::string>	&str)
 	else
 		client.MsgToClient("ERROR: Please Register First!");
 
-	if (client.getNickStatus() == false)
-		client.MsgToClient("Nick Reply");
-	else if (!client.getUsername().empty() &&
+	if (!client.getUsername().empty() &&
 		!client.getHostName().empty() &&
 		!client.getNickname().empty() &&
 		!client.getRealName().empty() &&
@@ -226,8 +225,8 @@ void Server::routeCommand(Client &client, std::vector<std::string> &cmd)
         Join(_channels, client, cmd);
 	else if (cmd[0] == "PASS")
 		pass(*this , client, cmd);
-	/*else if (cmd[0] == "WORDL")
-        Wordl::worldl(_channels ,client, cmd);*/
+	else if (cmd[0] == "WORDL")
+        Wordl::worldl(_channels ,client, cmd);
     else if (cmd[0] == "PRIVMSG")
         Privmsg(client, cmd, _channels, _clients);
 	else if (cmd[0] == "QUIT")

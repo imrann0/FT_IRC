@@ -3,6 +3,7 @@ NOTİCE // hasan
 # bdemirbu
 - her hata için fonksiyon kick.cpp içindeki ERR_NOTONCHANNEL gibi
 - if/else ağacından kurtul
+- bot test edilecek
 
 # operatörler:
 ∗ KICK - Bir istemciyi kanaldan çıkarır
@@ -21,3 +22,4 @@ NOTİCE // hasan
 - channel isminde # bulunma kontrolü
 - KICK kendini atmak
 - Accept error
+- 2. kullanıcı kanala mesaj atamıyor

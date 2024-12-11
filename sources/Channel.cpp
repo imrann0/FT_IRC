@@ -3,11 +3,13 @@
 #include <stdexcept>	// runtime_error
 #include "Tools.hpp"
 #include <sstream>
+#include <iostream>
 
-Channel::Channel() {}
+Channel::Channel() : _bot(0) {}
 
-Channel::Channel(const std::string& name, const std::string &password)
+Channel::Channel(const std::string& name, const std::string &password) : _bot(this)
 {
+    std::cout << "channel gerçek adres: "<< this << std::endl;
     _password = password;
     _name = name;
     _maxLimit = 0;
@@ -25,6 +27,7 @@ std::string             Channel::getTopic() const {return _topic;}
 bool                    Channel::getLimit() const {return (_maxLimit < _clients.size()); }
 std::string             Channel::getSizeClient() const {std::ostringstream oss; oss << _clients.size(); return oss.str();}
 std::string				Channel::getPassword() const {return _password; }
+Wordl   				&Channel::getBot() {return _bot; }
 
 
 // set
@@ -153,7 +156,7 @@ Client&  Channel::getClient(std::string target)
     throw std::runtime_error("Channel Error: Client Not Found");
 }
 
-void Channel::Brodcast(std::string &message)
+void Channel::Brodcast(std::string message)
 {
     for (it begin = _clients.begin(); begin != _clients.end(); begin++)
         (*begin)->MsgToClient(message);

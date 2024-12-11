@@ -1,25 +1,38 @@
 #ifndef		WORDL_HPP
 # define	WORDL_HPP
 
-# include	"Bot.hpp"
 # include	<vector>
+# include	<map>
+# include	<string>
 
-class Wordl : public Bot
+class Client;
+class Channel;
+
+#define hak 10
+
+class Wordl
 {
 	private:
-		static std::vector<std::string>	_wordDB;
-		std::string						_word;
-		bool							_isPlay;
+		static const  std::vector<std::string>	_wordDB;
+		std::string								_triedWord[hak];
+		std::string								_word;
+		Channel									*_channel;
+		bool									_isPlay;
+		int										_try;
+
 
 		// member function
-		void			play(Client &client, std::vector<std::string> &cmd);
-		void			stop(Client &client, std::vector<std::string> &cmd);
-		void			join(Client &client, std::vector<std::string> &cmd);
-		void			restart(Client &client, std::vector<std::string> &cmd);
+		void	play();
+		void	reStart();
+		void	guess(std::vector<std::string> &cmd);
+		void	show();
+		void	triedClear();
+		void	senChannelMsg(bool prefix, std::string message);
 
 	public:
+		void	setChannel(Channel &Channel);
 		// constructor
-		Wordl(std::string name, Channel &channel);
+		Wordl(Channel *channel);
 
 		// desstructor
 		~Wordl();
@@ -30,8 +43,10 @@ class Wordl : public Bot
 
 		// member function
 		static size_t	utf8CharacterCount(const std::string& str);
-		static void		worldl(std::map<std::string, Channel>&channels, Client & client, std::vector<std::string> &cmd);
+		static void		worldl(std::map<std::string, Channel> &channels, Client & client, std::vector<std::string> &cmd);
 
 };
+
+std::vector<std::string>	wordDB();
 
 #endif	//	WORDL_HPP

@@ -3,13 +3,13 @@
 #include <sys/socket.h> // send
 
 // Default Constructor
-Client::Client() :  _clientFd(-1) , _registered(false), _nickStatus(true) {}
+Client::Client() :  _clientFd(-1) , _registered(false) {}
 
-Client::Client(int fd) : _clientFd(fd), _nickname(""), _registered(false), _nickStatus(true) {}
+Client::Client(int fd) : _clientFd(fd), _nickname(""), _registered(false) {}
 
 // Parameterized Constructor
 Client::Client(const std::string& nickname, const std::string& username, int fd)
-    : _clientFd(fd), _nickname(nickname), _username(username), _pass(false),  _registered(false) {}
+    : _clientFd(fd), _nickname(nickname), _username(username),  _registered(false) {}
 
 // Getters
 const std::string& Client::getNickname() const { return _nickname; }
@@ -18,15 +18,14 @@ const std::string& Client::getUsername() const { return _username; }
 const std::string& Client::getOldName() const {return _oldNickName;}
 const std::string& Client::getRealName() const { return _realname; }
 const std::string& Client::getHostName() const { return _hostname; }
-bool	Client::getNickStatus() const {return _nickStatus;}
 const std::string& Client::getBuffer() const { return (this->_buffer); }
 bool Client::isRegistered() const { return _registered; }
 int Client::getClientFd() const { return _clientFd; }
-bool    Client::getPass() const { return this->_pass; }
+
+bool	Client::getPass() const { return _pass; }
 
 // Setters
 void Client::setOldNickName(const std::string& oldNickName) {_oldNickName = oldNickName;}
-void Client::setNickStatus(bool status) {_nickStatus = status;}
 void Client::setBuffer(const std::string& buffer) { _buffer = buffer; }
 
 void Client::setNickname(const std::string& nickname) { _nickname = nickname; }
@@ -41,7 +40,7 @@ void Client::registerClient() { _registered = true; }
 
 void Client::setClientFd(int fd){ _clientFd = fd; }
 
-void Client::setPass(bool pass) { this->_pass = pass; }
+void	Client::setPass(bool pass) { _pass = pass; }
 
 std::string	Client::getPrefixName()
 {

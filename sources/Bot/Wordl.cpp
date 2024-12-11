@@ -1,52 +1,158 @@
 #include "Wordl.hpp"
+#include "Channel.hpp"
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+#include <sstream>
 
+const std::vector<std::string>	Wordl::_wordDB = wordDB();
 
-std::vector<std::string> Wordl::_wordDB =
-{"kadar", "sonra", "yüzde", "büyük", "sayın", "değil", "ancak", "zaman", "devam", "genel", "bugün", "gelen", "bunun", "karşı", "diğer", "geçen", "ifade", "kendi", "fazla", "böyle", "şimdi", "bütün", "bizim", "başka", "nasıl", "çünkü", "doğru", "geldi", "polis", "kabul", "üzere", "artık", "dolar", "karar", "dünya", "olmak", "sahip", "neden", "yapan", "milli", "verdi", "insan", "adına", "parti", "benim", "hafta", "çıktı", "çıkan", "yaptı", "yakın", "tabii", "etmek", "ciddi", "biraz", "bakan", "kadın", "zaten", "hemen", "bilgi", "arada", "küçük", "lazım", "kanun", "durum", "kredi", "yılın", "bağlı", "güzel", "hangi", "uygun", "görev", "vardı", "basın", "orada", "terör", "artış", "hatta", "gelir", "fakat", "kalan", "veren", "çocuk", "olsun", "grubu", "belli", "temel", "gerek", "belki", "yılda", "seçim", "kaldı", "iddia", "yoğun", "henüz", "değer", "bakın", "sorun", "resmi", "ortak", "sizin", "takım", "takip", "vergi", "hızlı", "oranı", "haber", "talep", "düşük", "deniz", "güçlü", "yarın", "türlü", "cevap", "dönem", "sabah", "yerde", "bütçe", "akşam", "varsa", "tarım", "izmir", "almak", "zarar", "eylül", "dahil", "hukuk", "ileri", "sivil", "önüne", "doğal", "şehit", "onlar", "aylık", "araya", "çözüm", "satış", "geçti", "bölge", "üyesi", "geniş", "proje", "altın", "madde", "başta", "döviz", "hakkı", "işlem", "kimse", "kolay", "barış", "giden", "satın", "tepki", "kasım", "içine", "giren", "süren", "çekti", "yerel", "demek", "olmaz", "girdi", "kemal", "gören", "kuzey", "yoksa", "savaş", "çevre", "kitap", "gitti", "sonuç", "halde", "yaşam", "pazar", "hakim", "bilim", "olmuş", "sezon", "güney", "erkek", "hazır", "hızla", "yerli", "recep", "konut", "mayıs", "süper", "arama", "aşırı", "yargı", "banka", "yemek", "sanat", "hedef", "canlı", "yasal", "halen", "kısmı", "silah", "örnek", "çeken", "katkı", "orman", "erken", "şehir", "mutlu", "olayı", "sıcak", "alanı", "asker", "hayat", "iptal", "davet", "bazen", "almış", "alman", "diyor", "günde", "fatih", "rusya", "arttı", "adeta", "yayın", "tarih", "hasar", "düşen", "müzik", "çelik", "artan", "etmiş", "şahin", "kesin", "güven", "fiyat", "gizli", "hepsi", "aydın", "maçta", "hasta", "kurum", "buldu", "merak", "aracı", "krizi", "toplu", "demir", "maçın", "medya", "sınır", "halkı", "beyaz", "gelip", "doğan", "ligde", "düştü", "güneş", "yazık", "ondan", "rahat", "baskı", "ihale", "saygı", "halka", "süreç", "savcı", "yavaş", "ettik", "çiçek", "neler", "marka", "sürdü", "ister", "firma", "murat", "gördü", "uzman", "ekibi", "bence", "nisan", "kayıt", "metre", "hafif", "hayır", "hasan", "hapis", "gidip", "sanki", "eylem", "işler", "sebep", "sanık", "hisse", "açığı", "allah", "çadır", "hesap", "dokuz", "bursa", "ödeme", "libya", "mısır", "kaçak", "birer", "konuk", "giriş", "soğuk", "şeker", "çıkar", "görüş", "yoktu", "maddi", "yeşil", "yapma", "rapor", "acaba", "kurul", "ithal", "şubat", "engel", "ücret", "yönde", "yanıt", "geçiş", "kulüp", "yazar", "sekiz", "örgüt", "derin", "doğum", "hayal", "adını", "düşüş", "etkin", "kayıp", "ettim", "lider", "oraya", "özgür", "aktif", "aşağı", "rakam", "filmi", "evine", "metin", "forma", "bomba", "adana", "döndü", "nokta", "nedir", "yarım", "idare", "olası", "sınav", "idari", "riski", "hakem", "maruz", "çıkıp", "balık", "haklı", "sözlü", "koydu", "darbe", "günün", "kaybı", "oyunu", "gelin", "bebek", "eksik", "rakip", "ligin", "aldık", "yemin", "sınıf", "beyin", "farkı", "sahne", "nüfus", "taraf", "dünkü", "yolcu", "basit", "hakan", "tanık", "yirmi", "şeyin", "mıdır", "kartı", "sefer", "amacı", "somut", "rekor", "senin", "tablo", "verme", "yolda", "islam", "yaşlı", "çıkış", "aşkın", "bizde", "dedim", "model", "arası", "belge", "fikir", "ihraç", "ikili", "sokak", "planı", "verir", "imkan", "yunan", "yapar", "adamı", "ilave", "müdür", "ikisi", "daire", "olduk", "ödülü", "dönük", "yeter", "tatil", "borcu", "eşlik", "duran", "fayda", "alana", "vatan", "tören", "gayet", "adayı", "sahte", "temin", "okula", "bulan", "yetki", "düzey", "bilen", "aldım", "önlem", "yapıp", "hacmi", "şöyle", "cemil", "eline", "bakış", "bakım", "obama", "bilir", "işgal", "dönen", "mesaj", "şansı", "ayına", "vakit", "bazda", "odası", "sıfır", "enkaz", "önemi", "aydır", "zorlu", "tüzük", "katlı", "roman", "içeri", "siyah", "zayıf", "iyice", "sabit", "ürünü", "yasak", "tıpkı", "midir", "vurdu", "konya", "kaçan", "varil", "falan", "bağış", "sevgi", "kılıç", "plana", "kesim", "temiz", "engin", "meyve", "yorum", "mobil", "kadro", "aynen", "bölüm", "tutan", "devre", "kavga", "nefes", "işten", "tesis", "heyet", "etnik", "yazdı", "esnaf", "ekmek", "önünü", "zafer", "neyse", "kenti", "faili", "parça", "memur", "hüküm", "işini", "olaya", "oyuna", "hitap", "arazi", "yalan", "ihmal", "elini", "hayli", "zemin", "yedek", "gider", "buçuk", "kanal", "yağış", "okulu", "seyir", "korku", "evvel", "yönlü", "hariç", "zanlı", "çetin", "üstün", "husus", "gönül", "sırrı", "yarar", "tavır", "hatip", "alkol", "günkü", "bilet", "ortam", "borsa", "ihbar", "edici", "infaz", "açığa", "oldum", "erciş", "dosya", "inkar", "erdem", "bunda", "sakin", "maden", "katma", "anlar", "suçlu", "kanlı", "açmak", "japon", "gruba", "sundu", "gurur", "ayağa", "faizi", "kömür", "şarkı", "dedik", "temas", "duygu", "bitti", "yaşar", "keşke", "verin", "niçin", "yavuz", "anlam", "kadir", "mezun", "görme", "çevik", "yolun", "pamuk", "hanım", "girip", "radyo", "erkan", "huzur", "video", "vakıf", "sordu", "çağrı", "dönüş", "kağıt", "vücut", "iklim", "resim", "önder", "yunus", "işsiz", "okuma", "albüm", "ihlal", "köprü", "paket", "fikri", "alıcı", "beyan", "puana", "pilot", "sivas", "bedel", "sinir", "topla", "terim", "ismet", "ikiye", "aslan", "evden", "diyen", "kalma", "dönüp", "isyan", "eseri", "verip", "varan", "refah", "krize", "tatlı", "vefat", "tekin", "elden", "tokat", "satan", "uyarı", "vurgu", "kurdu", "işine", "çabuk", "kaçtı", "komşu", "açlık", "giyen", "rejim", "geçer", "görgü", "koyan", "kuran", "tuttu", "yatan", "sergi", "kalır", "delil", "maaşı", "yapım", "kısım", "giyim", "çizgi", "kıdem", "ülker", "semih", "nakit", "yakıt", "irade", "zorla", "motor", "atmak", "nihai", "sanal", "kızın", "tutar", "liman", "masum", "kahve", "suyun", "şehri", "köyde", "hattı", "biber", "bulut", "inönü", "düğün", "çaplı", "olanı", "baraj", "duyan", "zirve", "ilhan", "ölümü", "mesut", "kente", "dönüm", "beton", "köklü", "damar", "güler", "şahit", "mekan", "tamam", "sebze", "döner", "sayfa", "sahil", "atama", "aradı", "kulak", "golle", "kazım", "adımı", "tutum", "çizdi", "vakfı", "makul", "vuran", "yazan", "yerin", "denli", "panik", "fırat", "saati", "şartı", "araba", "hekim", "emine", "yatak", "alevi", "turan", "tütün", "meşru", "tıbbi", "madem", "sözde", "ergin", "emlak", "denge", "makam", "kirli", "albay", "moral", "okudu", "yüklü", "celal", "inanç", "hatay", "yaşta", "kaydı", "yapın", "layık", "ötürü", "kalem", "haluk", "sıkça", "bıçak", "öneri", "mesai", "cemal", "eşini", "malum", "meşin", "muğla", "vahim", "ihsan", "koyun", "vekil", "stres", "unsur", "kurma", "köpek", "şekli", "gümüş", "etmez", "tarzı", "yağlı", "iller", "kuruş", "şarap", "miyiz", "alımı", "iflas", "ilham", "girer", "miydi", "keyfi", "binin", "karın", "babam", "sadık", "kırdı", "dalga", "ısrar", "yanan", "tolga", "özgün", "kural", "ötesi", "metal", "metro", "çakır", "bitki", "tayin", "çeşit", "şahsı", "fiili", "tunus", "yıkım", "liste", "gerçi", "mimar", "teyit", "şükür", "cazip", "nesil", "organ", "ayağı", "kayak", "durdu", "puanı", "tuhaf", "etsin", "taksi", "kemik", "hapse", "nakli", "final", "geçip", "nedim", "primi", "filan", "fakir", "şahıs", "duvar", "çinli", "gözle", "bozuk", "sunan", "derbi", "ideal", "cümle", "uçağı", "lakin", "çavuş", "bunca", "mudur", "otele", "araca", "görüp", "salon", "göğüs", "emeği", "oğlum", "çıkma", "dersi", "dille", "kazan", "tavrı", "boyun", "çifte", "birim", "cihan", "posta", "anket", "aktör", "ekran", "duman", "litre", "şifre", "şehre", "dostu", "öteki", "acılı", "aysal", "ateşe", "besin", "garip", "çekim", "ikram", "çizen", "vakti", "kilit", "yiğit", "derdi", "evler", "cesur", "bende", "şüphe", "kalın", "gezen", "niyet", "dergi", "seven", "başçı", "yanda", "sakat", "kayda", "sular", "keyif", "ırkçı", "fizik", "testi", "şükrü", "minik", "divan", "tersi", "köyün", "kalbi", "taciz", "üzücü", "gidin", "karla", "daima", "sabır", "annem", "bayan", "zulüm", "artçı", "yatay", "mıydı", "talip", "tavuk", "cihaz", "antik", "konak", "atmış", "galip", "üzeri", "şişli", "nadir", "tarif", "saray", "satım", "şoför", "aydan", "kaide", "yolla", "kemer", "mazot", "prens", "yazın", "boğaz", "yapay", "sayan", "geçim", "kıran", "düzen", "birey", "özlük", "görür", "gitme", "sızan", "peşin", "açmış", "doğdu", "kesti", "artar", "teker", "katil", "sezer", "bilge", "acısı", "metni", "dicle", "esrar", "başlı", "andan", "golcü", "isveç", "rengi", "etken", "namaz", "kılan", "kırık", "ayrım", "düşme", "karlı", "sudan", "gözde", "bahar", "tokyo", "tüzel", "kitle", "bulup", "aşure", "düşer", "kamer", "katar", "derse", "neyin", "yarış", "helal", "izini", "sicil", "sözün", "sünni", "şeref", "idman", "hücum", "ceset", "biten", "yerle", "vanlı", "kaygı", "ölmüş", "evren", "emtia", "ispat", "makro", "ateşi", "dayak", "koyup", "yazma", "demiş", "tamir", "taviz", "ahlak", "çifti", "seçme", "mezar", "esnek", "yurdu", "özerk", "kimya", "kaset", "ölüme", "şahsi", "bakır", "sizce", "odada", "biden", "cinsi", "sattı", "burun", "evini", "usulü", "dilde", "binde", "filme", "simav", "ışığı", "gayri", "taşıt", "selim", "mehdi", "gücün", "polat", "iyiye", "miras", "cadde", "sözcü", "bulur", "komik", "kanat", "köylü", "nikah", "afgan", "bulma", "kalıp", "eşine", "seçti", "kuşak", "çürük", "onayı", "suçun", "alkış", "aylar", "azami", "turda", "perde", "selam", "fuarı", "hükmü", "nakil", "içini", "bakıp", "denen", "sesli", "çarşı", "ahşap", "durak", "kızım", "küfür", "bastı", "siirt", "gübre", "görün", "hüsnü", "hülya", "tahta", "abone", "salim", "kopya", "şekil", "deyip", "çekip", "çapta", "izzet", "çorum", "devri", "gölge", "gülen", "latin", "tavan", "açtık", "kışın", "yüzme", "döktü", "pembe", "hasat", "havai", "aşama", "şayet", "radar", "bahçe", "sıkma", "nöbet", "virüs", "seans", "doğuş", "izmit", "mikro", "sunum", "taşın", "parkı", "meral", "tohum", "nazım", "humus", "yazıp", "hocam", "gidiş", "genci", "bazlı", "ismin", "durup", "bozdu", "katta", "utanç", "yürek", "yaşın", "acıyı", "öneme", "devir", "pınar", "evlat", "sağcı", "özlem", "saate", "uçağa", "keşif", "kader", "içten", "rahmi", "diken", "çalan", "adres", "tekne", "söyle", "girme", "meğer", "dilek", "yavru", "orası", "ığdır", "altay", "şafak", "necip", "hamle", "mahir", "hücre", "belde", "rehin", "attık", "ezeli", "nasip", "ucuza", "kamil", "izler", "akışı", "diyet", "topun", "adaya", "adama", "saklı", "geçit", "soktu", "kesen", "lehte", "ayırt", "basan", "çeker", "çaldı", "ender", "tenis", "yasin", "duruş", "geliş", "daimi", "fuhuş", "direk", "cezai", "takas", "beden", "fahri", "tutun", "demin", "yücel", "çanta", "açısı", "biter", "düzce", "öğlen", "koşan", "olgun", "oluşu", "ürdün", "golün", "kısır", "kapak", "eşsiz", "satır", "orayı", "fidan", "konan", "ağacı", "ölçüm", "rayiç", "sesle", "seyit", "sizde", "rutin", "muydu", "irfan", "kızıl", "gelse", "damga", "marşı", "çolak", "nakdi", "acele", "anlık", "itham", "giydi", "boyut", "subay", "topçu", "umudu", "emsal", "zammı", "vahşi", "oteli", "aşmış", "tutup", "kerim", "burcu", "iyisi", "içmek", "reddi", "bariz", "saçma", "roket", "halis", "çamur", "ensar", "doldu", "terfi", "sakın", "kopan", "arıza", "kargo", "titiz", "çözme", "detay", "açıcı", "öteye", "geçme", "soran", "gelme", "çeşme", "pırıl", "mayın", "ofisi", "kralı", "domuz", "opera", "amiri", "almaz", "alarm", "ferdi", "ilacı", "mizah", "tipik", "evrak", "idrar", "yandı", "kıraç", "kısmi", "çoban", "kampa", "edebi", "canım", "odaya", "yankı", "adıma", "fazıl", "kerem", "hissi", "mermi", "dilin", "telif", "kumaş", "sürer", "misin", "miyim", "pekin", "pasta", "robot", "sever", "lazer", "olsam", "saran", "asılı", "riske", "kanıt", "bacak", "neydi", "üzgün", "duyar", "gizem", "katip", "bakar", "dizel", "torba", "fişek", "fener", "gezdi", "taşır", "derya", "çekme", "göçük", "kuşku", "koyma", "elmas", "tekme", "tünel", "üslup", "verim", "istek", "suyla", "maçla", "yurda", "taban", "yakan", "olana", "adalı", "fonun", "duble", "yemen", "amaca", "damla", "arena", "çöken", "külçe", "ocağı", "topuz", "dönme", "yaktı", "kondu", "sporu", "kanın", "soğan", "rahim", "mahal", "eroin", "kolon", "zihin", "aşmak", "çokça", "şirin", "dekar", "nebze", "iftar", "kutlu", "nimet", "banyo", "ıslah", "gölün", "dağda", "havuz", "bilin", "türkü", "monte", "seyri", "cephe", "özbek", "eleme", "muyuz", "şerif", "ırmak", "greve", "olmam", "durma", "itici", "soyut", "limon", "stada", "demet", "serin", "dinin", "mafya", "adedi", "musun", "ödüle", "şiiri", "çınar", "asist", "denir", "canan", "kurgu", "fırın", "yayla", "alsın", "gediz", "limit", "start", "raylı", "böcek", "seçen", "desin", "fuara", "vuruş", "talan", "namus", "tekel", "durur", "yağan", "buruk", "lokal", "bozan", "azeri", "kaplı", "spora", "kesip", "statü", "stadı", "delik", "çöktü", "bahis", "küsur", "çeldi", "nefis", "avşar", "üyeli", "konum", "uysal", "mühim", "günah", "bindi", "uğraş", "telef", "olsak", "kurup", "iskan", "karma", "baran", "ladin", "takla", "naaşı", "yalın", "kumar", "alçak", "yener", "anons", "ödedi", "üreme", "bosna", "buydu", "gazın", "sezen", "camia", "nehri", "kurun", "porno", "akman", "ajans", "bozma", "azdır", "kasıt", "kampı", "tuzlu", "çıkın", "evrim", "sevim", "idrak", "forum", "sayım", "israf", "uzaya", "çağın", "melek", "atışı", "çalık", "espri", "işlev", "bırak", "yakut", "koştu", "sahra", "mıyız", "butik", "tutma", "şapka", "ilahi", "attım", "kürsü", "topal", "ergen", "afyon", "tabir", "elbet", "kursu", "kaşif", "mısın", "bolca", "çorlu", "çoluk", "kasap", "ilanı", "müjde", "sinop", "etmem", "haddi", "ceviz", "hurda", "koyar", "yahut", "antep", "niğde", "kadim", "trend", "çıksa", "sorgu", "solcu", "şanlı", "çağan", "ersin", "odağı", "bildi", "biran", "acemi", "zarif", "taşlı", "yenik", "lüfer", "ölmez", "kaçar", "refik", "uymak", "deyim", "hüzün", "nehir", "eklem", "filiz", "mumcu", "ailem", "kırım", "balon", "malın", "tanrı", "zehir", "cizre", "tüfek", "yanık", "adası", "adada", "yiyor", "arşiv", "çorba", "soluk", "kaçış", "astım", "imajı", "derim", "hamsi", "yükün", "hükme", "tabur", "biziz", "özden", "kobra", "kabak", "tıkır", "kaosa", "kattı", "oynar", "kesme", "çeçen", "barut", "balcı", "çekin", "nesli", "neyle", "halim", "iştir", "binek", "taşra", "yılan", "ürüne", "harcı", "topar", "tosun", "koçak", "özeti", "formu", "taşla", "firar", "tugay", "eşref", "bayar", "simit", "dağın", "masaj", "bizce", "bloke", "yetim", "giray", "ihdas", "katan", "aşımı", "çilek", "inmiş", "medet", "yaban", "bekar", "gitar", "sorma", "mülki", "hande", "haciz", "göçün", "geçse", "beşte", "poşet", "zihni", "kazak", "anıtı", "sığır", "gövde", "sinem", "evsiz", "pasif", "güreş", "haliç", "hamam", "boğdu", "anmak", "noter", "koptu", "yiyip", "düşüp", "ikide", "susuz", "atlas", "dalan", "incir", "teğet", "denek", "ibraz", "sette", "düdük", "ermiş", "dolgu", "eller", "villa", "türev", "doğup", "aklın", "varız", "zulme", "uyumu", "kebap", "ayını", "panel", "mevzu", "çakar", "nazlı", "unvan", "tanım", "yanlı", "kutup", "yılla", "yekta", "fetih", "aleti", "resen", "kaçıp", "kesik", "ilkel", "susam", "davul", "damat", "deyin", "ıslak", "serum", "göbek", "haydi", "başla", "frank", "şıkın", "yaman", "fıkra", "bordo", "zulmü", "gezer", "tuzla", "çöküş", "seksi", "esası", "diler", "makas", "macar", "tempo", "yattı", "yazım", "onuru", "durun", "yağdı", "alkan", "ağlar", "kanda", "sorum", "solun", "şeyde", "şamil", "defne", "baktı", "selvi", "parka", "usule", "lanet", "honda", "yemiş", "konuş", "kablo", "kanla", "izine", "karış", "misli", "gazlı", "nispi", "serdi", "sitem", "taktı", "okura", "sapan", "fosil", "yedik", "coşku", "gebze", "treni", "sperm", "karnı", "kenya", "imdat", "uygar", "aşısı", "çinko", "güçte", "çağda", "bahsi", "saçlı", "lanse", "dilim", "dikiş", "hapsi", "yapsa", "tefek", "beyni", "kusur", "nüfuz", "bulgu", "kabus", "ağaca", "kalça", "ebedi", "ilden", "arabi", "müftü", "şaban", "barda", "casus", "çalıp", "çayın", "pilav", "işlek", "tatar", "binen", "kurar", "doğar", "yatıp", "yıktı", "ipucu", "ferah", "kabin", "keser", "şahsa", "badem", "simge", "bagaj", "haram", "çalar", "tabip", "grevi", "korur", "açtım", "türün", "zordu", "duydu", "sürüp", "fethi", "kongo", "giysi", "kırıp", "köfte", "çoklu", "keleş", "batan", "basıp", "payın", "gölde", "canla", "nazik", "dolan", "enine", "porto", "kursa", "kaşık", "sütün", "çorap", "öksüz", "hızda", "sağır", "bakma", "desem", "dendi", "bahse", "ibret", "sesin", "gülüm", "etler", "havlu", "sivri", "skoru", "afete", "ekibe", "ciğer", "sardı", "sözüm", "kibar", "kiraz", "ishal", "yağma", "gollü", "biçim", "uçuşu", "ölmek", "solda", "sokan", "resme", "ikame", "sunar", "büyür", "demeç", "deney", "senet", "sepet", "bayır", "funda", "bitiş", "dramı", "elimi", "elime", "dövme", "kusma", "omuza", "kilis", "irili", "süslü", "kılık", "fasıl", "kabil", "içler", "rezil", "ilaca", "gazla", "şeydi", "batık", "dünün", "harıl", "reşit", "hamur", "hacim", "takan", "takıp", "başak", "zerre", "vinci", "şudur", "eksen", "koşul", "sapma", "satıp", "verse", "fesat", "kokan", "klima", "izole", "kepçe", "kenar", "kaçma", "damak", "hilal", "gökçe", "sağda", "atıcı", "maske", "vurup", "dolup", "plaka", "bronz", "burnu", "sürem", "alemi", "gitse", "vasat", "varis", "lodos", "boylu", "ayran", "aşina", "faslı", "kalsa", "gezip", "tıpta", "sulak", "atağa", "dalış", "dalda", "metne", "evcil", "didik", "havva", "hafız", "değin", "tarla", "cirit", "tümör", "koşar", "tuğla", "yenen", "üyeye", "kopuk", "ajanı", "acıya", "kayan", "sorar", "likit", "milas", "misal", "bölük", "ayıbı", "özünü", "tabak", "elzem", "telaş", "okuru", "sedef", "saman", "sakız", "kurye", "fırça", "kucak", "şunun", "kışla", "orana", "yeşim", "edene", "legal", "aslen", "desen", "seken", "yirmi", "dokuz", "sekiz", "kadar", "büyük", "sonra", "yüzde", "nokta", "ancak", "değil", "genel", "ifade", "devam", "zaman", "sıfır", "karşı", "gelen", "geçen", "diğer", "bunun", "kendi", "fazla", "bugün", "böyle", "dünya", "şöyle", "üzere", "başka", "arası", "nasıl", "bütün", "verdi", "olmak", "milli", "yapan", "kabul", "artık", "doğru", "sahip", "bizim", "hafta", "çünkü", "dolar", "karar", "geldi", "neden", "parti", "polis", "insan", "şimdi", "çıkan", "çıktı", "yaptı", "benim", "basın", "kadın", "yakın", "küçük", "bağlı", "bilgi", "etmek", "arada", "şehir", "veren", "terör", "takım", "çocuk", "güzel", "hemen", "uygun", "ciddi", "görev", "deniz", "zaten", "iddia", "seçim", "ortak", "kredi", "kalan", "yılın", "resmi", "üyesi", "biraz", "diyor", "olsun", "bakan", "hatta", "durum", "vardı", "belli", "haber", "eylül", "belki", "sivil", "gerek", "temel", "fakat", "tabii", "sezon", "adına", "henüz", "araya", "gelir", "yılda", "ileri", "kaldı", "yoğun", "güçlü", "sayın", "lazım", "recep", "barış", "hangi", "sabah", "türlü", "vergi", "mayıs", "dahil", "savaş", "kemal", "takip", "diyen", "akşam", "kuzey", "sanat", "yarın", "talep", "sorun", "cihan", "güney", "bölge", "hukuk", "süren", "hızlı", "artış", "düşük", "yayın", "başta", "değer", "kitap", "dönem", "grubu", "geniş", "çeken", "almak", "aylık", "zarar", "önüne", "geçti", "çözüm", "proje", "satış", "pazar", "bilim", "orada", "maçta", "nisan", "onlar", "tepki", "altın", "doğan", "yerde", "kimse", "çekti", "kasım", "giden", "hazır", "yerel", "alman", "müzik", "erkek", "doğal", "kolay", "oranı", "giren", "süper", "cevap", "beyaz", "murat", "tarım", "içine", "gören", "yargı", "mutlu", "şubat", "şehit", "çevre", "sonuç", "satın", "aydın", "hakkı", "demek", "hakim", "işlem", "olmaz", "çelik", "ligde", "yoksa", "yaşam", "asker", "şahin", "fatih", "erken", "silah", "hayır", "metre", "aşırı", "halde", "birde", "gizli", "yemek", "girdi", "alanı", "örnek", "hayat", "gitti", "hedef", "varsa", "siyah", "yazar", "hapis", "tarih", "halen", "beşte", "maçın", "yasal", "sürdü", "konut", "olmuş", "sıcak", "iptal", "arama", "davet", "katkı", "banka", "demir", "filmi", "yeşil", "güneş", "günde", "düşen", "bazen", "sizin", "güven", "medya", "hızla", "bütçe", "fiyat", "sınır", "darbe", "yerli", "hakan", "çiçek", "madde", "canlı", "forma", "adını", "bursa", "kesin", "kurum", "olayı", "baskı", "ikisi", "etmiş", "rahat", "kayıt", "neler", "obama", "toplu", "lider", "saygı", "düştü", "yanıt", "eylem", "halka", "adeta", "kanun", "ikide", "döviz", "buldu", "sanık", "görüş", "orman", "hayal", "adana", "kulüp", "halkı", "ekibi", "metin", "hisse", "adayı", "odası", "yavaş", "hafif", "aracı", "hepsi", "derin", "yolcu", "artan", "ister", "krizi", "birer", "maddi", "okulu", "giriş", "mısır", "konuk", "ödeme", "gelip", "ondan", "bence", "almış", "sınıf", "örgüt", "sanki", "planı", "doğum", "işler", "hasta", "oyunu", "kurul", "merak", "güler", "müdür", "soğuk", "uzman", "süreç", "kısmı", "ihale", "yapma", "çıkar", "nedir", "ödülü", "sebep", "engel", "final", "farkı", "marka", "ligin", "tatil", "rapor", "hakem", "gördü", "savcı", "taraf", "yarım", "sahne", "düzey", "sayfa", "yoktu", "yazdı", "özgür", "adamı", "yunan", "yaşar", "idari", "beyin", "arttı", "zafer", "aktif", "acaba", "yönde", "döndü", "hesap", "firma", "ikiye", "balık", "gayri", "idare", "sınav", "çıkış", "etkin", "roman", "haklı", "gidip", "sahte", "kaçak", "dedim", "bomba", "çetin", "sokak", "evine", "şeyin", "vatan", "basit", "geçiş", "gönül", "nüfus", "bebek", "yolda", "ikili", "daire", "rakip", "düşüş", "ilhan", "kayıp", "günün", "model", "olası", "aşkın", "ücret", "dünkü", "etnik", "ettik", "şeker", "koydu", "albay", "maruz", "belge", "eksik", "bulan", "okula", "kartı", "fikir", "yaşlı", "kadir", "aşağı", "kılıç", "çıkıp", "vakfı", "mesaj", "ihraç", "zorlu", "bizde", "bilen", "somut", "bakım", "yazık", "senin", "verme", "meyve", "yorum", "yasak", "sevgi", "dönen", "tanık", "engin", "bakın", "sefer", "ettim", "ekmek", "şarkı", "yağış", "amacı", "sezer", "işgal", "kimin", "iyice", "bağış", "sergi", "aldık", "duran", "hasar", "vurdu", "kaybı", "şansı", "galip", "bakış", "memur", "yapıp", "mesut", "radyo", "giyen", "cemil", "sordu", "aslan", "resim", "eşlik", "yavuz", "hariç", "kavga", "kadro", "rekor", "oyuna", "sabit", "imkan", "verir", "dördü", "işten", "plana", "ithal", "ayına", "devre", "temin", "ürünü", "esnaf", "tıpkı", "vakit", "zayıf", "yapar", "yalan", "rakam", "riski", "alana", "gayet", "korku", "dönük", "tutan", "oraya", "önlem", "kenti", "temiz", "huzur", "yeter", "ilave", "kanal", "nefes", "okuma", "önemi", "tavır", "video", "heyet", "puana", "gurur", "üstün", "hayli", "cemal", "turan", "gider", "ihlal", "tekin", "borsa", "hanım", "olduk", "bilet", "yedek", "erkan", "golle", "bölüm", "mobil", "oldum", "semih", "eline", "hitap", "bilir", "tatlı", "ihmal", "tören", "budur", "bitti", "kağıt", "tesis", "elini", "gelin", "borcu", "açığı", "parça", "alkol", "salih", "hattı", "yolun", "erdem", "iklim", "ihbar", "işini", "aydır", "önder", "çizen", "yetki", "tablo", "albüm", "yılki", "zirve", "domuz", "yapım", "giyim", "krize", "motor", "pilot", "kulak", "dönüş", "yazan", "anlam", "maden", "ergin", "fikri", "alevi", "komşu", "edici", "yakıt", "sebze", "aldım", "hacmi", "neyse", "vurgu", "bayan", "mezun", "kaçan", "köprü", "kalma", "dosya", "dörde", "kuran", "zemin", "layık", "işsiz", "gümüş", "yunus", "içeri", "celal", "kesim", "çağrı", "posta", "uyarı", "paket", "kanlı", "aynen", "bordo", "olaya", "falan", "önünü", "katlı", "demiş", "çabuk", "fayda", "yarar", "puanı", "satan", "çizgi", "şükrü", "kızın", "emine", "arazi", "keşke", "niçin", "görme", "terim", "pamuk", "inanç", "kazım", "vakıf", "topla", "sakin", "eseri", "çeşit", "meşin", "ortam", "kuruş", "yüklü", "tütün", "varan", "çizdi", "tarzı", "selim", "nihai", "sanal", "haluk", "açığa", "babam", "saati", "sahil", "ismet", "hüküm", "beyan", "temas", "zorla", "vücut", "uçağı", "suçlu", "evden", "emlak", "işine", "ölümü", "alıcı", "bahar", "mekan", "duygu", "tamam", "köpek", "açmak", "verip", "araba", "suyun", "dedik", "gribi", "girip", "bunda", "elden", "günkü", "koyan", "nakit", "buçuk", "kaide", "yarış", "delil", "yönlü", "zanlı", "sundu", "ötürü", "ayağa", "filan", "sunan", "düğün", "golcü", "anlar", "varil", "tıbbi", "sinir", "ötesi", "masum", "kurma", "tutum", "infaz", "saray", "yemin", "metal", "meşru", "kalır", "şehri", "iftar", "geçer", "öteki", "tuhaf", "kömür", "gruba", "midir", "çevik", "moral", "turda", "nazım", "atmak", "sözde", "çıkma", "tekel", "döner", "kurdu", "asist", "şükür", "seyir", "çaplı", "kural", "refah", "açlık", "makul", "litre", "eleme", "kahve", "kaydı", "mimar", "isyan", "dalga", "denli", "salon", "yatan", "metro", "dönüp", "ihsan", "kitle", "antik", "sadık", "biber", "garip", "köklü", "boyun", "bulut", "yücel", "tuttu", "sözlü", "kısım", "ısrar", "binde", "dönüm", "mıdır", "vuran", "kaçtı", "damar", "çakır", "vefat", "bazda", "dergi", "yatak", "tokat", "oğlum", "gülen", "kilit", "yerin", "liste", "yendi", "yaşta", "kalem", "malum", "sırrı", "köyde", "organ", "özgün", "ilham", "faizi", "hüsnü", "seçme", "atama", "kızıl", "yiğit", "şüphe", "pınar", "dille", "şişli", "panik", "kente", "katil", "baraj", "niyet", "liman", "olanı", "gerçi", "sakat", "nesil", "katma", "rejim", "fizik", "duyan", "beden", "bıçak", "miydi", "derbi", "aydan", "evren", "görgü", "teyit", "tavrı", "etmez", "ayağı", "ahlak", "çifte", "ideal", "kerem", "kralı", "seans", "cazip", "kirli", "adımı", "yağlı", "stres", "tolga", "kamil", "yapın", "sünni", "dersi", "dostu", "minik", "çavuş", "cesur", "makam", "şartı", "faili", "koyun", "çadır", "hapse", "tavuk", "annem", "şeref", "daimi", "komik", "denge", "seven", "sudan", "taciz", "kemik", "verin", "alımı", "mesai", "divan", "şahit", "inkar", "bilge", "durdu", "düzen", "fener", "kaygı", "birin", "yazın", "hatip", "karın", "fakir", "vahim", "geçip", "şarap", "tayin", "daima", "adres", "gözle", "biten", "bitki", "talip", "özerk", "yazma", "binin", "aradı", "üzeri", "hülya", "boğaz", "rüştü", "kayak", "tarif", "derdi", "sular", "irade", "ersin", "namaz", "özlem", "cümle", "tutar", "vakti", "frank", "kazan", "görüp", "opera", "bende", "burun", "fuarı", "eşini", "öneri", "taksi", "doğdu", "nadir", "çekim", "üçten", "fiili", "mıydı", "şafak", "kayda", "hücum", "yolla", "miyiz", "girer", "iflas", "başlı", "evvel", "duman", "şekli", "bedel", "duvar", "ateşi", "bozuk", "anket", "aktör", "sıkça", "keyif", "topçu", "göğüs", "unsur", "kılan", "devir", "cihaz", "ateşe", "şahıs", "bunca", "skoru", "kerim", "nakli", "beşer", "kanat", "ezeli", "yüzme", "ender", "yenen", "durak", "taviz", "tersi", "konak", "ırkçı", "subay", "esrar", "üzücü", "gözde", "hekim", "ikram", "düşme", "okudu", "yanda", "rengi", "emeği", "atmış", "mayın", "sizce", "gitme", "pekin", "yüzün", "gezen", "filme", "görür", "kırık", "ekran", "nedim", "kalın", "madem", "kimya", "kıran", "mumcu", "perde", "çekip", "testi", "peşin", "hücre", "besin", "birim", "meral", "kutlu", "üçlük", "keyfi", "cadde", "lakin", "beton", "stadı", "bastı", "yapay", "yiyen", "kırdı", "mikro", "ahşap", "küfür", "araca", "kalıp", "bahçe", "ışığı", "şehre", "mezar", "ölüme", "köyün", "gölge", "kalbi", "neyin", "soran", "world", "karla", "sözcü", "prens", "maaşı", "kargo", "bulup", "kader", "tenis", "açmış", "bulma", "kesti", "taşıt", "camii", "metni", "irfan", "terfi", "bronz", "devri", "abone", "fahri", "iyisi", "diyet", "kızım", "sesli", "çorum", "cinsi", "çifti", "alkış", "etsin", "izzet", "iller", "karlı", "miras", "suçun", "etken", "usulü", "sezen", "kurgu", "şerif", "yıkım", "düşer", "kayın", "primi", "husus", "yanan", "keşif", "fidan", "katar", "nikah", "canım", "denen", "özden", "belde", "tüzel", "selam", "derse", "azami", "necip", "çınar", "dilde", "teker", "iyiye", "evini", "gücün", "ferdi", "kuşak", "ölmüş", "sever", "eşsiz", "geçit", "gidiş", "kuşku", "dilek", "kemer", "sağcı", "yazıp", "eşine", "parkı", "topuz", "pembe", "tanrı", "mermi", "çekme", "fazıl", "virüs", "çoban", "sayan", "vahşi", "evler", "melek", "odada", "bakıp", "birey", "düzce", "koyup", "girme", "ceset", "şekil", "dayak", "ispat", "bulur", "çalan", "utanç", "dinin", "ofisi", "nakil", "doğuş", "aşama", "saklı", "helal", "şirin", "rahmi", "yenik", "nimet", "hükmü", "adada", "sesle", "tünel", "sakın", "kışın", "şahsi", "şiiri", "enkaz", "köylü", "taban", "mehdi", "boyut", "vekil", "aylar", "şoför", "otele", "adaya", "şudur", "kanıt", "tekne", "ismin", "karma", "yaşın", "oteli", "stand", "andan", "derya", "makro", "esnek", "hissi", "seçti", "çeşme", "saçma", "kumar", "sabır", "mizah", "musun", "akman", "halis", "rehin", "villa", "onayı", "kıraç", "artar", "tokyo", "demet", "sözün", "topal", "iskan", "kıdem", "çolak", "torba", "kısmi", "robot", "içini", "istek", "umudu", "tamir", "canan", "basan", "koşan", "limon", "meğer", "satır", "tavan", "acılı", "tugay", "kopya", "ucuza", "içten", "dizel", "otuza", "güreş", "tahta", "arıza", "tüzük", "üçünü", "fuhuş", "uysal", "adası", "sızan", "çeker", "çarşı", "ödüle", "bozdu", "yener", "rutin", "bakır", "adama", "beşin", "durup", "kesen", "ayrım", "şifre", "biter", "uçağa", "kursu", "odağı", "yankı", "maçla", "ilacı", "kampa", "yerle", "bahis", "solcu", "filiz", "çanta", "eroin", "ağacı", "refik", "eşref", "şaban", "almaz", "yürek", "kapak", "şanlı", "saate", "yaman", "alarm", "çaldı", "misin", "çapta", "salim", "çorba", "ayırt", "yavru", "günah", "saran", "odaya", "dilin", "evlat", "açısı", "neydi", "gürcü", "gelme", "türkü", "golün", "tuzla", "yatay", "yurda", "mudur", "çalık", "porto", "marşı", "damla", "tutup", "öneme", "mafya", "nöbet", "geçim", "hocam", "izini", "soğan", "gidin", "orası", "cephe", "fişek", "soktu", "çamur", "üslup", "yüzlü", "haydi", "telif", "taşın", "duruş", "havai", "oluşu", "start", "giydi", "kaset", "idrar", "afyon", "acele", "ilahi", "vecdi", "geçme", "şayet", "yalın", "sporu", "kampı", "sicil", "diken", "alçak", "zammı", "nasip", "stada", "takas", "tabir", "riske", "topun", "bakar", "gelse", "arena", "yaktı", "suyla", "solda", "anlık", "ıslak", "üzgün", "yahut", "solun", "espri", "buydu", "evrak", "masal", "sette", "dinci", "olsam", "kopan", "yaban", "idman", "bayar", "roket", "koçak", "gitar", "havuz", "kurup", "tosun", "aşmak", "emtia", "burcu", "kaplı", "edebi", "dalda", "fesat", "kısır", "öteye", "yemen", "akışı", "yandı", "sunum", "izler", "öğlen", "soylu", "hamle", "forum", "denir", "çarpı", "fetih"};
-
-
-Wordl::Wordl(std::string name, Channel &channel) : Bot(name, channel)
+Wordl::Wordl(Channel *channel) : _channel(channel), _isPlay(false)
 {
-
+	std::cout << "wordlda tutulan adres: " << _channel << std::endl;
+	_try = 0;
 }
 
 Wordl::~Wordl()
 {
 
 }
+void	Wordl::setChannel(Channel &channel) {_channel = &channel; }
+
+size_t	utf8ByteLength(char c)
+{
+	size_t charLength = 1;
+	if ((c & 0xF8) == 0xF0)
+		charLength = 4;
+	else if ((c & 0xF0) == 0xE0)
+		charLength = 3;
+	else if ((c & 0xE0) == 0xC0)
+		charLength = 2;
+	return (charLength);
+}
+
+std::string	ft_itos(int value)
+{
+	std::stringstream	ret;
+
+	ret << value;
+	return (ret.str());
+}
+
+//
+void	Wordl::show()
+{
+	std::string firstMes = "\x03,11--->WORDL<---";
+	std::string a;
+	std::string b;
+	this->senChannelMsg(true, firstMes);
+	for (int i = 0; i < _try; i++)
+	{
+		std::string word = ft_itos(i + 1) + ". ";
+		for (int j = 0; j < 5; j++)
+		{
+			a = _triedWord[i].substr(j, utf8ByteLength(_triedWord[i][j]));
+			b = _word.substr(j, utf8ByteLength(_word[j]));
+			std::cout << "tried : |"<< a << "|"<<std::endl << "word : |" << b << "|"<< std::endl;
+			if (a == b)
+            	word.append(a);
+			else
+            	word.append("_");
+            word.append(" ");
+		}
+		this->senChannelMsg(false, word);
+	}
+	this->senChannelMsg(false, "");
+}
+
+void	Wordl::triedClear()
+{
+	for (int i = 0; i < hak; ++i)
+        _triedWord[i] = "";
+}
 
 size_t Wordl::utf8CharacterCount(const std::string& str)
 {
-    size_t length = 0;
-    for (size_t i = 0; i < str.size(); ++i)
-        if ((str[i] & 0xC0) != 0x80)
-            ++length;
-    return length;
+	size_t length = 0;
+	for (size_t i = 0; i < str.size(); ++i)
+		if ((str[i] & 0xC0) != 0x80)
+			++length;
+	return length;
 }
 
-void	Wordl::worldl(std::map<std::string, Channel>&channels, Client & client, std::vector<std::string> &cmd)
+void	Wordl::worldl(std::map<std::string, Channel>&channels, Client &client, std::vector<std::string> &cmd)
+{
+	if (cmd.size() != 3)
+		throw ERR_NEEDMOREPARAMS(client.getNickname(), cmd[0]);
+	if (channels.find(cmd[1]) == channels.end())
+		throw ERR_NOSUCHCHANNEL(client.getNickname(), cmd[0]);
+	if (channels[cmd[1]].IsClient(client) == false)
+		throw ERR_NOTONCHANNEL(client.getNickname(), channels[cmd[1]].getName());
+	Wordl &bot = channels[cmd[1]].getBot();
+
+	if (cmd[2] == "PLAY")
+		bot.play();
+	else if (cmd[2] == "RESTART")
+		bot.reStart();
+	else
+		bot.guess(cmd);
+}
+
+void	Wordl::guess(std::vector<std::string> &cmd)
+{
+	if (this->_isPlay == false)
+		throw std::string("WORDL <channel name> PLAY");
+	if (utf8CharacterCount(cmd[2]) != 5)
+		throw std::string("harf sayisi hatali");
+	_triedWord[_try] = cmd[2];
+	_try++;
+	show();
+	if (this->_try == 10 || this->_triedWord[this->_try - 1] == this->_word)
+	{
+		std::string message;
+		if (this->_try == 10)
+			message = "\x03,4Üzgünüm bilemedin doğru kelimemiz \""+ this->_word +"\" Asla pes etme 💪🏼";
+		else
+			message = "\x03,10Sen bir harikasın doğru kelimeyi buldun 🥳";
+		this->triedClear();
+		this->_isPlay = false;
+		this->_try = 0;
+		this->senChannelMsg(true, message);
+	}
+	else
+		this->senChannelMsg(false, "\x03,7Maalesefki kelimemiz \"" + cmd[2] + "\" değil!");
+}
+
+void	Wordl::play()
 {
 
+	if (this->_isPlay == true)
+	{
+		this->show();
+		throw	std::string("hali hazirda oynaniyor");
+	}
 
+	srand(static_cast<unsigned int>(time(0)));
+    this->_word = _wordDB[rand() % (_wordDB.size() -1)];
+	std::cout << "123" << std::endl;
+	this->triedClear();
+
+	std::cout << this->_word << std::endl;
+	this->senChannelMsg(true, "\x03,8Ben aklımdan 5 karakterli bir kelime tuttum hadi bakalım bilebilecek misin? (kullanımı : WORDL <channel name> kelime)");
+	std::cout << "123" << std::endl;
+	this->_isPlay = true;
 }
 
-void	Wordl::play(Client &client, std::vector<std::string> &cmd)
+void	Wordl::reStart()
 {
-
+	this->_isPlay = false;
+	this->triedClear();
+	this->_try = 0;
+	play();
 }
 
-void	Wordl::stop(Client &client, std::vector<std::string> &cmd)
+void	Wordl::senChannelMsg(bool prefix, std::string message)
 {
-
+	std::string source = prefix == true ? "WORDL!WORDL@WORDL" : "";
+	_channel->Brodcast(RPL_PRIVMSG(source, _channel->getName(), message));
 }
-
-void	Wordl::join(Client &client, std::vector<std::string> &cmd)
-{
-
-}
-
-void	Wordl::restart(Client &client, std::vector<std::string> &cmd)
-{
-
-}
-

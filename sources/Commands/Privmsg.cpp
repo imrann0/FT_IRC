@@ -23,7 +23,7 @@ void Privmsg(Client client, std::vector<std::string> &cmd, std::map<std::string,
 		else
 		{
 			privMessage = RPL_PRIVMSG(client.getPrefixName(), cmd[1], cmd[2]);
-			channels[cmd[1]].Brodcast(privMessage);
+			channels[cmd[1]].Brodcast(privMessage, client);
 		}
 	}
 	else

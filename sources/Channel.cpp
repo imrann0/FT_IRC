@@ -161,3 +161,12 @@ void Channel::Brodcast(std::string message)
     for (it begin = _clients.begin(); begin != _clients.end(); begin++)
         (*begin)->MsgToClient(message);
 }
+
+void Channel::Brodcast(std::string &message, Client &client)
+{
+    for (it begin = _clients.begin(); begin != _clients.end(); begin++)
+    {
+        if ((*begin)->getNickname() != client.getNickname())
+            (*begin)->MsgToClient(message);
+    }
+}

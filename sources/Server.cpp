@@ -29,7 +29,6 @@ void signalHandler(int signal)
 	usleep(500000);
 
 	std::cout << "Signal: " << signal << std::endl;
-	exit(1);
 }
 
 Server::Server(int port, std::string password) : _port(port), _password(password)

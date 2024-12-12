@@ -19,13 +19,13 @@ void who(std::map<std::string, Channel> &channels, Client client, std::vector<st
         client.MsgToClient(ERR_NOSUCHCHANNEL(client.getPrefixName(), cmd[1]));
     else
     {
+        
         std::vector<Client *>::iterator it;
         std::string users;
         for (it = channels[cmd[1]].getClients().begin(); it != channels[cmd[1]].getClients().end(); it++)
         {
-            users += (*it)->getNickname() + " ";
+            client.MsgToClient(RPL_WHOREPLY(client.getPrefixName(), cmd[1], (*it)->getUsername(), "", "localhost", "H", ""));
         }
-        client.MsgToClient(RPL_NAMREPLY(client.getPrefixName(), cmd[1], users));
         client.MsgToClient(RPL_ENDOFNAMES(client.getPrefixName(), cmd[1]));
     }
 }

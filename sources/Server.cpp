@@ -103,7 +103,7 @@ void	Server::Debug()
 		if (ret == -1)
 		{
 			close(_socket);
-			if (errno == EINTR)
+			if (errno == EINTR || errno == EWOULDBLOCK)
 				return ;
 			std::cout << strerror(errno) << std::endl;
 			throw std::runtime_error("poll Error");

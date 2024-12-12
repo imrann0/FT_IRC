@@ -66,6 +66,18 @@ Server::Server(int port, std::string password) : _port(port), _password(password
 	_pollFds.push_back(fds);
 }
 
+Server::~Server()
+{
+	std::vector<pollfd>::iterator it = _pollFds.begin();
+	while (it != _pollFds.end())
+	{
+		close(it->fd);
+		it++;
+	}
+	std::cout << "Server Destructor Called" << std::endl;
+	close(_socket);
+}
+
 void  Server::setSignal(int signal)
 {
 	_signal = signal;

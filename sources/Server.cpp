@@ -195,11 +195,11 @@ void	Server::login(Client &client, std::vector<std::string>	&str)
 void Server::processMessage(Client	&client)
 {
 	std::string	command;
-	while (client.getBufferLine(command))
+	while (IsClient(_clients, client) && client.getBufferLine(command))
 	{
 		try
 		{
-			std::cout << "komut : " <<command << std::endl;
+			std::cout << "komut : " << command << std::endl;
 			std::vector<std::string>	str = split(command, ' ');
 			if (str.size() == 0)
 			{

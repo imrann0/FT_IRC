@@ -44,6 +44,16 @@ const Client getClientNameFd(const std::map<int, Client>& clients, const std::st
     throw std::runtime_error("Client not found");
 }
 
+bool IsClient(const std::map<int, Client>& clients, Client &client)
+{
+    for (std::map<int, Client>::const_iterator user = clients.begin(); user != clients.end(); ++user)
+    {
+        if (user->second == client)
+            return true;
+    }
+    return false;
+}
+
 bool IsClient(const std::map<int, Client>& clients, const std::string& client)
 {
     try

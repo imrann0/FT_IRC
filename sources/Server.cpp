@@ -20,6 +20,18 @@
 
 int Server::_signal = 0;
 
+void signalHandler(int signal)
+{
+	Server::setSignal(signal);
+	usleep(500000);
+	usleep(500000);
+	usleep(500000);
+	usleep(500000);
+
+	std::cout << "Signal: " << signal << std::endl;
+	exit(1);
+}
+
 Server::Server(int port, std::string password) : _port(port), _password(password)
 {
 	std::cout << "Server Constructor Called" << std::endl;
@@ -27,7 +39,7 @@ Server::Server(int port, std::string password) : _port(port), _password(password
 	_socket = socket(AF_INET, SOCK_STREAM, 0);
 	if (_socket == -1)
 		throw std::runtime_error("Socket Error");
-	int buffer_size = 1;
+	int buffer_size = 1024 * 1024;
 	if (setsockopt(_socket, SOL_SOCKET, SO_REUSEADDR, &buffer_size, sizeof(buffer_size)) == -1)
 	{
 		close(_socket);
@@ -53,12 +65,11 @@ Server::Server(int port, std::string password) : _port(port), _password(password
 
 	std::cout << "Bind başarılı. Sunucu " << _port << " portuna bağlandı.\n";
 
-	if (listen(_socket, 100) == -1)
+	if (listen(_socket, 2) == -1)
 	{
 		close(_socket);
 		throw std::runtime_error("Listen Error");
 	}
-
 	struct pollfd fds;
 	fds.fd = _socket;
 	fds.events = POLLIN;
@@ -83,42 +94,33 @@ void  Server::setSignal(int signal)
 	_signal = signal;
 }
 
-void signalHandler(int signal)
-{
-	Server::setSignal(signal);
-	std::cout << "Signal: " << signal << std::endl;
-}
 
 void	Server::Debug()
 {
 	signal(SIGINT, signalHandler);
-	while (!_signal)
+	while (_signal == 0)
 	{
-		int ret = poll(_pollFds.data(), _pollFds.size(), -1);
+		int ret = poll(&_pollFds[0], _pollFds.size(), -1);
 		if (ret == -1)
 		{
 			close(_socket);
+			std::cout << strerror(errno) << std::endl;
 			throw std::runtime_error("poll Error");
 		}
-		for (size_t i = 0; i < _pollFds.size(); ++i)
-		{
-			if (_pollFds[i].revents & POLLIN)
-			{
-				processUserEvents();
-			}
-		}
+		if (_pollFds[0].revents & POLLIN)
+			this->acceptClient();
+		processUserEvents();
 	}
 }
 
 void Server::acceptClient()
 {
-	sockaddr_in clientAddr;
+	struct sockaddr_in clientAddr;
 	socklen_t clientLen = sizeof(clientAddr);
 	int clientSocket = accept(_socket, (struct sockaddr*)&clientAddr, &clientLen);
 	if (clientSocket == -1)
 	{
-		std::cerr << "Accept Error: "  << strerror(clientSocket) << "bu error" << std::endl;
-
+		std::cerr << "Accept Error: "  << strerror(errno) << "bu error" << std::endl;
 		return ;
 	}
 
@@ -139,6 +141,7 @@ int Server::receiveData(Client &client)
 
 	std::memset(buffer, 0, sizeof(buffer));
 	int bytesReceived = recv(client.getClientFd(), buffer, sizeof(buffer) - 1, 0);
+	std::cout << bytesReceived << std::endl;
 	if (bytesReceived <= 0) {
 		if (bytesReceived == 0)
 		{
@@ -147,6 +150,7 @@ int Server::receiveData(Client &client)
 		}
 		else
 			std::cerr << "Error receiving data from client " << client.getClientFd() << std::endl;
+		std::cout << strerror(errno) << std::endl;
 	}
 	buffer[bytesReceived] = '\0';
 	client.appendBuffer(buffer);
@@ -155,22 +159,17 @@ int Server::receiveData(Client &client)
 
 void	Server::processUserEvents()
 {
-	for (size_t i = 0; i < _pollFds.size(); ++i)
+	for (size_t i = 1; i < _pollFds.size(); ++i)
 	{
 		if (_pollFds[i].revents & POLLIN)
 		{
-			if (_pollFds[i].fd == _socket)
-				Server::acceptClient();
-			else
+			int bytesReceived = receiveData(_clients[_pollFds[i].fd]);
+			if (bytesReceived <= 0)
 			{
-				int bytesReceived = receiveData(_clients[_pollFds[i].fd]);
-				if (bytesReceived <= 0)
-				{
-					Quit(_channels ,_clients, _pollFds[i].fd , _pollFds);
-					continue ;
-				}
-				processMessage(_clients[_pollFds[i].fd]);
+				Quit(_channels ,_clients, _pollFds[i].fd , _pollFds);
+				continue ;
 			}
+			processMessage(_clients[_pollFds[i].fd]);
 		}
 	}
 }
@@ -211,6 +210,7 @@ void Server::processMessage(Client	&client)
 	{
 		try
 		{
+			std::cout << strerror(errno) << std::endl;
 			std::cout << "komut : " << command << std::endl;
 			std::vector<std::string>	str = split(command, ' ');
 			if (str.size() == 0)

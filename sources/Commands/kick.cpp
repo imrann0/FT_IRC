@@ -39,12 +39,20 @@ void	kick(std::map<std::string, Channel> &channels, Client &client, std::vector<
 		throw ERR_NOTONCHANNEL(client.getUsername(), channelsName[0]); // +
 	else
 	{
-		std::string reason = cmd.size() != 4 ? "" : cmd[3];
-		std::string message = RPL_KICK(client.getNickname(), client.getUsername(), client.getHostName(),
-									channels[channelsName[0]].getName(),
-									channels[channelsName[0]].getClient(users[0]).getNickname(),
-									reason);
-		channels[channelsName[0]].Brodcast(message);
-		channels[channelsName[0]].ClientRemove(channels[channelsName[0]].getClient(users[0]));
+		if (cmd[2] != client.getNickname())
+		{
+			std::string reason = cmd.size() != 4 ? "" : cmd[3];
+			std::string message = RPL_KICK(client.getNickname(), client.getUsername(), client.getHostName(),
+										channels[channelsName[0]].getName(),
+										channels[channelsName[0]].getClient(users[0]).getNickname(),
+										reason);
+			channels[channelsName[0]].Brodcast(message);
+			channels[channelsName[0]].ClientRemove(channels[channelsName[0]].getClient(users[0]));
+		}
+		else
+		{
+			std::string m = "kendiniz atamazsın mesajı yazdırılmalı";
+			std::cout << m << std::endl;
+		}
 	}
 }

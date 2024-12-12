@@ -21,6 +21,7 @@ typedef std::vector<Client *>::iterator it;
 #define RPL_INVITING(client, invited, channel) 			" 341 " + client + " " + invited + " " + channel
 #define RPL_PART(source, channel)                       ":" + source + " PART :" + channel
 #define RPL_NICK(source,nickname)                       ":" + source + " NICK " + nickname
+#define RPL_CHANNELMODEIS(source, channel, modes)        ": 324 " + source + " " + channel + " " + modes
 
 // Error
 #define ERR_NOSUCHCHANNEL(source, channel)              ": 403 " + source + " " + channel + " :No such channel"
@@ -126,6 +127,7 @@ class Channel
 		void	TopicAdd(std::string &topic);
 		void	Brodcast(std::string message);
 		void	Brodcast(std::string &message, Client &client);
+		std::string getFlags();
 };
 
 #endif

@@ -148,6 +148,11 @@ void Mode(std::map<std::string, Channel> &channles, Client &client ,std::vector<
         throw ERR_NEEDMOREPARAMS(client.getNickname(), cmd[0]); // +
     else if (channles.find(cmd[1]) == channles.end())
         throw ERR_NOSUCHCHANNEL(client.getPrefixName(), cmd[1]); // +
+    else if (cmd.size() == 2)
+    {
+        std::string modeMessage = RPL_CHANNELMODEIS(client.getPrefixName(), cmd[1], channles[cmd[1]].getFlags());
+        client.MsgToClient(modeMessage);
+    }
     else if (channles[cmd[1]].IsClient(client) == false)
         throw ERR_NOTONCHANNEL(client.getNickname(), cmd[1]); // +
     else if (channles[cmd[1]].IsOperator(client) == false)

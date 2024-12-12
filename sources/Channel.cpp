@@ -170,3 +170,17 @@ void Channel::Brodcast(std::string &message, Client &client)
             (*begin)->MsgToClient(message);
     }
 }
+
+std::string Channel::getFlags()
+{
+    std::string flags = "";
+    for (std::map<char, bool>::iterator it = _flags.begin(); it != _flags.end(); it++)
+    {
+        if (it->second == true)
+        {
+            flags += it->first;
+            flags += " ";
+        }
+    }
+    return flags;
+}

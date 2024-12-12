@@ -59,8 +59,9 @@ bool IsClient(const std::map<int, Client>& clients, const std::string& client)
 
 void RemoveChannels(std::map<std::string, Channel> &channels, Client &client)
 {
+    if (channels.size() == 0) // deneme test silinebilir
+        return ;
     std::map<std::string, Channel>::iterator it = channels.begin();
-
     while (it != channels.end())
     {
         if (it->second.IsClient(client))

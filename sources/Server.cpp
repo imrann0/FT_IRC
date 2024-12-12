@@ -62,6 +62,7 @@ Server::Server(int port, std::string password) : _port(port), _password(password
 	struct pollfd fds;
 	fds.fd = _socket;
 	fds.events = POLLIN;
+	fds.revents = 0;
 	_pollFds.push_back(fds);
 }
 
@@ -112,6 +113,7 @@ void Server::acceptClient()
 	pollfd clientPollFd;
 	clientPollFd.fd = clientSocket;
 	clientPollFd.events = POLLIN;
+	clientPollFd.revents = 0;
 	_pollFds.push_back(clientPollFd);
 	_clients.insert(std::make_pair(clientSocket, Client(clientSocket)));
 	std::cout << clientSocket << " Login" << std::endl;
@@ -170,7 +172,10 @@ void	Server::login(Client &client, std::vector<std::string>	&str)
 	else if (str[0] == "USER")
         user(client, str);
 	else if (str[0] == "QUIT")
+	{
 		Quit(_channels, _clients, client.getClientFd(), _pollFds);
+		return ;
+	}
 	else if (str[0] == "PASS")
 		pass(*this , client, str);
 	else

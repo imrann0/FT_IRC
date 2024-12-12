@@ -22,10 +22,18 @@ std::vector<pollfd>::iterator Find(std::vector<pollfd>& pollFds, int clientFd)
 
 void Quit(std::map<std::string, Channel> &channels, std::map<int, Client>& clients, int clientFd, std::vector<pollfd>& pollFds)
 {
-	RemoveChannels(channels, clients[clientFd]);
-	clients[clientFd].MsgToClient("QUIT : Good bye.");
-	std::cout << clientFd << " Disconnected() :( " << std::endl;
-	clients.erase(clientFd);
-	pollFds.erase(Find(pollFds, clientFd));
-	close(clientFd);
+	try
+	{
+		Client &client = clients[clientFd];
+		client.MsgToClient("QUIT : Good bye.");
+		std::cout << clientFd << " Disconnected() :( " << std::endl;
+		RemoveChannels(channels, client);
+		clients.erase(clientFd);
+		pollFds.erase(Find(pollFds, clientFd));
+		close(clientFd);
+	}
+	catch(const std::exception& e)
+	{
+		std::cerr << e.what() << '\n';
+	}
 }

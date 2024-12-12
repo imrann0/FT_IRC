@@ -3,13 +3,13 @@
 #include <sys/socket.h> // send
 
 // Default Constructor
-Client::Client() :  _clientFd(-1) , _registered(false) {}
+Client::Client() :  _clientFd(-1) , _pass(false), _registered(false) {}
 
-Client::Client(int fd) : _clientFd(fd), _nickname(""), _registered(false) {}
+Client::Client(int fd) : _clientFd(fd), _nickname(""), _pass(false), _registered(false) {}
 
 // Parameterized Constructor
 Client::Client(const std::string& nickname, const std::string& username, int fd)
-    : _clientFd(fd), _nickname(nickname), _username(username),  _registered(false) {}
+    : _clientFd(fd), _nickname(nickname), _username(username),  _pass(false), _registered(false) {}
 
 // Getters
 const std::string& Client::getNickname() const { return _nickname; }
@@ -72,6 +72,8 @@ bool Client::getBufferLine(std::string &str)
     find = this->_buffer.find("\r\n");
     if (find == std::string::npos)/* || str.compare(str.length() - 2, 2, "\r\n") */
         return (false);
+	else if (find > _buffer.size())
+        return false;
     str = this->_buffer.substr(0, find);
     this->_buffer.erase(0, find + 2);
     return (true);

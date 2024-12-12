@@ -40,26 +40,28 @@ std::string	ft_itos(int value)
 	return (ret.str());
 }
 
-//
 void	Wordl::show()
 {
-	std::string firstMes = "\x03,11--->WORDL<---";
-	std::string a;
-	std::string b;
+	std::string	firstMes = "\x03,11--->WORDL<---";
+
 	this->senChannelMsg(true, firstMes);
 	for (int i = 0; i < _try; i++)
 	{
+		int 		char1Length = 0;
+		int			word1Point = 0;
+		int 		char2Length = 0;
+		int			word2Point = 0;
 		std::string word = ft_itos(i + 1) + ". ";
 		for (int j = 0; j < 5; j++)
 		{
-			a = _triedWord[i].substr(j, utf8ByteLength(_triedWord[i][j]));
-			b = _word.substr(j, utf8ByteLength(_word[j]));
-			std::cout << "tried : |"<< a << "|"<<std::endl << "word : |" << b << "|"<< std::endl;
-			if (a == b)
-            	word.append(a);
+			char1Length = utf8ByteLength(_triedWord[i][word1Point]);
+			char2Length = utf8ByteLength(_word[word2Point]);
+			if (_triedWord[i].substr(word1Point, char1Length) == _word.substr(word2Point, char2Length))
+            	word.append(_triedWord[i].substr(word1Point, char1Length) + " ");
 			else
-            	word.append("_");
-            word.append(" ");
+            	word.append("_ ");
+			word1Point += char1Length;
+			word2Point += char2Length;
 		}
 		this->senChannelMsg(false, word);
 	}
@@ -135,12 +137,10 @@ void	Wordl::play()
 
 	srand(static_cast<unsigned int>(time(0)));
     this->_word = _wordDB[rand() % (_wordDB.size() -1)];
-	std::cout << "123" << std::endl;
 	this->triedClear();
 
 	std::cout << this->_word << std::endl;
 	this->senChannelMsg(true, "\x03,8Ben aklımdan 5 karakterli bir kelime tuttum hadi bakalım bilebilecek misin? (kullanımı : WORDL <channel name> kelime)");
-	std::cout << "123" << std::endl;
 	this->_isPlay = true;
 }
 

@@ -11,23 +11,21 @@
 //#define RPL_WHOREPLY(client, channel,username, host,target, status, realname)   ": 352 " + client + " " + channel + " " + username + " " + host + " " + "localhost "  + target +  " H"+status + ":0 " + realname
 #define RPL_WHOREPLY(client, channel, username, host, target, status, realname) ": 352 " + client + " " + channel + " " + username + " " + host + " * " + target + " " + status + " :0 " + realname
 #define RPL_ENDOFWHO(client, channel) ":* 315 " + client + " " + channel + " :End of WHO list"
-void    who(std::map<std::string, Channel> &channels, Client client,  std::vector<std::string> &cmd)
+void who(std::map<std::string, Channel> &channels, Client client, std::vector<std::string> &cmd)
 {
-    (void)channels;
-    (void)client;
-    (void)cmd;
-    /*if (cmd.size() != 2)
-        client.MsgToClient(ERR_NEEDMOREPARAMS(client.getNickname(), cmd[0])); // kalan parametreler eklencek
+    if (cmd.size() != 2)
+        client.MsgToClient(ERR_NEEDMOREPARAMS(client.getNickname(), cmd[0]));
     else if (channels.find(cmd[1]) == channels.end())
         client.MsgToClient(ERR_NOSUCHCHANNEL(client.getPrefixName(), cmd[1]));
     else
     {
-        std::vector<Client *>::iterator user = channels[cmd[1]].getClients().begin();
-        for (; user != channels[cmd[1]].getClients().end(); ++user)
+        std::vector<Client *>::iterator it;
+        std::string users;
+        for (it = channels[cmd[1]].getClients().begin(); it != channels[cmd[1]].getClients().end(); it++)
         {
-            std::string status = channels[cmd[1]].IsOperator(*user[0]) ? "O" : "H";
-            client.MsgToClient(RPL_WHOREPLY(client.getNickname(), cmd[1], client.getUsername() ,client.getHostName(), user[0]->getNickname(),status, user[0]->getRealName()));
+            users += (*it)->getNickname() + " ";
         }
-        client.MsgToClient(RPL_ENDOFWHO(client.getNickname(), cmd[1]));
-    }*/
+        client.MsgToClient(RPL_NAMREPLY(client.getPrefixName(), cmd[1], users));
+        client.MsgToClient(RPL_ENDOFNAMES(client.getPrefixName(), cmd[1]));
+    }
 }

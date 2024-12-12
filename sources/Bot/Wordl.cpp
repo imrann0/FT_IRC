@@ -17,6 +17,7 @@ Wordl::~Wordl()
 {
 
 }
+
 void	Wordl::setChannel(Channel &channel) {_channel = &channel; }
 
 size_t	utf8ByteLength(char c)

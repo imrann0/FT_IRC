@@ -51,8 +51,8 @@ void	kick(std::map<std::string, Channel> &channels, Client &client, std::vector<
 		}
 		else
 		{
-			std::string m = "kendiniz atamazsın mesajı yazdırılmalı";
-			std::cout << m << std::endl;
+			std::string m = "You cannot assign this to yourself.";
+			client.MsgToClient(m);
 		}
 	}
 }

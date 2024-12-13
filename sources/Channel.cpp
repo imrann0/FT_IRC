@@ -162,7 +162,7 @@ void Channel::Brodcast(std::string message)
         (*begin)->MsgToClient(message);
 }
 
-void Channel::Brodcast(std::string &message, Client &client)
+void Channel::Brodcast(std::string message, Client &client)
 {
     for (it begin = _clients.begin(); begin != _clients.end(); begin++)
     {

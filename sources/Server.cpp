@@ -19,7 +19,6 @@
 #define RPL_WELCOME(serverName, nick, user, host)	":" + serverName + " 001 " + nick + " :Welcome to the Internet Relay Network "+ nick +"!" + user + "@" + host
 
 int Server::_signal = 0;
-
 void signalHandler(int signal)
 {
 	Server::setSignal(signal);
@@ -44,6 +43,7 @@ Server::Server(int port, std::string password) : _port(port), _password(password
 		close(_socket);
 		throw std::runtime_error("setsockopt Error");
 	}
+
 	// non-blockhing
 	if (fcntl(_socket, F_SETFL, O_NONBLOCK) == -1)
 	{
@@ -52,18 +52,15 @@ Server::Server(int port, std::string password) : _port(port), _password(password
 	}
 
 	std::memset(&server_addr, 0, sizeof(server_addr));
-	server_addr.sin_family = AF_INET;				 // IPv4 adres ailesi
-	server_addr.sin_addr.s_addr = htonl(INADDR_ANY);  // Herhangi bir IP adresi
-	server_addr.sin_port = htons(_port);			 // Port numarası
-
+	server_addr.sin_family = AF_INET;
+	server_addr.sin_addr.s_addr = htonl(INADDR_ANY);
+	server_addr.sin_port = htons(_port);
 	if (bind(_socket, (struct sockaddr*)&server_addr, sizeof(server_addr)) == -1)
 	{
 		close(_socket);
 		throw std::runtime_error("Bind Error");
 	}
-
-	std::cout << "Bind başarılı. Sunucu " << _port << " portuna bağlandı.\n";
-
+	std::cout << "Bind successful. The server is now connected to port " << _port << "." << std::endl;
 	if (listen(_socket, 2) == -1)
 	{
 		close(_socket);
@@ -121,7 +118,7 @@ void Server::acceptClient()
 	int clientSocket = accept(_socket, (struct sockaddr*)&clientAddr, &clientLen);
 	if (clientSocket == -1)
 	{
-		std::cerr << "Accept Error: "  << strerror(errno) << "bu error" << std::endl;
+		std::cerr << "Accept Error: "  << strerror(errno) << std::endl;
 		return ;
 	}
 
@@ -211,8 +208,6 @@ void Server::processMessage(Client	&client)
 	{
 		try
 		{
-			std::cout << strerror(errno) << std::endl;
-			std::cout << "komut : " << command << std::endl;
 			std::vector<std::string>	str = split(command, ' ');
 			if (str.size() == 0)
 			{
@@ -260,7 +255,7 @@ void Server::routeCommand(Client &client, std::vector<std::string> &cmd)
 	else if (cmd[0] == "LIST")
 		this->list(client);
 	else if (cmd[0] == "WHO")
-		who(_channels, client, cmd);
+		;
 	else
 		client.MsgToClient("ERROR: Unknow Command!");
 }

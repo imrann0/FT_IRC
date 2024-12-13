@@ -1,4 +1,4 @@
-NAME = Server
+NAME = ircserv
 
 CXX = c++
 OBJ_DIR = .objs
@@ -21,9 +21,8 @@ SRCS =  \
 		sources/Commands/Mode.cpp \
 		sources/Commands/kick.cpp \
 		sources/Commands/Part.cpp \
-		sources/Commands/Who.cpp \
 		sources/Bot/Wordl.cpp \
-		sources/Bot/wordDB.cpp 
+		sources/Bot/wordDB.cpp
 
 OBJS = $(addprefix $(OBJ_DIR)/, $(SRCS:.cpp=.o))
 

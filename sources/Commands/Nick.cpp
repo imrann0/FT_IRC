@@ -36,11 +36,15 @@ void Nick(std::map<int, Client>& clients, Client &client, std::vector<std::strin
 	else if (client.isRegistered() == true)
     {
 		client.MsgToClient(RPL_NICK(client.getPrefixName(), cmd[1]));
-        for (std::map<std::string, Channel>::iterator it; it != channels.end(); it++)
+		client.setNickname(cmd[1]);
+        for (std::map<std::string, Channel>::iterator it = channels.begin(); it != channels.end(); it++)
         {
+			std::cout <<  it->second.getUsersNames() << std::endl;
             if (it->second.IsClient(client))
-                it->second.Brodcast(RPL_NAMREPLY(client.getPrefixName(), it->second.getName(), it->second.getUsersNames()));
+                it->second.Brodcast(RPL_NAMREPLY(client.getPrefixName(), it->second.getName(), it->second.getUsersNames()), client);
+			it->second.Brodcast(RPL_ENDOFNAMES(client.getPrefixName(), it->second.getName()), client);
         }
+		return ;
     }
 	client.setNickname(cmd[1]);
 }

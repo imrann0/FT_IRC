@@ -126,7 +126,7 @@ class Channel
 		void	OperatorAdd(Client &newOperator);
 		void	TopicAdd(std::string &topic);
 		void	Brodcast(std::string message);
-		void	Brodcast(std::string &message, Client &client);
+		void	Brodcast(std::string message, Client &client);
 		std::string getFlags();
 };
 

@@ -37,7 +37,9 @@ Server::Server(int port, std::string password) : _port(port), _password(password
 	_socket = socket(AF_INET, SOCK_STREAM, 0);
 	if (_socket == -1)
 		throw std::runtime_error("Socket Error");
-	int buffer_size = 1024 * 1024;
+
+	int buffer_size = 1;
+
 	if (setsockopt(_socket, SOL_SOCKET, SO_REUSEADDR, &buffer_size, sizeof(buffer_size)) == -1)
 	{
 		close(_socket);

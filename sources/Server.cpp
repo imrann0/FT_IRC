@@ -3,6 +3,8 @@
 #include "Wordl.hpp"
 #include "Command.hpp"
 #include "protocolMessages.hpp"
+
+#include <iostream>
 #include <sys/socket.h> // socket, bind
 #include <cstring>	 	// memset strerror
 #include <unistd.h>		// close

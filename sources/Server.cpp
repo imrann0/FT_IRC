@@ -236,7 +236,7 @@ void Server::routeCommand(Client &client, std::vector<std::string> &cmd)
 	if (cmd[0] == "USER")
 		client.MsgToClient(ERR_NEEDMOREPARAMS(client.getNickname(), cmd[0]));
     else if (cmd[0] == "NICK")
-        Nick(_clients, client, cmd);
+        Nick(_clients, client, cmd, _channels);
 	else if (cmd[0] == "KICK")
         kick(_channels, client, cmd);
     else if (cmd[0] == "JOIN")

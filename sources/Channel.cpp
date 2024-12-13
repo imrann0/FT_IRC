@@ -9,7 +9,6 @@ Channel::Channel() : _bot(0) {}
 
 Channel::Channel(const std::string& name, const std::string &password) : _bot(this)
 {
-    std::cout << "channel gerçek adres: "<< this << std::endl;
     _password = password;
     _name = name;
     _maxLimit = 0;
@@ -24,7 +23,7 @@ std::string             Channel::getName() {return _name;}
 std::vector<Client *>   &Channel::getClients() {return _clients;}
 std::vector<Client *>   &Channel::getOperator() { return _operator; }
 std::string             Channel::getTopic() const {return _topic;}
-bool                    Channel::getLimit() const {return (_maxLimit < _clients.size()); }
+bool                    Channel::getLimit() const {return (_maxLimit <= _clients.size()); }
 std::string             Channel::getSizeClient() const {std::ostringstream oss; oss << _clients.size(); return oss.str();}
 std::string				Channel::getPassword() const {return _password; }
 Wordl   				&Channel::getBot() {return _bot; }
@@ -184,3 +183,4 @@ std::string Channel::getFlags()
     }
     return flags;
 }
+

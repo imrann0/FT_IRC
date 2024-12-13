@@ -127,9 +127,16 @@ void i(Channel &channel, Client &client, std::vector<std::string> cmd)
     {
         if (cmd.size() == 4)
         {
-            modeMessage =  RPL_MODE(client.getPrefixName(), cmd[1], "-i", cmd[3]);
-            channel.removeInvite(cmd[3]);
-            channel.Brodcast(modeMessage);
+            try
+            {
+                modeMessage =  RPL_MODE(client.getPrefixName(), cmd[1], "-i", cmd[3]);
+                channel.removeInvite(cmd[3]);
+                channel.Brodcast(modeMessage);
+            }
+            catch(const std::exception& e)
+            {
+                client.MsgToClient(ERR_NOTONCHANNEL(client.getNickname(), cmd[1]));
+            }
         }
         else if (cmd.size() == 3)
         {

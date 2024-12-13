@@ -7,16 +7,9 @@
 
 const std::vector<std::string>	Wordl::_wordDB = wordDB();
 
-Wordl::Wordl(Channel *channel) : _channel(channel), _isPlay(false)
-{
-	std::cout << "wordlda tutulan adres: " << _channel << std::endl;
-	_try = 0;
-}
+Wordl::Wordl(Channel *channel) : _channel(channel), _isPlay(false) { _try = 0; }
 
-Wordl::~Wordl()
-{
-
-}
+Wordl::~Wordl() {}
 
 void	Wordl::setChannel(Channel &channel) {_channel = &channel; }
 

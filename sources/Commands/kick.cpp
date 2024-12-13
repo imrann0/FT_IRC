@@ -48,6 +48,7 @@ void	kick(std::map<std::string, Channel> &channels, Client &client, std::vector<
 										reason);
 			channels[channelsName[0]].Brodcast(message);
 			channels[channelsName[0]].ClientRemove(channels[channelsName[0]].getClient(users[0]));
+
 		}
 		else
 		{

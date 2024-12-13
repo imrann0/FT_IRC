@@ -23,3 +23,9 @@ NOTİCE // hasan
 - KICK kendini atmak
 - Accept error
 - 2. kullanıcı kanala mesaj atamıyor
+
+# NOTE
+- Nıck değişince name list güncelle
+- nc ile ctrl-D calşmıyo
+- part ile kişi çıktıgında kendinde çıktığı görünmüyor
+- birden fazla kanal quit

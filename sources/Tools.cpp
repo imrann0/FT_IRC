@@ -48,7 +48,7 @@ bool IsClient(const std::map<int, Client>& clients, Client &client)
 {
     for (std::map<int, Client>::const_iterator user = clients.begin(); user != clients.end(); ++user)
     {
-        if (user->second == client)
+        if (&user->second == &client)
             return true;
     }
     return false;

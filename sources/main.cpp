@@ -1,5 +1,6 @@
 #include "Server.hpp"
 #include <cstdlib> // std::atoi
+#include <iostream>
 
 int main(int ar, char **av)
 {
@@ -8,10 +9,8 @@ int main(int ar, char **av)
 		std::cerr << "used: ./program <port> <password>" << std::endl;
 		return 1;
 	}
-
 	try
 	{
-		(void)ar;
 		Server server(std::atoi(av[1]), av[2]);
 		server.Debug();
 

@@ -1,13 +1,8 @@
-#include "Client.hpp"
+#include "protocolMessages.hpp"
 #include "Tools.hpp"
-#include <iostream>
-#include <cstring>	 	//  strerror
-#include <sys/socket.h> // send
-#include "Channel.hpp" // RPL and ERR
-// :!bdemirbu@0 NICK bdemirbu_
 
 
-bool isValidNickname(const std::string& nickname) {
+static bool isValidNickname(const std::string& nickname) {
     if (nickname.length() < 1 || nickname.length() > 9)
         return false;
 
@@ -39,7 +34,6 @@ void Nick(std::map<int, Client>& clients, Client &client, std::vector<std::strin
 		client.setNickname(cmd[1]);
         for (std::map<std::string, Channel>::iterator it = channels.begin(); it != channels.end(); it++)
         {
-			std::cout <<  it->second.getUsersNames() << std::endl;
             if (it->second.IsClient(client))
                 it->second.Brodcast(RPL_NAMREPLY(client.getPrefixName(), it->second.getName(), it->second.getUsersNames()), client);
 			it->second.Brodcast(RPL_ENDOFNAMES(client.getPrefixName(), it->second.getName()), client);

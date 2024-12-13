@@ -1,5 +1,6 @@
+#include "protocolMessages.hpp"
+
 #include <Channel.hpp>
-#include <Tools.hpp>
 #include <iostream>
 #include <cstdlib>
 #include <map>

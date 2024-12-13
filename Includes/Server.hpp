@@ -1,7 +1,6 @@
 #ifndef SERVER_HPP
 # define SERVER_HPP
 
-#include <iostream>
 #include <netinet/in.h>	// sockamddr_in
 #include <poll.h>		//poll
 #include <vector>		//vector

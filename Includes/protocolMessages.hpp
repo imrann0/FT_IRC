@@ -2,6 +2,7 @@
 # define PROTOCOLMESSAGE_HPP
 
 
+#define RPL_WELCOME(serverName, nick, user, host)		":" + serverName + " 001 " + nick + " :Welcome to the Internet Relay Network "+ nick +"!" + user + "@" + host
 #define RPL_LISTSTART(client)				 	        ": 321 " + client + " RPL_LISTSTART"
 #define RPL_LIST(client, channel, size, topic)	        ": 322 " + client + " " + channel + " " + size + " :" + topic
 #define RPL_LISTEND(client)						        ": 323 " + client + " RPL_LISTEND :End of /LIST"
@@ -47,6 +48,7 @@
 #define ERR_USERSDONTMATCH(client)						": 502 " + client + " :Cannot change mode for other users"
 
 // -KICK ERRORS-
+#define RPL_KICK(nick, user, host, channel, target ,reason) ":" + nick + "!" + user + "@" + host + " KICK " + channel + " " + target + " :" + reason
 
 // -INVITE ERRORS-
 #define ERR_BANNEDFROMCHAN(client, channel)				": 474 " + client + " " + channel + " :Cannot join channel (+b)"

@@ -1,8 +1,8 @@
 #include "Client.hpp"
 #include "Channel.hpp"
 #include "Tools.hpp"
-#include "Command.hpp"
-#include <sys/socket.h> // send
+#include "protocolMessages.hpp"
+
 #include <map>
 
 void Privmsg(Client client, std::vector<std::string> &cmd, std::map<std::string, Channel> channels, std::map<int, Client>& clients)

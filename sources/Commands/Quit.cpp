@@ -5,7 +5,6 @@
 #include "Client.hpp"
 #include "Tools.hpp"
 #include <stdexcept>
-#include <sys/socket.h> // send
 #include <iostream>
 
 std::vector<pollfd>::iterator Find(std::vector<pollfd>& pollFds, int clientFd)

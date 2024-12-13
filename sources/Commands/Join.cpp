@@ -1,11 +1,7 @@
 #include "Tools.hpp"
 #include "Channel.hpp"
-#include "error.hpp"
-
-#include <iostream>
-#include <sys/socket.h> // send
+#include "protocolMessages.hpp"
 #include <map>
-#include <cstring>
 
 bool isValidChannelName(const std::string& channelName)
 {
@@ -13,13 +9,15 @@ bool isValidChannelName(const std::string& channelName)
         return false;
 	else if (channelName.length() == 1)
 		return false;
-    if (channelName.empty() || (channelName[0] != '&' && channelName[0] != '#'))
-        return false;
-   for (unsigned int i = 0; i < channelName.length(); ++i) {
+    else if (channelName.empty() || (channelName[0] != '&' && channelName[0] != '#'))
+	{
+		return (false);
+	}
+	for (unsigned int i = 0; i < channelName.length(); ++i)
+	{
         char c = channelName[i];
-        if (c == ' ' || c == 7 || c == ',') {
+        if (c == ' ' || c == 7 || c == ',')
             return false;
-        }
     }
     return true;
 }
@@ -50,7 +48,6 @@ void Join(std::map<std::string, Channel> &channels, Client &client, std::vector<
 	{
     	std::string joinMessage = RPL_JOIN(client.getPrefixName(), cmd[1]);
 		Channel  channel(cmd[1], password);
-		std::cout << "Channel Nick Name" << client.getNickname() << std::endl;
 
 		channel.ClientAdd(client);
 		channel.OperatorAdd(client);

@@ -1,12 +1,11 @@
 #include "Server.hpp"
-#include "Channel.hpp"
 #include "Tools.hpp"
 #include "Wordl.hpp"
-#include "error.hpp"
 #include "Command.hpp"
+#include "protocolMessages.hpp"
 
+#include <iostream>
 #include <sys/socket.h> // socket, bind
-#include <fcntl.h>		// fcntl, F_SETFL, O_NONBLOCK
 #include <cstring>	 	// memset strerror
 #include <unistd.h>		// close
 #include <stdexcept>	// runtime_error
@@ -14,21 +13,10 @@
 #include <string>
 #include <cerrno>   // errno
 #include <csignal>  // signal
-#include <algorithm> // std::error
-//								:<server_name> 001 <nick> :Welcome to the Internet Relay Network <nick>!<user>@<host>
-#define RPL_WELCOME(serverName, nick, user, host)	":" + serverName + " 001 " + nick + " :Welcome to the Internet Relay Network "+ nick +"!" + user + "@" + host
 
 int Server::_signal = 0;
-void signalHandler(int signal)
-{
-	Server::setSignal(signal);
-	usleep(500000);
-	usleep(500000);
-	usleep(500000);
-	usleep(500000);
 
-	std::cout << "Signal: " << signal << std::endl;
-}
+
 
 Server::Server(int port, std::string password) : _port(port), _password(password)
 {
@@ -44,13 +32,6 @@ Server::Server(int port, std::string password) : _port(port), _password(password
 	{
 		close(_socket);
 		throw std::runtime_error("setsockopt Error");
-	}
-
-	// non-blockhing
-	if (fcntl(_socket, F_SETFL, O_NONBLOCK) == -1)
-	{
-		close(_socket);
-		throw std::runtime_error("fcntl Error");
 	}
 
 	std::memset(&server_addr, 0, sizeof(server_addr));
@@ -87,11 +68,9 @@ Server::~Server()
 	close(_socket);
 }
 
-void  Server::setSignal(int signal)
-{
-	_signal = signal;
-}
+void signalHandler(int signal) { Server::setSignal(signal); }
 
+void  Server::setSignal(int signal) { _signal = signal; }
 
 void	Server::Debug()
 {
@@ -263,7 +242,6 @@ void Server::routeCommand(Client &client, std::vector<std::string> &cmd)
 }
 
 std::string	Server::getPassword() const {return (this->_password); }
-
 
 void Server::list(Client &client)
 {

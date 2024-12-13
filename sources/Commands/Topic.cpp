@@ -1,4 +1,6 @@
-#include "Command.hpp"
+#include "protocolMessages.hpp"
+#include "Channel.hpp"
+#include "Client.hpp"
 #include <vector>
 
 void    Topic(std::map<std::string, Channel> &channels, Client &client, std::vector<std::string> cmd)
@@ -23,10 +25,8 @@ void    Topic(std::map<std::string, Channel> &channels, Client &client, std::vec
     }
     else // sadece operator değiştirebilir
     {
-        std::cout << "31" << std::endl;
         if (channels[cmd[1]].IsOperator(client))
         {
-            std::cout << "1" << std::endl;
             std::string topic;
             if (cmd.size()  == 3)
             {

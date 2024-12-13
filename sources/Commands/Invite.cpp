@@ -1,7 +1,7 @@
 #include "Channel.hpp"
 #include "Client.hpp"
 #include "Tools.hpp"
-#include <iostream>
+#include "protocolMessages.hpp"
 
 void    Invite(std::map<std::string, Channel> &channels, std::map<int, Client> &clients, Client &client, std::vector<std::string> cmd)
 {

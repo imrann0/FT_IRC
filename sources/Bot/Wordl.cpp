@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <sstream>
+#include "protocolMessages.hpp"
 
 const std::vector<std::string>	Wordl::_wordDB = wordDB();
 

@@ -40,14 +40,11 @@ void Join(std::map<std::string, Channel> &channels, Client &client, std::vector<
 		else if (channels[cmd[1]].IsFlags('i') == true && channels[cmd[1]].IsInvites(client.getNickname()) == false)
 			throw (ERR_INVITEONLYCHAN(client.getNickname(), cmd[1]));
 
-		std::string joinMessage = RPL_JOIN(client.getPrefixName(), cmd[1]);
 		channels[cmd[1]].ClientAdd(client);
-		channels[cmd[1]].Brodcast(joinMessage);
 
-		std::string nameReplyMessage = RPL_NAMREPLY(client.getPrefixName(), cmd[1], channels[cmd[1]].getUsersNames());
-		std::string endOfNamesMessage = RPL_ENDOFNAMES(client.getPrefixName(), cmd[1]);
-		channels[cmd[1]].Brodcast(nameReplyMessage);
-		channels[cmd[1]].Brodcast(endOfNamesMessage);
+		channels[cmd[1]].Brodcast(RPL_JOIN(client.getPrefixName(), cmd[1]));
+		channels[cmd[1]].Brodcast(RPL_NAMREPLY(client.getPrefixName(), cmd[1], channels[cmd[1]].getUsersNames()));
+		channels[cmd[1]].Brodcast(RPL_ENDOFNAMES(client.getPrefixName(), cmd[1]));
 	}
 	else
 	{

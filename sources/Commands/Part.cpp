@@ -13,13 +13,14 @@ void    Part(std::map<std::string, Channel> &channels, Client &client,  std::vec
     {
         if (channels[cmd[1]].IsClient(client))
         {
-            std::string mes = RPL_PART(client.getPrefixName(), cmd[1]);
-            channels[cmd[1]].ClientRemove(client);
-            channels[cmd[1]].Brodcast(mes);
+            channels[cmd[1]].Brodcast(RPL_PART(client.getPrefixName(), cmd[1]));
             if (channels[cmd[1]].IsOperator(client))
                 channels[cmd[1]].OperatorRemove(client);
+            channels[cmd[1]].ClientRemove(client);
             if (channels[cmd[1]].getSizeClient() == "0")
-                 channels.erase(cmd[1]);
+                channels.erase(cmd[1]);
+            //channels[cmd[1]].Brodcast(RPL_NAMREPLY(client.getPrefixName(), cmd[1], channels[cmd[1]].getUsersNames()));
+            //channels[cmd[1]].Brodcast(RPL_ENDOFNAMES(client.getPrefixName(), cmd[1]));
         }
         else
             client.MsgToClient(ERR_NOTONCHANNEL(client.getNickname(), cmd[1])); // +

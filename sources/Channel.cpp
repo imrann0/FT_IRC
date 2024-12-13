@@ -36,7 +36,8 @@ void    Channel::setInvite(std::string &invited) { _invites.push_back(invited); 
 
 // add
 void    Channel::TopicAdd(std::string &topic) {_topic = topic;}
-void    Channel::ClientAdd(Client &newClient) { _clients.push_back(&newClient);}
+void    Channel::ClientAdd(Client &newClient) { _clients.push_back(&newClient); std::cout  << "size "<< _clients.size() << std::endl;}
+
 void    Channel::OperatorAdd(Client &newOperator) { _operator.push_back(&newOperator);}
 
 

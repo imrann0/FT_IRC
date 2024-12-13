@@ -26,6 +26,6 @@ NOTİCE // hasan
 
 # NOTE
 - Nıck değişince name list güncelle
-- nc ile ctrl-D calşmıyo
-- part ile kişi çıktıgında kendinde çıktığı görünmüyor
-- birden fazla kanal quit
+- nc ile ctrl-D calşmıyo --
+- part ile kişi çıktıgında kendinde çıktığı görünmüyor --
+- birden fazla kanal quit --

@@ -1,6 +1,10 @@
 #ifndef PROTOCOLMESSAGE_HPP
 # define PROTOCOLMESSAGE_HPP
 
+
+#define RPL_LISTSTART(client)				 	        ": 321 " + client + " RPL_LISTSTART"
+#define RPL_LIST(client, channel, size, topic)	        ": 322 " + client + " " + channel + " " + size + " :" + topic
+#define RPL_LISTEND(client)						        ": 323 " + client + " RPL_LISTEND :End of /LIST"
 #define RPL_PRIVMSG(source, target, message)            ":" + source + " PRIVMSG " + target + " :" + message
 #define RPL_NAMREPLY(source, channel, users)            ": 353 " + source + " = " + channel + " :" + users
 #define RPL_ENDOFNAMES(source, channel)                 ": 366 " + source + " " + channel + " :End of /NAMES list."

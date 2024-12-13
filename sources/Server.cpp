@@ -2,9 +2,8 @@
 #include "Channel.hpp"
 #include "Tools.hpp"
 #include "Wordl.hpp"
-#include "error.hpp"
 #include "Command.hpp"
-
+#include "protocolMessages.hpp"
 #include <sys/socket.h> // socket, bind
 #include <fcntl.h>		// fcntl, F_SETFL, O_NONBLOCK
 #include <cstring>	 	// memset strerror
